@@ -14,11 +14,12 @@ typedef struct {
   double x,y,z;
 } vector_t;
 
-double dot(const vector_t* a, const vector_t* b);
-double squared_norm(const vector_t*v);
-double norm(const vector_t *v);
-double normalize(vector_t* v);
-void cross(vector_t* o, const vector_t*a, const vector_t*b);
+void        sub(vector_t* o, const vector_t*a, const vector_t*b);
+double      dot(const vector_t* a, const vector_t* b);
+double      squared_norm(const vector_t*v);
+double      norm(const vector_t *v);
+double      normalize(vector_t* v);
+void        cross(vector_t* o, const vector_t*a, const vector_t*b);
 const char* vector_str(const vector_t*v);
 
 #endif /* VECTOR_UTILS_H */

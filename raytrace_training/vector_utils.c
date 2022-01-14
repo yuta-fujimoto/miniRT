@@ -1,5 +1,12 @@
 #include "vector_utils.h"
 
+void sub(vector_t* o, const vector_t*a, const vector_t*b)
+{
+	o->x = a->x - b->x;
+	o->y = a->y - b->y;
+	o->z = a->z - b->z;
+}
+
 double dot(const vector_t* a, const vector_t* b)
 {
   return a->x * b->x + a->y * b->y + a->z * b->z;

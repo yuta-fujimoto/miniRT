@@ -30,13 +30,6 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-void sub(vector_t* o, const vector_t*a, const vector_t*b)
-{
-	o->x = a->x - b->x;
-	o->y = a->y - b->y;
-	o->z = a->z - b->z;
-}
-
 //want to generalize
 void conv2to3(vector_t *vec_onscrn, double x_img, double y_img)
 {
