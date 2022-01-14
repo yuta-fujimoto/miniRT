@@ -10,11 +10,13 @@ t_vec3 vec3(double x, double y, double z)
   return (ret);
 }
 
-void sub(t_vec3* o, const t_vec3*a, const t_vec3*b)
+t_vec3 sub(const t_vec3*a, const t_vec3*b)
 {
-	o->x = a->x - b->x;
-	o->y = a->y - b->y;
-	o->z = a->z - b->z;
+  t_vec3 ret;
+	ret.x = a->x - b->x;
+	ret.y = a->y - b->y;
+	ret.z = a->z - b->z;
+  return (ret);
 }
 
 double dot(const t_vec3* a, const t_vec3* b)
@@ -41,11 +43,13 @@ double normalize(t_vec3* v)
   return vnorm;
 }
 
-void cross(t_vec3* o, const t_vec3*a, const t_vec3*b)
+t_vec3 cross(const t_vec3*a, const t_vec3*b)
 {
-  o->x = a->y * b->z - a->z * b->y;
-  o->y = a->z * b->x - a->x * b->z;
-  o->z = a->x * b->y - a->y * b->x;
+  t_vec3  ret;
+  ret.x = a->y * b->z - a->z * b->y;
+  ret.y = a->z * b->x - a->x * b->z;
+  ret.z = a->x * b->y - a->y * b->x;
+  return (ret);
 }
 
 const char* vector_str(const t_vec3*v)

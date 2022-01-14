@@ -6,6 +6,18 @@
 #include <math.h>
 #include <string.h>
 
+#define BLACK 0x00000000
+#define RED 0x00FF0000
+#define GREEN 0x0000FF00
+#define BLUE 0x000000FF
+#define YELLOW 0x00FFFF00
+#define WHITE 0x00FFFFFF
+
+#define SQR(x) ((x)*(x))
+#define MIN(a,b) (a < b ? a : b)
+#define MAX(a,b) (a > b ? a : b)
+#define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
+
 typedef struct	s_data {
 	void	*mlx;
 	void	*mlx_win;
@@ -25,18 +37,13 @@ typedef struct	s_vectors {
   double  radius;
 }	t_vecs;
 
-#define SQR(x) ((x)*(x))
-#define MIN(a,b) (a < b ? a : b)
-#define MAX(a,b) (a > b ? a : b)
-#define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
-
 t_vec3      vec3(double x, double y, double z);
-void        sub(t_vec3* o, const t_vec3*a, const t_vec3*b);
+t_vec3      sub(const t_vec3*a, const t_vec3*b);
 double      dot(const t_vec3* a, const t_vec3* b);
 double      squared_norm(const t_vec3*v);
 double      norm(const t_vec3 *v);
 double      normalize(t_vec3* v);
-void        cross(t_vec3* o, const t_vec3*a, const t_vec3*b);
+t_vec3      cross(const t_vec3*a, const t_vec3*b);
 const char* vector_str(const t_vec3*v);
 
 #endif /* VECTOR_UTILS_H */
