@@ -14,14 +14,6 @@
 #define W_IMG 500
 #define H_IMG 500
 
-typedef struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}				t_data;
-
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
@@ -30,7 +22,6 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-//want to generalize
 void conv2to3(t_vec3 *vec_onscrn, double x_img, double y_img)
 {
 	double	w_scrn = 2;
@@ -41,20 +32,13 @@ void conv2to3(t_vec3 *vec_onscrn, double x_img, double y_img)
 	vec_onscrn->z = 0;
 }
 
-bool is_crossed(double x_img, double y_img)
+bool is_crossed(double x_img, double y_img, t_vecs *vecs)
 {
-    t_vec3	vec_onscrn;
-	conv2to3(&vec_onscrn, x_img, y_img);
-	t_vec3	vec_view = {0.0f, 0.0f, -5.0f};
-	t_vec3	vec_ray;
-	sub(&vec_ray, &vec_onscrn, &vec_view);
-	t_vec3	vec_ctr = {0.0f, 0.0f, 5.0f};
-	t_vec3	vec_ctr_to_view;
-	sub(&vec_ctr_to_view, &vec_view, &vec_ctr);
-	double		radius = 1.0;
-	double		A = squared_norm(&vec_ray);
-	double		B = 2 * dot(&vec_ctr_to_view, &vec_ray);
-	double		C = squared_norm(&vec_ctr_to_view) - (radius * radius);
+	conv2to3(&(vecs->vec_onscrn), x_img, y_img);
+	sub(&(vecs->vec_ray), &(vecs->vec_onscrn), &(vecs->vec_view));
+	double		A = squared_norm(&(vecs->vec_ray));
+	double		B = 2 * dot(&(vecs->vec_ctr_to_view), &(vecs->vec_ray));
+	double		C = squared_norm(&(vecs->vec_ctr_to_view)) - SQR(vecs->radius);
 	double		D = B * B - 4 * A * C;
 	if (D >= 0)
 		return (true);
@@ -64,18 +48,21 @@ bool is_crossed(double x_img, double y_img)
 
 int	main(void)
 {
-	void	*mlx;
-	void	*mlx_win;
 	t_data	data;
+	t_vecs	vecs;
 	double	x_img;
 	double	y_img;
 	int		color;
 
-
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, W_IMG, H_IMG, "Tuttoluu");
-	data.img = mlx_new_image(mlx, W_IMG, H_IMG);
+	data.mlx = mlx_init();
+	data.mlx_win = mlx_new_window(data.mlx, W_IMG, H_IMG, "Tuttoluu");
+	data.img = mlx_new_image(data.mlx, W_IMG, H_IMG);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+
+	vecs.vec_view = vec3(0.0, 0.0, -5.0);
+	vecs.vec_ctr = vec3(0.0, 0.0, 5.0);
+	sub(&(vecs.vec_ctr_to_view), &(vecs.vec_view), &(vecs.vec_ctr));
+	vecs.radius = 1.0;
 
 	y_img = 0;
 	while (y_img < H_IMG)
@@ -83,7 +70,7 @@ int	main(void)
 		x_img = 0;
 		while (x_img < W_IMG)
 		{
-			if (is_crossed(x_img, y_img))
+			if (is_crossed(x_img, y_img, &vecs))
 				color = GREEN;
 			else
 				color = BLACK;
@@ -92,6 +79,6 @@ int	main(void)
 		}
 		y_img++;
 	}
-	mlx_put_image_to_window(mlx, mlx_win, data.img, 0, 0);
-	mlx_loop(mlx);
+	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
+	mlx_loop(data.mlx);
 }

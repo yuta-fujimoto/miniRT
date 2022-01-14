@@ -1,5 +1,15 @@
 #include "vector_utils.h"
 
+t_vec3 vec3(double x, double y, double z)
+{
+  t_vec3  ret;
+
+  ret.x = x;
+  ret.y = y;
+  ret.z = z;
+  return (ret);
+}
+
 void sub(t_vec3* o, const t_vec3*a, const t_vec3*b)
 {
 	o->x = a->x - b->x;
