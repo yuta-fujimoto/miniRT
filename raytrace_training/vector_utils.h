@@ -11,13 +11,13 @@
 #define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
 
 typedef struct {
-  float x,y,z;
+  double x,y,z;
 } vector_t;
 
-float dot(const vector_t* a, const vector_t* b);
-float squared_norm(const vector_t*v);
-float norm(const vector_t *v);
-float normalize(vector_t* v);
+double dot(const vector_t* a, const vector_t* b);
+double squared_norm(const vector_t*v);
+double norm(const vector_t *v);
+double normalize(vector_t* v);
 void cross(vector_t* o, const vector_t*a, const vector_t*b);
 const char* vector_str(const vector_t*v);
 

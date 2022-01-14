@@ -38,17 +38,17 @@ void sub(vector_t* o, const vector_t*a, const vector_t*b)
 }
 
 //want to generalize
-void conv2to3(vector_t *vec_onscrn, float x_img, float y_img)
+void conv2to3(vector_t *vec_onscrn, double x_img, double y_img)
 {
-	float	w_scrn = 2;
-	float	h_scrn = 2;
+	double	w_scrn = 2;
+	double	h_scrn = 2;
 
 	vec_onscrn->x = w_scrn * (x_img / (W_IMG - 1)) - (w_scrn / 2);
 	vec_onscrn->y = h_scrn * (y_img / (W_IMG - 1)) - (w_scrn / 2);
 	vec_onscrn->z = 0;
 }
 
-bool is_crossed(float x_img, float y_img)
+bool is_crossed(double x_img, double y_img)
 {
     vector_t	vec_onscrn;
 	conv2to3(&vec_onscrn, x_img, y_img);
@@ -58,11 +58,11 @@ bool is_crossed(float x_img, float y_img)
 	vector_t	vec_ctr = {0.0f, 0.0f, 5.0f};
 	vector_t	vec_ctr_to_view;
 	sub(&vec_ctr_to_view, &vec_view, &vec_ctr);
-	float		radius = 1.0;
-	float		A = squared_norm(&vec_ray);
-	float		B = 2 * dot(&vec_ctr_to_view, &vec_ray);
-	float		C = squared_norm(&vec_ctr_to_view) - (radius * radius);
-	float		D = B * B - 4 * A * C;
+	double		radius = 1.0;
+	double		A = squared_norm(&vec_ray);
+	double		B = 2 * dot(&vec_ctr_to_view, &vec_ray);
+	double		C = squared_norm(&vec_ctr_to_view) - (radius * radius);
+	double		D = B * B - 4 * A * C;
 	if (D >= 0)
 		return (true);
 	else
@@ -74,8 +74,8 @@ int	main(void)
 	void	*mlx;
 	void	*mlx_win;
 	t_data	data;
-	float	x_img;
-	float	y_img;
+	double	x_img;
+	double	y_img;
 	int		color;
 
 

@@ -1,23 +1,23 @@
 #include "vector_utils.h"
 
-float dot(const vector_t* a, const vector_t* b)
+double dot(const vector_t* a, const vector_t* b)
 {
   return a->x * b->x + a->y * b->y + a->z * b->z;
 }
 
-float squared_norm(const vector_t*v)
+double squared_norm(const vector_t*v)
 {
   return SQR(v->x) + SQR(v->y) + SQR(v->z);
 }
 
-float norm(const vector_t *v)
+double norm(const vector_t *v)
 {
   return sqrt(squared_norm(v));
 }
 
-float normalize(vector_t* v)
+double normalize(vector_t* v)
 {
-  float vnorm = norm(v);
+  double vnorm = norm(v);
   v->x /= vnorm;
   v->y /= vnorm;
   v->z /= vnorm;
