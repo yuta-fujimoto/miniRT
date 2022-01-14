@@ -1,4 +1,4 @@
-NAME = ray
+NAME = tutorial
 SRCS_DIR = .
 SRCS_NAME = circle.c \
 			vector_utils.c

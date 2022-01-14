@@ -1,5 +1,5 @@
 #include "mlx.h"
-#include "vector_utils.h"
+#include "tutorial.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -49,7 +49,7 @@ int	main(void)
 	int		color;
 
 	data.mlx = mlx_init();
-	data.mlx_win = mlx_new_window(data.mlx, W_IMG, H_IMG, "Tuttoluu");
+	data.mlx_win = mlx_new_window(data.mlx, W_IMG, H_IMG, "Defence Line");
 	data.img = mlx_new_image(data.mlx, W_IMG, H_IMG);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
@@ -67,7 +67,7 @@ int	main(void)
 			if (is_crossed(x_img, y_img, &vecs))
 				color = GREEN;
 			else
-				color = BLACK;
+				color = BLUE;
 			my_mlx_pixel_put(&data,(int)x_img, (int)y_img, color);
 			x_img++;
 		}
