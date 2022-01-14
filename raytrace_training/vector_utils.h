@@ -1,6 +1,7 @@
 #ifndef VECTOR_UTILS_H
 #define VECTOR_UTILS_H
 
+#include "miniRT.h"
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
@@ -10,16 +11,12 @@
 #define MAX(a,b) (a > b ? a : b)
 #define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
 
-typedef struct {
-  double x,y,z;
-} vector_t;
-
-void        sub(vector_t* o, const vector_t*a, const vector_t*b);
-double      dot(const vector_t* a, const vector_t* b);
-double      squared_norm(const vector_t*v);
-double      norm(const vector_t *v);
-double      normalize(vector_t* v);
-void        cross(vector_t* o, const vector_t*a, const vector_t*b);
-const char* vector_str(const vector_t*v);
+void        sub(t_vec3* o, const t_vec3*a, const t_vec3*b);
+double      dot(const t_vec3* a, const t_vec3* b);
+double      squared_norm(const t_vec3*v);
+double      norm(const t_vec3 *v);
+double      normalize(t_vec3* v);
+void        cross(t_vec3* o, const t_vec3*a, const t_vec3*b);
+const char* vector_str(const t_vec3*v);
 
 #endif /* VECTOR_UTILS_H */

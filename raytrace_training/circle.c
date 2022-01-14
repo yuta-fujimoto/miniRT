@@ -31,7 +31,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 }
 
 //want to generalize
-void conv2to3(vector_t *vec_onscrn, double x_img, double y_img)
+void conv2to3(t_vec3 *vec_onscrn, double x_img, double y_img)
 {
 	double	w_scrn = 2;
 	double	h_scrn = 2;
@@ -43,13 +43,13 @@ void conv2to3(vector_t *vec_onscrn, double x_img, double y_img)
 
 bool is_crossed(double x_img, double y_img)
 {
-    vector_t	vec_onscrn;
+    t_vec3	vec_onscrn;
 	conv2to3(&vec_onscrn, x_img, y_img);
-	vector_t	vec_view = {0.0f, 0.0f, -5.0f};
-	vector_t	vec_ray;
+	t_vec3	vec_view = {0.0f, 0.0f, -5.0f};
+	t_vec3	vec_ray;
 	sub(&vec_ray, &vec_onscrn, &vec_view);
-	vector_t	vec_ctr = {0.0f, 0.0f, 5.0f};
-	vector_t	vec_ctr_to_view;
+	t_vec3	vec_ctr = {0.0f, 0.0f, 5.0f};
+	t_vec3	vec_ctr_to_view;
 	sub(&vec_ctr_to_view, &vec_view, &vec_ctr);
 	double		radius = 1.0;
 	double		A = squared_norm(&vec_ray);
