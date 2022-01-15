@@ -7,6 +7,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include "keysymdef.h"
 #include "../gnl/get_next_line_bonus.h"
 #include "../libft/libft.h"
 

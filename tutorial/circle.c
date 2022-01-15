@@ -73,6 +73,9 @@ int	main(void)
 		}
 		y_img++;
 	}
+
+	mlx_hook(data.mlx_win, 33, 1 << 17, ft_exit, &data);
+	mlx_key_hook(data.mlx_win, key_hook, &data);
 	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
 	mlx_loop(data.mlx);
 }

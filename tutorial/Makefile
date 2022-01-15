@@ -1,7 +1,8 @@
 NAME = tutorial
 SRCS_DIR = .
 SRCS_NAME = circle.c \
-			vector_utils.c
+			vector_utils.c \
+			hook_funcs.c
 SRCS = ${addprefix ${SRCS_DIR}/, ${SRCS_NAME}}
 MINIRT_H = ../srcs
 MLX_DIR = ../minilibx-linux
