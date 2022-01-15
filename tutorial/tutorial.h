@@ -37,6 +37,9 @@ typedef struct	s_vectors {
   double  radius;
 }	t_vecs;
 
+int         ft_exit(t_data *data);
+int         key_hook(int keycode, t_data *data);
+
 t_vec3      vec3(double x, double y, double z);
 t_vec3      sub(const t_vec3*a, const t_vec3*b);
 double      dot(const t_vec3* a, const t_vec3* b);

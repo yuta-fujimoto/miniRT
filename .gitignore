@@ -1,3 +1,5 @@
 .vscode
 *.o
+*.a
 a.out
+tutorial/tutorial
