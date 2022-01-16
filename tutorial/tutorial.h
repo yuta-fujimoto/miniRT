@@ -17,6 +17,16 @@
 #define MIN(a,b) (a < b ? a : b)
 #define MAX(a,b) (a > b ? a : b)
 #define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
+#define CALD(a,b,c) (SQR(b) - 4 * a * c)
+
+typedef enum e_discriminant
+{
+	A,
+	B,
+	C,
+	D,
+	DIS_NUM
+}	t_dis;
 
 typedef struct	s_data {
 	void	*mlx;
@@ -28,14 +38,16 @@ typedef struct	s_data {
 	int		endian;
 }	t_data;
 
-typedef struct	s_vectors {
-  t_vec3	vec_onscrn;
+typedef struct	s_info {
+	t_vec3	vec_onscrn;
 	t_vec3	vec_view;
+	t_vec3	vec_light;
 	t_vec3	vec_ray;
 	t_vec3	vec_ctr;
 	t_vec3	vec_ctr_to_view;
-  double  radius;
-}	t_vecs;
+	double  radius;
+	double	dis[DIS_NUM];
+}	t_info;
 
 int         ft_exit(t_data *data);
 int         key_hook(int keycode, t_data *data);

@@ -26,15 +26,14 @@ t_vec3 conv2to3(double x_img, double y_img)
 	return (vec_onscrn);
 }
 
-bool is_crossed(double x_img, double y_img, t_vecs *vecs)
+bool is_crossed(double x_img, double y_img, t_info *info)
 {
-	vecs->vec_onscrn = conv2to3(x_img, y_img);
-	vecs->vec_ray = sub(&(vecs->vec_onscrn), &(vecs->vec_view));
-	double		A = squared_norm(&(vecs->vec_ray));
-	double		B = 2 * dot(&(vecs->vec_ctr_to_view), &(vecs->vec_ray));
-	double		C = squared_norm(&(vecs->vec_ctr_to_view)) - SQR(vecs->radius);
-	double		D = B * B - 4 * A * C;
-	if (D >= 0)
+	info->vec_onscrn = conv2to3(x_img, y_img);
+	info->vec_ray = sub(&(info->vec_onscrn), &(info->vec_view));
+	info->dis[A] = squared_norm(&(info->vec_ray));
+	info->dis[B] = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
+	info->dis[D] = CALD(info->dis[A], info->dis[B], info->dis[C]);
+	if (info->dis[D] >= 0)
 		return (true);
 	else
 		return (false);
@@ -43,7 +42,7 @@ bool is_crossed(double x_img, double y_img, t_vecs *vecs)
 int	main(void)
 {
 	t_data	data;
-	t_vecs	vecs;
+	t_info	info;
 	double	x_img;
 	double	y_img;
 	int		color;
@@ -53,10 +52,17 @@ int	main(void)
 	data.img = mlx_new_image(data.mlx, W_IMG, H_IMG);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
-	vecs.vec_view = vec3(0.0, 0.0, -5.0);
-	vecs.vec_ctr = vec3(0.0, 0.0, 5.0);
-	vecs.vec_ctr_to_view = sub(&(vecs.vec_view), &(vecs.vec_ctr));
-	vecs.radius = 1.0;
+	info.vec_onscrn = vec3(0.0, 0.0, 0.0);
+	info.vec_view = vec3(0.0, 0.0, -5.0);
+	info.vec_light = vec3(-5.0, 5.0, -5.0);
+	info.vec_ray = vec3(0.0, 0.0, 0.0);
+	info.vec_ctr = vec3(0.0, 0.0, 5.0);
+	info.vec_ctr_to_view = sub(&(info.vec_view), &(info.vec_ctr));
+	info.radius = 1.0;
+	info.dis[A] = 0;
+	info.dis[B] = 0;
+	info.dis[C] = squared_norm(&(info.vec_ctr_to_view)) - SQR(info.radius);
+	info.dis[D] = 0;
 
 	y_img = 0;
 	while (y_img < H_IMG)
@@ -64,7 +70,7 @@ int	main(void)
 		x_img = 0;
 		while (x_img < W_IMG)
 		{
-			if (is_crossed(x_img, y_img, &vecs))
+			if (is_crossed(x_img, y_img, &info))
 				color = GREEN;
 			else
 				color = BLUE;
