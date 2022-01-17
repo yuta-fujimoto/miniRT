@@ -26,12 +26,32 @@ t_vec3	conv2to3(double x_img, double y_img)
 	return (vec_onscrn);
 }
 
+double	cal_t(double a, double b, double d)
+{
+	double	d_sqrt;
+	double	mol1;
+	double	mol2;
+
+	if (d >= 0)
+	{
+		d_sqrt = sqrt(d);
+		mol1 = -b + d_sqrt;
+		mol2 = -b - d_sqrt;
+		if (0 < mol1 && mol1 < mol2)
+			return (mol1 / 2 * a);
+		else if (0 < mol2)
+			return (mol2 / 2 * a);
+	}
+	return (-1);
+}
+
 int	raytrace(double x_img, double y_img, t_info *info)
 {
 	double	a;
 	double	b;
 	double	c;
 	double	d;
+	double	t;
 
 	info->vec_onscrn = conv2to3(x_img, y_img);
 	info->vec_ray = sub(&(info->vec_onscrn), &(info->vec_view));
@@ -39,15 +59,9 @@ int	raytrace(double x_img, double y_img, t_info *info)
 	b = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
 	c = info->buf;
 	d = SQR(b) - 4 * a * c;
-	if (d >= 0)
-	{
-		//if (info->dis[D] == 0)
-		//	info->t = -info->t / 2 * info->dis[A];
-		//else
-		//{
-		//}
+	t = cal_t(a, b, d);
+	if (t > 0)
 		return (GREEN);
-	}
 	return (BLUE);
 }
 
