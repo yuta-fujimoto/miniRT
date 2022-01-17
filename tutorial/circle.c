@@ -58,14 +58,25 @@ double	cal_t(double a, double b, double d)
 	return (-1);
 }
 
+int	create_trgb(int t, int r, int g, int b)
+{
+	return (t << 24 | r << 16 | g << 8 | b);
+}
+
 color_int	next(t_info *info, double t)
 {
 	info->vec_int = add_deep(info->vec_view, times(t, &(info->vec_ray)));
 	//t_vec3	ctr_to_int = sub(&(info->vec_int), &(info->vec_ctr));
 	//if (info->radius - 0.1 <= norm(&(ctr_to_int)) && norm(&(ctr_to_int)) <= info->radius + 0.1)
 	//	return (GREEN);
-	//info->vec_inc = 
-	return (RED);
+	info->vec_inc = sub(&(info->vec_light), &(info->vec_int));
+	normalize(&(info->vec_inc));
+	info->vec_norm = sub(&(info->vec_int), &(info->vec_ctr));
+	normalize(&(info->vec_norm));
+	int	gray = 255 * dot(&(info->vec_norm), &(info->vec_inc));
+	if (gray < 0)
+		gray = 0;
+	return (create_trgb(0, gray, gray, gray));
 }
 
 color_int	raytrace(double x_img, double y_img, t_info *info)
@@ -86,13 +97,13 @@ color_int	raytrace(double x_img, double y_img, t_info *info)
 	t = cal_t(a, b, d);
 	if (t > 0)
 		return (next(info, t));
-	return (BLUE);
+	return (PURPLE);
 }
 
 void	init_data(t_data *data)
 {
 	data->mlx = mlx_init();
-	data->mlx_win = mlx_new_window(data->mlx, W_IMG, H_IMG, "Defence Line");
+	data->mlx_win = mlx_new_window(data->mlx, W_IMG, H_IMG, "fyuta & rakiyama in the house");
 	data->img = mlx_new_image(data->mlx, W_IMG, H_IMG);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 }

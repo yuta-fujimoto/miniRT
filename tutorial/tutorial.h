@@ -12,6 +12,8 @@
 #define BLUE 0x000000FF
 #define YELLOW 0x00FFFF00
 #define WHITE 0x00FFFFFF
+#define NAVY 0x00000080
+#define PURPLE 0x00800080
 
 #define SQR(x) ((x)*(x))
 #define MIN(a,b) (a < b ? a : b)
