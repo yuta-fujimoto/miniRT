@@ -14,7 +14,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-t_vec3 conv2to3(double x_img, double y_img)
+t_vec3	conv2to3(double x_img, double y_img)
 {
 	t_vec3	vec_onscrn;
 	double	w_scrn = 2;
@@ -26,7 +26,7 @@ t_vec3 conv2to3(double x_img, double y_img)
 	return (vec_onscrn);
 }
 
-bool is_crossed(double x_img, double y_img, t_info *info)
+bool	is_crossed(double x_img, double y_img, t_info *info)
 {
 	info->vec_onscrn = conv2to3(x_img, y_img);
 	info->vec_ray = sub(&(info->vec_onscrn), &(info->vec_view));
@@ -39,6 +39,29 @@ bool is_crossed(double x_img, double y_img, t_info *info)
 		return (false);
 }
 
+void	init_info(t_info *info)
+{
+	info->vec_onscrn = vec3(0.0, 0.0, 0.0);
+	info->vec_view = vec3(0.0, 0.0, -5.0);
+	info->vec_light = vec3(-5.0, 5.0, -5.0);
+	info->vec_ray = vec3(0.0, 0.0, 0.0);
+	info->vec_ctr = vec3(0.0, 0.0, 5.0);
+	info->vec_ctr_to_view = sub(&(info->vec_view), &(info->vec_ctr));
+	info->radius = 1.0;
+	info->dis[A] = 0;
+	info->dis[B] = 0;
+	info->dis[C] = squared_norm(&(info->vec_ctr_to_view)) - SQR(info->radius);
+	info->dis[D] = 0;
+}
+
+void	init_data(t_data *data)
+{
+	data->mlx = mlx_init();
+	data->mlx_win = mlx_new_window(data->mlx, W_IMG, H_IMG, "Defence Line");
+	data->img = mlx_new_image(data->mlx, W_IMG, H_IMG);
+	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
+}
+
 int	main(void)
 {
 	t_data	data;
@@ -47,23 +70,8 @@ int	main(void)
 	double	y_img;
 	int		color;
 
-	data.mlx = mlx_init();
-	data.mlx_win = mlx_new_window(data.mlx, W_IMG, H_IMG, "Defence Line");
-	data.img = mlx_new_image(data.mlx, W_IMG, H_IMG);
-	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
-
-	info.vec_onscrn = vec3(0.0, 0.0, 0.0);
-	info.vec_view = vec3(0.0, 0.0, -5.0);
-	info.vec_light = vec3(-5.0, 5.0, -5.0);
-	info.vec_ray = vec3(0.0, 0.0, 0.0);
-	info.vec_ctr = vec3(0.0, 0.0, 5.0);
-	info.vec_ctr_to_view = sub(&(info.vec_view), &(info.vec_ctr));
-	info.radius = 1.0;
-	info.dis[A] = 0;
-	info.dis[B] = 0;
-	info.dis[C] = squared_norm(&(info.vec_ctr_to_view)) - SQR(info.radius);
-	info.dis[D] = 0;
-
+	init_data(&data);
+	init_info(&info);
 	y_img = 0;
 	while (y_img < H_IMG)
 	{
@@ -79,7 +87,6 @@ int	main(void)
 		}
 		y_img++;
 	}
-
 	mlx_hook(data.mlx_win, 33, 1 << 17, ft_exit, &data);
 	mlx_key_hook(data.mlx_win, key_hook, &data);
 	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
