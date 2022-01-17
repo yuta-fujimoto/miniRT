@@ -39,6 +39,14 @@ bool	is_crossed(double x_img, double y_img, t_info *info)
 		return (false);
 }
 
+void	init_data(t_data *data)
+{
+	data->mlx = mlx_init();
+	data->mlx_win = mlx_new_window(data->mlx, W_IMG, H_IMG, "Defence Line");
+	data->img = mlx_new_image(data->mlx, W_IMG, H_IMG);
+	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
+}
+
 void	init_info(t_info *info)
 {
 	info->vec_onscrn = vec3(0.0, 0.0, 0.0);
@@ -52,14 +60,6 @@ void	init_info(t_info *info)
 	info->dis[B] = 0;
 	info->dis[C] = squared_norm(&(info->vec_ctr_to_view)) - SQR(info->radius);
 	info->dis[D] = 0;
-}
-
-void	init_data(t_data *data)
-{
-	data->mlx = mlx_init();
-	data->mlx_win = mlx_new_window(data->mlx, W_IMG, H_IMG, "Defence Line");
-	data->img = mlx_new_image(data->mlx, W_IMG, H_IMG);
-	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
 }
 
 int	main(void)
