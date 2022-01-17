@@ -26,28 +26,30 @@ t_vec3	conv2to3(double x_img, double y_img)
 	return (vec_onscrn);
 }
 
-int	is_crossed(double x_img, double y_img, t_info *info)
+int	raytrace(double x_img, double y_img, t_info *info)
 {
+	double	a;
+	double	b;
+	double	c;
+	double	d;
+
 	info->vec_onscrn = conv2to3(x_img, y_img);
 	info->vec_ray = sub(&(info->vec_onscrn), &(info->vec_view));
-	info->dis[A] = squared_norm(&(info->vec_ray));
-	info->dis[B] = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
-	info->dis[D] = CALD(info->dis[A], info->dis[B], info->dis[C]);
-	if (info->dis[D] >= 0)
+	a = squared_norm(&(info->vec_ray));
+	b = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
+	c = info->buf;
+	d = SQR(b) - 4 * a * c;
+	if (d >= 0)
+	{
+		//if (info->dis[D] == 0)
+		//	info->t = -info->t / 2 * info->dis[A];
+		//else
+		//{
+		//}
 		return (GREEN);
-	else
-		return (BLUE);
+	}
+	return (BLUE);
 }
-
-//void	reflection(t_info *info)
-//{
-//	if (info->dis[D] == 0)
-//		info->t = -info->t / 2 * info->dis[A];
-//	else if (info->dis[D] > 0)
-//	{
-		
-//	}
-//}
 
 void	init_data(t_data *data)
 {
@@ -66,11 +68,7 @@ void	init_info(t_info *info)
 	info->vec_ctr = vec3(0.0, 0.0, 5.0);
 	info->vec_ctr_to_view = sub(&(info->vec_view), &(info->vec_ctr));
 	info->radius = 1.0;
-	info->dis[A] = 0;
-	info->dis[B] = 0;
-	info->dis[C] = squared_norm(&(info->vec_ctr_to_view)) - SQR(info->radius);
-	info->dis[D] = 0;
-	info->t = 0;
+	info->buf = squared_norm(&(info->vec_ctr_to_view)) - SQR(info->radius);
 }
 
 int	main(void)
@@ -88,7 +86,7 @@ int	main(void)
 		x_img = 0;
 		while (x_img < W_IMG)
 		{
-			my_mlx_pixel_put(&data,(int)x_img, (int)y_img, is_crossed(x_img, y_img, &info));
+			my_mlx_pixel_put(&data,(int)x_img, (int)y_img, raytrace(x_img, y_img, &info));
 			x_img++;
 		}
 		y_img++;
