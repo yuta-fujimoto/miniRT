@@ -6,6 +6,19 @@
 #define W_IMG 500
 #define H_IMG 500
 
+void put_info(t_info *info)
+{
+	//rm
+	printf("------------------------>info\n");
+	printf("vec->onscrn->%s\n", vector_str(&(info->vec_onscrn)));
+	printf("vec_view->%s\n", vector_str(&(info->vec_view)));
+	printf("vec_light->%s\n", vector_str(&(info->vec_light)));
+	printf("vec_ray->%s\n", vector_str(&(info->vec_ray)));
+	printf("vec_ctr->%s\n", vector_str(&(info->vec_ctr)));
+	printf("vec_ctr_to_view->%s\n", vector_str(&(info->vec_ctr_to_view)));
+	printf("vec_int->%s\n", vector_str(&(info->vec_int)));
+}
+
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
@@ -48,7 +61,11 @@ double	cal_t(double a, double b, double d)
 color_int	next(t_info *info, double t)
 {
 	info->vec_int = add_deep(info->vec_view, times(t, &(info->vec_ray)));
-	return (GREEN);
+	//t_vec3	ctr_to_int = sub(&(info->vec_int), &(info->vec_ctr));
+	//if (info->radius - 0.1 <= norm(&(ctr_to_int)) && norm(&(ctr_to_int)) <= info->radius + 0.1)
+	//	return (GREEN);
+	//info->vec_inc = 
+	return (RED);
 }
 
 color_int	raytrace(double x_img, double y_img, t_info *info)
@@ -60,7 +77,8 @@ color_int	raytrace(double x_img, double y_img, t_info *info)
 	double	t;
 
 	info->vec_onscrn = conv2to3(x_img, y_img);
-	info->vec_ray = sub(&(info->vec_onscrn), &(info->vec_view));
+	info->vec_ray = (sub(&(info->vec_onscrn), &(info->vec_view)));
+	normalize(&(info->vec_ray));
 	a = squared_norm(&(info->vec_ray));
 	b = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
 	c = info->buf;
@@ -88,6 +106,8 @@ void	init_info(t_info *info)
 	info->vec_ctr = vec3(0.0, 0.0, 5.0);
 	info->vec_ctr_to_view = sub(&(info->vec_view), &(info->vec_ctr));
 	info->vec_int = vec3(0.0, 0.0, 0.0);
+	info->vec_inc = vec3(0.0, 0.0, 0.0);
+	info->vec_norm = vec3(0.0, 0.0, 0.0);
 	info->radius = 1.0;
 	info->buf = squared_norm(&(info->vec_ctr_to_view)) - SQR(info->radius);
 }

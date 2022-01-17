@@ -63,7 +63,9 @@ double norm(const t_vec3 *v)
 
 double normalize(t_vec3* v)
 {
-  double vnorm = norm(v);
+  double vnorm;
+
+  vnorm = norm(v);
   v->x /= vnorm;
   v->y /= vnorm;
   v->z /= vnorm;

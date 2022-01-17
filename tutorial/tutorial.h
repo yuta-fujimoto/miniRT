@@ -38,6 +38,8 @@ typedef struct	s_info {
 	t_vec3	vec_ctr;
 	t_vec3	vec_ctr_to_view;
 	t_vec3	vec_int;
+	t_vec3	vec_inc;
+	t_vec3	vec_norm;
 	double  radius;
 	double	buf;
 }	t_info;
