@@ -18,6 +18,8 @@
 #define MAX(a,b) (a > b ? a : b)
 #define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
 
+typedef int color_int;
+
 typedef struct	s_data {
 	void	*mlx;
 	void	*mlx_win;
@@ -35,6 +37,7 @@ typedef struct	s_info {
 	t_vec3	vec_ray;
 	t_vec3	vec_ctr;
 	t_vec3	vec_ctr_to_view;
+	t_vec3	vec_int;
 	double  radius;
 	double	buf;
 }	t_info;
@@ -43,7 +46,10 @@ int         ft_exit(t_data *data);
 int         key_hook(int keycode, t_data *data);
 
 t_vec3      vec3(double x, double y, double z);
+t_vec3		add(const t_vec3*a, const t_vec3*b);
+t_vec3		add_deep(const t_vec3 a, const t_vec3 b);
 t_vec3      sub(const t_vec3*a, const t_vec3*b);
+t_vec3		times(double nb, const t_vec3*a);
 double      dot(const t_vec3* a, const t_vec3* b);
 double      squared_norm(const t_vec3*v);
 double      norm(const t_vec3 *v);

@@ -10,12 +10,39 @@ t_vec3 vec3(double x, double y, double z)
   return (ret);
 }
 
+t_vec3 add(const t_vec3*a, const t_vec3*b)
+{
+  t_vec3 ret;
+	ret.x = a->x + b->x;
+	ret.y = a->y + b->y;
+	ret.z = a->z + b->z;
+  return (ret);
+}
+
+t_vec3 add_deep(const t_vec3 a, const t_vec3 b)
+{
+  t_vec3 ret;
+	ret.x = a.x + b.x;
+	ret.y = a.y + b.y;
+	ret.z = a.z + b.z;
+  return (ret);
+}
+
 t_vec3 sub(const t_vec3*a, const t_vec3*b)
 {
   t_vec3 ret;
 	ret.x = a->x - b->x;
 	ret.y = a->y - b->y;
 	ret.z = a->z - b->z;
+  return (ret);
+}
+
+t_vec3 times(double nb, const t_vec3*a)
+{
+  t_vec3 ret;
+	ret.x = nb * a->x;
+	ret.y = nb * a->y;
+	ret.z = nb * a->z;
   return (ret);
 }
 

@@ -45,7 +45,13 @@ double	cal_t(double a, double b, double d)
 	return (-1);
 }
 
-int	raytrace(double x_img, double y_img, t_info *info)
+color_int	next(t_info *info, double t)
+{
+	info->vec_int = add_deep(info->vec_view, times(t, &(info->vec_ray)));
+	return (GREEN);
+}
+
+color_int	raytrace(double x_img, double y_img, t_info *info)
 {
 	double	a;
 	double	b;
@@ -61,7 +67,7 @@ int	raytrace(double x_img, double y_img, t_info *info)
 	d = SQR(b) - 4 * a * c;
 	t = cal_t(a, b, d);
 	if (t > 0)
-		return (GREEN);
+		return (next(info, t));
 	return (BLUE);
 }
 
@@ -81,6 +87,7 @@ void	init_info(t_info *info)
 	info->vec_ray = vec3(0.0, 0.0, 0.0);
 	info->vec_ctr = vec3(0.0, 0.0, 5.0);
 	info->vec_ctr_to_view = sub(&(info->vec_view), &(info->vec_ctr));
+	info->vec_int = vec3(0.0, 0.0, 0.0);
 	info->radius = 1.0;
 	info->buf = squared_norm(&(info->vec_ctr_to_view)) - SQR(info->radius);
 }
