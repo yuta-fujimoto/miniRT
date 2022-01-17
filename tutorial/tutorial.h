@@ -47,6 +47,7 @@ typedef struct	s_info {
 	t_vec3	vec_ctr_to_view;
 	double  radius;
 	double	dis[DIS_NUM];
+	double	t;
 }	t_info;
 
 int         ft_exit(t_data *data);

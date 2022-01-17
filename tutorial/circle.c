@@ -26,7 +26,7 @@ t_vec3	conv2to3(double x_img, double y_img)
 	return (vec_onscrn);
 }
 
-bool	is_crossed(double x_img, double y_img, t_info *info)
+int	is_crossed(double x_img, double y_img, t_info *info)
 {
 	info->vec_onscrn = conv2to3(x_img, y_img);
 	info->vec_ray = sub(&(info->vec_onscrn), &(info->vec_view));
@@ -34,10 +34,20 @@ bool	is_crossed(double x_img, double y_img, t_info *info)
 	info->dis[B] = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
 	info->dis[D] = CALD(info->dis[A], info->dis[B], info->dis[C]);
 	if (info->dis[D] >= 0)
-		return (true);
+		return (GREEN);
 	else
-		return (false);
+		return (BLUE);
 }
+
+//void	reflection(t_info *info)
+//{
+//	if (info->dis[D] == 0)
+//		info->t = -info->t / 2 * info->dis[A];
+//	else if (info->dis[D] > 0)
+//	{
+		
+//	}
+//}
 
 void	init_data(t_data *data)
 {
@@ -60,6 +70,7 @@ void	init_info(t_info *info)
 	info->dis[B] = 0;
 	info->dis[C] = squared_norm(&(info->vec_ctr_to_view)) - SQR(info->radius);
 	info->dis[D] = 0;
+	info->t = 0;
 }
 
 int	main(void)
@@ -68,7 +79,6 @@ int	main(void)
 	t_info	info;
 	double	x_img;
 	double	y_img;
-	int		color;
 
 	init_data(&data);
 	init_info(&info);
@@ -78,11 +88,7 @@ int	main(void)
 		x_img = 0;
 		while (x_img < W_IMG)
 		{
-			if (is_crossed(x_img, y_img, &info))
-				color = GREEN;
-			else
-				color = BLUE;
-			my_mlx_pixel_put(&data,(int)x_img, (int)y_img, color);
+			my_mlx_pixel_put(&data,(int)x_img, (int)y_img, is_crossed(x_img, y_img, &info));
 			x_img++;
 		}
 		y_img++;
