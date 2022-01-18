@@ -53,6 +53,7 @@ t_vec3      vec3(double x, double y, double z);
 t_vec3		add(const t_vec3*a, const t_vec3*b);
 t_vec3		add_deep(const t_vec3 a, const t_vec3 b);
 t_vec3      sub(const t_vec3*a, const t_vec3*b);
+t_vec3		sub_deep(const t_vec3 a, const t_vec3 b);
 t_vec3		times(double nb, const t_vec3*a);
 double      dot(const t_vec3* a, const t_vec3* b);
 double      squared_norm(const t_vec3*v);

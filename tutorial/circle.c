@@ -5,6 +5,12 @@
 
 #define W_IMG 500
 #define H_IMG 500
+#define REF_FACTOR_ENV 0.01
+#define REF_FACTOR_DIFFUSE 0.69
+#define REF_FACTOR_MIRROR 0.3
+#define ILLUMI_RATE_ENV 0.1
+#define ILLUMI_RATE_DIR 1.0
+#define GLOSSINESS 8
 
 void put_info(t_info *info)
 {
@@ -39,7 +45,7 @@ t_vec3	conv2to3(double x_img, double y_img)
 	return (vec_onscrn);
 }
 
-double	cal_t(double a, double b, double d)
+double	get_fact_t(double a, double b, double d)
 {
 	double	d_sqrt;
 	double	mol1;
@@ -63,17 +69,46 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-color_int	next(t_info *info, double t)
+double	get_brilliance(t_info *info, double dot_norm_inc)
 {
-	info->vec_int = add_deep(info->vec_view, times(t, &(info->vec_ray)));
+	double	br_env;
+	double	br_diffuse;
+	double	br_mirror;
+	t_vec3	vec_ref;
+	t_vec3	vec_view_reverse;
+
+	br_env = REF_FACTOR_ENV * ILLUMI_RATE_ENV;
+	if (dot_norm_inc > 0)
+	{
+		br_diffuse = REF_FACTOR_DIFFUSE * ILLUMI_RATE_DIR * dot_norm_inc;
+		vec_ref = sub_deep(times(2*dot_norm_inc, &(info->vec_norm)), info->vec_inc);
+		normalize(&vec_ref);
+		vec_view_reverse = times(-1, &(info->vec_ray));
+		br_mirror = REF_FACTOR_MIRROR * ILLUMI_RATE_DIR * pow(dot(&vec_ref, &vec_view_reverse), GLOSSINESS);
+	}
+	else
+	{
+		br_diffuse = 0;
+		br_mirror = 0;
+	}
+	return(br_env + br_diffuse + br_mirror);
+}
+
+color_int	shading(t_info *info, double fact_ray)
+{
+	int				rgb;
+	double			brilliance;
+
+	info->vec_int = add_deep(info->vec_view, times(fact_ray, &(info->vec_ray)));
 	info->vec_inc = sub(&(info->vec_light), &(info->vec_int));
 	normalize(&(info->vec_inc));
 	info->vec_norm = sub(&(info->vec_int), &(info->vec_ctr));
 	normalize(&(info->vec_norm));
-	int	gray = 255 * dot(&(info->vec_norm), &(info->vec_inc));
-	if (gray < 0)
-		gray = 0;
-	return (create_trgb(0, gray, gray, gray));
+	brilliance = get_brilliance(info, dot(&(info->vec_norm), &(info->vec_inc)));
+	if (brilliance > 1)
+		brilliance = 1;
+	rgb = 255 * brilliance;
+	return (create_trgb(0, rgb, rgb, rgb));
 }
 
 color_int	raytrace(double x_img, double y_img, t_info *info)
@@ -82,7 +117,7 @@ color_int	raytrace(double x_img, double y_img, t_info *info)
 	double	b;
 	double	c;
 	double	d;
-	double	t;
+	double	fact_ray;
 
 	info->vec_onscrn = conv2to3(x_img, y_img);
 	info->vec_ray = (sub(&(info->vec_onscrn), &(info->vec_view)));
@@ -91,9 +126,9 @@ color_int	raytrace(double x_img, double y_img, t_info *info)
 	b = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
 	c = info->buf;
 	d = SQR(b) - 4 * a * c;
-	t = cal_t(a, b, d);
-	if (t > 0)
-		return (next(info, t));
+	fact_ray = get_fact_t(a, b, d);
+	if (fact_ray > 0)
+		return (shading(info, fact_ray));
 	return (PURPLE);
 }
 
