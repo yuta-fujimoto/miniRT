@@ -8,7 +8,7 @@
 
 void put_info(t_info *info)
 {
-	//rm
+	//norminette
 	printf("------------------------>info\n");
 	printf("vec->onscrn->%s\n", vector_str(&(info->vec_onscrn)));
 	printf("vec_view->%s\n", vector_str(&(info->vec_view)));
@@ -66,9 +66,6 @@ int	create_trgb(int t, int r, int g, int b)
 color_int	next(t_info *info, double t)
 {
 	info->vec_int = add_deep(info->vec_view, times(t, &(info->vec_ray)));
-	//t_vec3	ctr_to_int = sub(&(info->vec_int), &(info->vec_ctr));
-	//if (info->radius - 0.1 <= norm(&(ctr_to_int)) && norm(&(ctr_to_int)) <= info->radius + 0.1)
-	//	return (GREEN);
 	info->vec_inc = sub(&(info->vec_light), &(info->vec_int));
 	normalize(&(info->vec_inc));
 	info->vec_norm = sub(&(info->vec_int), &(info->vec_ctr));
