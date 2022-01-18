@@ -2,9 +2,11 @@
 #define VECTOR_UTILS_H
 
 #include "miniRT.h"
+#include "mlx.h"
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define BLACK 0x00000000
 #define RED 0x00FF0000
@@ -14,6 +16,15 @@
 #define WHITE 0x00FFFFFF
 #define NAVY 0x00000080
 #define PURPLE 0x00800080
+
+#define W_IMG 500
+#define H_IMG 500
+#define REF_FACTOR_ENV 0.01
+#define REF_FACTOR_DIFFUSE 0.69
+#define REF_FACTOR_MIRROR 0.3
+#define ILLUMI_RATE_ENV 0.1
+#define ILLUMI_RATE_DIR 1.0
+#define GLOSSINESS 8
 
 #define SQR(x) ((x)*(x))
 #define MIN(a,b) (a < b ? a : b)
@@ -46,9 +57,11 @@ typedef struct	s_info {
 	double	buf;
 }	t_info;
 
+//hook_funcs.c
 int         ft_exit(t_data *data);
 int         key_hook(int keycode, t_data *data);
 
+//vector_utils.c
 t_vec3      vec3(double x, double y, double z);
 t_vec3		add(const t_vec3*a, const t_vec3*b);
 t_vec3		add_deep(const t_vec3 a, const t_vec3 b);

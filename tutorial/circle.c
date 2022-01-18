@@ -1,16 +1,4 @@
-#include "mlx.h"
 #include "tutorial.h"
-#include <stdio.h>
-#include <stdbool.h>
-
-#define W_IMG 500
-#define H_IMG 500
-#define REF_FACTOR_ENV 0.01
-#define REF_FACTOR_DIFFUSE 0.69
-#define REF_FACTOR_MIRROR 0.3
-#define ILLUMI_RATE_ENV 0.1
-#define ILLUMI_RATE_DIR 1.0
-#define GLOSSINESS 8
 
 void put_info(t_info *info)
 {
@@ -31,37 +19,6 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
-}
-
-t_vec3	conv2to3(double x_img, double y_img)
-{
-	t_vec3	vec_onscrn;
-	double	w_scrn = 2;
-	double	h_scrn = 2;
-
-	vec_onscrn.x = w_scrn * (x_img / (W_IMG - 1)) - (w_scrn / 2);
-	vec_onscrn.y = h_scrn * (y_img / (W_IMG - 1)) - (w_scrn / 2);
-	vec_onscrn.z = 0;
-	return (vec_onscrn);
-}
-
-double	get_fact_t(double a, double b, double d)
-{
-	double	d_sqrt;
-	double	mol1;
-	double	mol2;
-
-	if (d >= 0)
-	{
-		d_sqrt = sqrt(d);
-		mol1 = -b + d_sqrt;
-		mol2 = -b - d_sqrt;
-		if (0 < mol1 && mol1 < mol2)
-			return (mol1 / 2 * a);
-		else if (0 < mol2)
-			return (mol2 / 2 * a);
-	}
-	return (-1);
 }
 
 int	create_trgb(int t, int r, int g, int b)
@@ -94,12 +51,12 @@ double	get_brilliance(t_info *info, double dot_norm_inc)
 	return(br_env + br_diffuse + br_mirror);
 }
 
-color_int	shading(t_info *info, double fact_ray)
+color_int	reflection(t_info *info, double factor_ray)
 {
-	int				rgb;
-	double			brilliance;
+	int		rgb;
+	double	brilliance;
 
-	info->vec_int = add_deep(info->vec_view, times(fact_ray, &(info->vec_ray)));
+	info->vec_int = add_deep(info->vec_view, times(factor_ray, &(info->vec_ray)));
 	info->vec_inc = sub(&(info->vec_light), &(info->vec_int));
 	normalize(&(info->vec_inc));
 	info->vec_norm = sub(&(info->vec_int), &(info->vec_ctr));
@@ -111,24 +68,61 @@ color_int	shading(t_info *info, double fact_ray)
 	return (create_trgb(0, rgb, rgb, rgb));
 }
 
+t_vec3	conv2to3(double x_img, double y_img)
+{
+	t_vec3	vec_onscrn;
+	double	w_scrn = 2;
+	double	h_scrn = 2;
+
+	vec_onscrn.x = w_scrn * (x_img / (W_IMG - 1)) - (w_scrn / 2);
+	vec_onscrn.y = h_scrn * (y_img / (W_IMG - 1)) - (w_scrn / 2);
+	vec_onscrn.z = 0;
+	return (vec_onscrn);
+}
+
+double	get_fact_ray(double a, double b, double d)
+{
+	double	d_sqrt;
+	double	mol1;
+	double	mol2;
+
+	if (d >= 0)
+	{
+		d_sqrt = sqrt(d);
+		mol1 = -b + d_sqrt;
+		mol2 = -b - d_sqrt;
+		if (0 < mol1 && mol1 < mol2)
+			return (mol1 / 2 * a);
+		else if (0 < mol2)
+			return (mol2 / 2 * a);
+	}
+	return (-1);
+}
+
+typedef enum e_formula
+{
+	A,
+	B,
+	C,
+	D,
+	FORMULA_NUM
+}	t_formula;
+
 color_int	raytrace(double x_img, double y_img, t_info *info)
 {
-	double	a;
-	double	b;
-	double	c;
-	double	d;
-	double	fact_ray;
+	double	form[FORMULA_NUM];
+	double	factor_ray;
 
 	info->vec_onscrn = conv2to3(x_img, y_img);
 	info->vec_ray = (sub(&(info->vec_onscrn), &(info->vec_view)));
 	normalize(&(info->vec_ray));
-	a = squared_norm(&(info->vec_ray));
-	b = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
-	c = info->buf;
-	d = SQR(b) - 4 * a * c;
-	fact_ray = get_fact_t(a, b, d);
-	if (fact_ray > 0)
-		return (shading(info, fact_ray));
+	form[A] = squared_norm(&(info->vec_ray));
+	form[B] = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
+	form[C] = info->buf;
+	form[D] = SQR(form[B]) - 4 * form[A] * form[C];
+	factor_ray = get_fact_ray(form[A], form[B], form[D]);
+	if (factor_ray > 0)
+		return (reflection(info, factor_ray));
 	return (PURPLE);
 }
 
