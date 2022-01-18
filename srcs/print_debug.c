@@ -2,7 +2,7 @@
 
 void print_color(t_color c, char *prefix)
 {
-	printf("%s: %d %d %d\n", prefix, c.r, c.g, c.b);
+	printf("%s: %f %f %f\n", prefix, c.r, c.g, c.b);
 }
 
 void print_vec3(t_vec3 v, char *prefix)
