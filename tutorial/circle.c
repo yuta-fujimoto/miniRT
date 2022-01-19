@@ -4,10 +4,10 @@ void put_info(t_info *info)
 {
 	//norminette
 	printf("------------------------>info\n");
-	printf("vec->onscrn->%s\n", vector_str(&(info->vec_onscrn)));
-	printf("vec_view->%s\n", vector_str(&(info->vec_view)));
-	printf("vec_light->%s\n", vector_str(&(info->vec_light)));
-	printf("vec_ray->%s\n", vector_str(&(info->vec_ray)));
+	printf("vec->onscrn->%s\n", vector_str(&(info->pos_onscrn)));
+	printf("pos_camera->%s\n", vector_str(&(info->pos_camera)));
+	printf("pos_light->%s\n", vector_str(&(info->pos_light)));
+	printf("dir_ray->%s\n", vector_str(&(info->dir_ray)));
 	printf("vec_ctr->%s\n", vector_str(&(info->vec_ctr)));
 	printf("vec_ctr_to_view->%s\n", vector_str(&(info->vec_ctr_to_view)));
 	printf("vec_int->%s\n", vector_str(&(info->vec_int)));
@@ -32,7 +32,7 @@ double	get_brilliance(t_info *info, double dot_norm_inc)
 	double	br_diffuse;
 	double	br_mirror;
 	t_vec3	vec_ref;
-	t_vec3	vec_view_reverse;
+	t_vec3	pos_camera_reverse;
 
 	br_env = REF_FACTOR_ENV * ILLUMI_RATE_ENV;
 	if (dot_norm_inc > 0)
@@ -40,8 +40,9 @@ double	get_brilliance(t_info *info, double dot_norm_inc)
 		br_diffuse = REF_FACTOR_DIFFUSE * ILLUMI_RATE_DIR * dot_norm_inc;
 		vec_ref = sub_deep(times(2*dot_norm_inc, &(info->vec_norm)), info->vec_inc);
 		normalize(&vec_ref);
-		vec_view_reverse = times(-1, &(info->vec_ray));
-		br_mirror = REF_FACTOR_MIRROR * ILLUMI_RATE_DIR * pow(dot(&vec_ref, &vec_view_reverse), GLOSSINESS);
+		pos_camera_reverse = times(-1, &(info->dir_ray));
+		//normalize(&pos_camera_reverse);
+		br_mirror = REF_FACTOR_MIRROR * ILLUMI_RATE_DIR * pow(dot(&vec_ref, &pos_camera_reverse), GLOSSINESS);
 	}
 	else
 	{
@@ -51,13 +52,13 @@ double	get_brilliance(t_info *info, double dot_norm_inc)
 	return(br_env + br_diffuse + br_mirror);
 }
 
-color_int	reflection(t_info *info, double factor_ray)
+color_int	reflection(t_info *info, double t)
 {
 	int		rgb;
 	double	brilliance;
 
-	info->vec_int = add_deep(info->vec_view, times(factor_ray, &(info->vec_ray)));
-	info->vec_inc = sub(&(info->vec_light), &(info->vec_int));
+	info->vec_int = add_deep(info->pos_camera, times(t, &(info->dir_ray)));
+	info->vec_inc = sub(&(info->pos_light), &(info->vec_int));
 	normalize(&(info->vec_inc));
 	info->vec_norm = sub(&(info->vec_int), &(info->vec_ctr));
 	normalize(&(info->vec_norm));
@@ -70,17 +71,17 @@ color_int	reflection(t_info *info, double factor_ray)
 
 t_vec3	conv2to3(double x_img, double y_img)
 {
-	t_vec3	vec_onscrn;
+	t_vec3	pos_onscrn;
 	double	w_scrn = 2;
 	double	h_scrn = 2;
 
-	vec_onscrn.x = w_scrn * (x_img / (W_IMG - 1)) - (w_scrn / 2);
-	vec_onscrn.y = h_scrn * (y_img / (W_IMG - 1)) - (w_scrn / 2);
-	vec_onscrn.z = 0;
-	return (vec_onscrn);
+	pos_onscrn.x = w_scrn * (x_img / (W_IMG - 1)) - (w_scrn / 2);
+	pos_onscrn.y = h_scrn * (y_img / (H_IMG - 1)) - (h_scrn / 2);
+	pos_onscrn.z = 0;
+	return (pos_onscrn);
 }
 
-double	get_fact_ray(double a, double b, double d)
+double	get_t(double a, double b, double d)
 {
 	double	d_sqrt;
 	double	mol1;
@@ -91,7 +92,7 @@ double	get_fact_ray(double a, double b, double d)
 		d_sqrt = sqrt(d);
 		mol1 = -b + d_sqrt;
 		mol2 = -b - d_sqrt;
-		if (0 < mol1 && mol1 < mol2)
+		if (0 < mol1 && mol1 < mol2)//計算後を比較
 			return (mol1 / 2 * a);
 		else if (0 < mol2)
 			return (mol2 / 2 * a);
@@ -111,18 +112,18 @@ typedef enum e_formula
 color_int	raytrace(double x_img, double y_img, t_info *info)
 {
 	double	form[FORMULA_NUM];
-	double	factor_ray;
+	double	t;
 
-	info->vec_onscrn = conv2to3(x_img, y_img);
-	info->vec_ray = (sub(&(info->vec_onscrn), &(info->vec_view)));
-	normalize(&(info->vec_ray));
-	form[A] = squared_norm(&(info->vec_ray));
-	form[B] = 2 * dot(&(info->vec_ctr_to_view), &(info->vec_ray));
+	info->pos_onscrn = conv2to3(x_img, y_img);
+	info->dir_ray = (sub(&(info->pos_onscrn), &(info->pos_camera)));
+	normalize(&(info->dir_ray));
+	form[A] = squared_norm(&(info->dir_ray));
+	form[B] = 2 * dot(&(info->vec_ctr_to_view), &(info->dir_ray));
 	form[C] = info->buf;
 	form[D] = SQR(form[B]) - 4 * form[A] * form[C];
-	factor_ray = get_fact_ray(form[A], form[B], form[D]);
-	if (factor_ray > 0)
-		return (reflection(info, factor_ray));
+	t = get_t(form[A], form[B], form[D]);
+	if (t > 0)
+		return (reflection(info, t));
 	return (PURPLE);
 }
 
@@ -136,12 +137,12 @@ void	init_data(t_data *data)
 
 void	init_info(t_info *info)
 {
-	info->vec_onscrn = vec3(0.0, 0.0, 0.0);
-	info->vec_view = vec3(0.0, 0.0, -5.0);
-	info->vec_light = vec3(-5.0, 5.0, -5.0);
-	info->vec_ray = vec3(0.0, 0.0, 0.0);
+	info->pos_onscrn = vec3(0.0, 0.0, 0.0);
+	info->pos_camera = vec3(0.0, 0.0, -5.0);
+	info->pos_light = vec3(-5.0, 5.0, -5.0);
+	info->dir_ray = vec3(0.0, 0.0, 0.0);
 	info->vec_ctr = vec3(0.0, 0.0, 5.0);
-	info->vec_ctr_to_view = sub(&(info->vec_view), &(info->vec_ctr));
+	info->vec_ctr_to_view = sub(&(info->pos_camera), &(info->vec_ctr));
 	info->vec_int = vec3(0.0, 0.0, 0.0);
 	info->vec_inc = vec3(0.0, 0.0, 0.0);
 	info->vec_norm = vec3(0.0, 0.0, 0.0);

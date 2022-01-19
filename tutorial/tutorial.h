@@ -17,8 +17,8 @@
 #define NAVY 0x00000080
 #define PURPLE 0x00800080
 
-#define W_IMG 500
-#define H_IMG 500
+#define W_IMG 512
+#define H_IMG 512
 #define REF_FACTOR_ENV 0.01
 #define REF_FACTOR_DIFFUSE 0.69
 #define REF_FACTOR_MIRROR 0.3
@@ -44,10 +44,10 @@ typedef struct	s_data {
 }	t_data;
 
 typedef struct	s_info {
-	t_vec3	vec_onscrn;
-	t_vec3	vec_view;
-	t_vec3	vec_light;
-	t_vec3	vec_ray;
+	t_vec3	pos_onscrn;
+	t_vec3	pos_camera;
+	t_vec3	pos_light;
+	t_vec3	dir_ray;
 	t_vec3	vec_ctr;
 	t_vec3	vec_ctr_to_view;
 	t_vec3	vec_int;
