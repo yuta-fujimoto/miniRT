@@ -84,20 +84,20 @@ t_vec3	conv2to3(double x_img, double y_img)
 double	get_t(double a, double b, double d)
 {
 	double	d_sqrt;
-	double	mol1;
-	double	mol2;
+	double	t1;
+	double	t2;
 
 	if (d >= 0)
 	{
 		d_sqrt = sqrt(d);
-		mol1 = -b + d_sqrt;
-		mol2 = -b - d_sqrt;
-		if (0 < mol1 && mol1 < mol2)//計算後を比較
-			return (mol1 / 2 * a);
-		else if (0 < mol2)
-			return (mol2 / 2 * a);
+		t1 = (-b + d_sqrt) / 2 * a;
+		t2 = (-b - d_sqrt) / 2 * a;
+		if (0 < t1 && (t1 < t2 || t2 <= 0))
+			return (t1);
+		else if (0 < t2)
+			return (t2);
 	}
-	return (-1);
+	return (0);
 }
 
 typedef enum e_formula
@@ -137,15 +137,15 @@ void	init_data(t_data *data)
 
 void	init_info(t_info *info)
 {
-	info->pos_onscrn = vec3(0.0, 0.0, 0.0);
-	info->pos_camera = vec3(0.0, 0.0, -5.0);
+	info->pos_onscrn = vec3(0, 0, 0);
+	info->pos_camera = vec3(0, 0, -5.0);
 	info->pos_light = vec3(-5.0, 5.0, -5.0);
-	info->camera_to_onscrn = vec3(0.0, 0.0, 0.0);
-	info->pos_centr = vec3(0.0, 0.0, 5.0);
+	info->camera_to_onscrn = vec3(0, 0, 0);
+	info->pos_centr = vec3(0, 0, 5.0);
 	info->centr_to_camera = sub(&(info->pos_camera), &(info->pos_centr));
-	info->pos_inter = vec3(0.0, 0.0, 0.0);
-	info->pos_incident = vec3(0.0, 0.0, 0.0);
-	info->pos_vertical = vec3(0.0, 0.0, 0.0);
+	info->pos_inter = vec3(0, 0, 0);
+	info->pos_incident = vec3(0, 0, 0);
+	info->pos_vertical = vec3(0, 0, 0);
 	info->radius = 1.0;
 	info->buf = squared_norm(&(info->centr_to_camera)) - SQR(info->radius);
 }
