@@ -6,6 +6,16 @@ static bool end_conversion(char **s, bool rlt)
 	return (rlt);
 }
 
+t_vec3 vec3(const double x, const double y, const double z)
+{
+	t_vec3	ret;
+
+	ret.x = x;
+	ret.y = y;
+	ret.z = z;
+	return (ret);
+}
+
 bool atovec3(char const *nptr, t_vec3 *v)
 {
 	char	**vec3;
@@ -25,18 +35,4 @@ bool is_normalized_vector(t_vec3 v)
 {
 	return (v.x >= -1.0 && v.x <= 1.0 && v.y >= -1.0 
 		&& v.y <= 1.0 && v.z >= -1.0 && v.z <= 1.0);
-}
-
-double norm(const t_vec3 *v)
-{
-  return sqrt(squared_norm(v));
-}
-
-double normalize(t_vec3* v)
-{
-  double vnorm = norm(v);
-  v->x /= vnorm;
-  v->y /= vnorm;
-  v->z /= vnorm;
-  return vnorm;
 }

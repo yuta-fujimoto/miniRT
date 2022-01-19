@@ -1,7 +1,6 @@
 #ifndef VECTOR_UTILS_H
 #define VECTOR_UTILS_H
 
-#include "miniRT.h"
 #include "mlx.h"
 #include <stdio.h>
 #include <stdlib.h>

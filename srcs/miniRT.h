@@ -111,6 +111,7 @@ typedef struct s_world {
 
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
+t_color	cmult(const t_color a, const t_color b);
 // color
 
 bool		atovec3(char const *nptr, t_vec3 *rlt);
@@ -118,16 +119,16 @@ bool		is_normalized_vector(t_vec3 v);
 t_vec3      vec3(double x, double y, double z);
 t_vec3 add(const t_vec3 a, const t_vec3 b);
 t_vec3      sub(const t_vec3 a, const t_vec3 b);
-t_vec3 mul(const t_vec3 a, const t_vec3 b);
-t_vec3 vec3sigma(double i, const t_vec3 a, double j, const t_vec3 b);
+t_vec3 		mult(const t_vec3 a, const t_vec3 b);
+t_vec3		times(const double nb, const t_vec3 a);
 double      dot(const t_vec3 *a, const t_vec3 *b);
 double      squared_norm(const t_vec3 *v);
 double      norm(const t_vec3 *v);
 double      normalize(t_vec3* v);
-t_vec3      cross(const t_vec3*a, const t_vec3*b);
+t_vec3      cross(const t_vec3 a, const t_vec3 b);
 // vector
 
-t_world *parser(char *fn);
+bool parser(char *fn, t_world *w);
 bool parser_amb_light(t_world *world, char **info);
 bool parser_light(t_world *world, char **info);
 bool parser_camera(t_world *world, char **info);
@@ -143,7 +144,7 @@ void print_vec3(t_vec3 v, char *prefix);
 
 void	ft_str_arr_free(char **str_arr);
 int		ft_str_arr_len(char **str_arr);
-t_world	*end_world(t_world *w);
+bool	end_world(t_world *w, bool rlt);
 void	safe_free(void *p);
 // utils
 

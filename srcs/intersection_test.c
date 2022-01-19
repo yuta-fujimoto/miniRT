@@ -21,7 +21,7 @@ static bool	intersection_test_plane(const t_plane *plane, const t_ray *ray, t_in
 		if (t > 0)
 		{
 			out_intp->distance = t * norm(&ray->direction);
-			out_intp->position = vec3sigma(t, ray->direction, 1, ray->start);
+			out_intp->position = add(times(t, ray->direction), times(1, ray->start));
 			out_intp->normal = plane->norm_ori_vec;
 			return (true);
 		}

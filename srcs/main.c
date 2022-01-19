@@ -24,7 +24,7 @@ t_vec3 conv2to3(double x_img, double y_img)
 
 int main(int ac, char **av)
 {
-	t_world	*w;
+	t_world	w;
 	t_ray	camray;
 	t_data	data;
 	double x_img;
@@ -40,14 +40,13 @@ int main(int ac, char **av)
 		ft_putendl_fd("NO ARGUMENT", STDERR_FILENO);
 		return (0);
 	}
-	w = parser(av[1]);
-	if (!w)
+	if (!parser(av[1], &w))
 	{
 		ft_putendl_fd("ERROR", STDERR_FILENO);
 		return (0);
 	}
-	print_world(w);
-	camray.start = w->camera.pos;
+	print_world(&w);
+	camray.start = w.camera.pos;
 	y_img = 0;
 	while (y_img < H_IMG)
 	{
@@ -55,7 +54,7 @@ int main(int ac, char **av)
 		while (x_img < W_IMG)
 		{
 			camray.direction = sub(conv2to3(x_img, y_img), camray.start);
-			if (!raytrace(w, &camray, &col))
+			if (!raytrace(&w, &camray, &col))
 				col = color(1.0, 1.0, 1.0);
 			my_mlx_pixel_put(&data, (int)x_img, (int)y_img, col);
 			x_img++;
@@ -67,5 +66,5 @@ int main(int ac, char **av)
 	mlx_key_hook(data.mlx_win, key_hook, &data);
 	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
 	mlx_loop(data.mlx);
-	end_world(w);
+	end_world(&w, true);
 }

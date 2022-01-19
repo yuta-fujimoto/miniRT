@@ -6,11 +6,11 @@ SRCS :=	srcs/main.c \
 		srcs/parser_obj_elems.c \
 		srcs/parser.c \
 		srcs/utils.c \
-		srcs/vec3_1.c \
-		srcs/vec3_2.c \
-		srcs/vec3_3.c \
+		srcs/vector_utils1.c \
+		srcs/vector_utils2.c \
+		srcs/vector_utils3.c \
+		srcs/color_utils.c \
 		srcs/print_debug.c \
-		srcs/color.c \
 		srcs/hook_funcs.c \
 		srcs/intersection_test.c \
 		srcs/raytrace.c
@@ -24,8 +24,8 @@ LIBNAME := libft.a
 
 GNL := ./gnl
 GNLNAME := get_next_line_bonus.o get_next_line_utils_bonus.o
-GNLFILE :=  $(GNL)/get_next_line_bonus.o \
-			$(GNL)/get_next_line_utils_bonus.o
+GNLFILE :=  $(GNL)/get_next_line_utils_bonus.o \
+			$(GNL)/get_next_line_bonus.o
 
 %.o: %.c
 	$(CC) $(CFLAG)  -I$(MLXDIR)  -c $< -o $@
