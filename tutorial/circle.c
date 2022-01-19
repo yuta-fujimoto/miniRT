@@ -7,10 +7,10 @@ void put_info(t_info *info)
 	printf("vec->onscrn->%s\n", vector_str(&(info->pos_onscrn)));
 	printf("pos_camera->%s\n", vector_str(&(info->pos_camera)));
 	printf("pos_light->%s\n", vector_str(&(info->pos_light)));
-	printf("dir_ray->%s\n", vector_str(&(info->dir_ray)));
-	printf("vec_ctr->%s\n", vector_str(&(info->vec_ctr)));
-	printf("vec_ctr_to_view->%s\n", vector_str(&(info->vec_ctr_to_view)));
-	printf("vec_int->%s\n", vector_str(&(info->vec_int)));
+	printf("camera_to_onscrn->%s\n", vector_str(&(info->camera_to_onscrn)));
+	printf("pos_centr->%s\n", vector_str(&(info->pos_centr)));
+	printf("centr_to_camera->%s\n", vector_str(&(info->centr_to_camera)));
+	printf("pos_inter->%s\n", vector_str(&(info->pos_inter)));
 }
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -38,9 +38,9 @@ double	get_brilliance(t_info *info, double dot_norm_inc)
 	if (dot_norm_inc > 0)
 	{
 		br_diffuse = REF_FACTOR_DIFFUSE * ILLUMI_RATE_DIR * dot_norm_inc;
-		vec_ref = sub_deep(times(2*dot_norm_inc, &(info->vec_norm)), info->vec_inc);
+		vec_ref = sub_deep(times(2*dot_norm_inc, &(info->pos_vertical)), info->pos_incident);
 		normalize(&vec_ref);
-		pos_camera_reverse = times(-1, &(info->dir_ray));
+		pos_camera_reverse = times(-1, &(info->camera_to_onscrn));
 		//normalize(&pos_camera_reverse);
 		br_mirror = REF_FACTOR_MIRROR * ILLUMI_RATE_DIR * pow(dot(&vec_ref, &pos_camera_reverse), GLOSSINESS);
 	}
@@ -57,12 +57,12 @@ color_int	reflection(t_info *info, double t)
 	int		rgb;
 	double	brilliance;
 
-	info->vec_int = add_deep(info->pos_camera, times(t, &(info->dir_ray)));
-	info->vec_inc = sub(&(info->pos_light), &(info->vec_int));
-	normalize(&(info->vec_inc));
-	info->vec_norm = sub(&(info->vec_int), &(info->vec_ctr));
-	normalize(&(info->vec_norm));
-	brilliance = get_brilliance(info, dot(&(info->vec_norm), &(info->vec_inc)));
+	info->pos_inter = add_deep(info->pos_camera, times(t, &(info->camera_to_onscrn)));
+	info->pos_incident = sub(&(info->pos_light), &(info->pos_inter));
+	normalize(&(info->pos_incident));
+	info->pos_vertical = sub(&(info->pos_inter), &(info->pos_centr));
+	normalize(&(info->pos_vertical));
+	brilliance = get_brilliance(info, dot(&(info->pos_vertical), &(info->pos_incident)));
 	if (brilliance > 1)
 		brilliance = 1;
 	rgb = 255 * brilliance;
@@ -115,10 +115,10 @@ color_int	raytrace(double x_img, double y_img, t_info *info)
 	double	t;
 
 	info->pos_onscrn = conv2to3(x_img, y_img);
-	info->dir_ray = (sub(&(info->pos_onscrn), &(info->pos_camera)));
-	normalize(&(info->dir_ray));
-	form[A] = squared_norm(&(info->dir_ray));
-	form[B] = 2 * dot(&(info->vec_ctr_to_view), &(info->dir_ray));
+	info->camera_to_onscrn = (sub(&(info->pos_onscrn), &(info->pos_camera)));
+	normalize(&(info->camera_to_onscrn));
+	form[A] = squared_norm(&(info->camera_to_onscrn));
+	form[B] = 2 * dot(&(info->centr_to_camera), &(info->camera_to_onscrn));
 	form[C] = info->buf;
 	form[D] = SQR(form[B]) - 4 * form[A] * form[C];
 	t = get_t(form[A], form[B], form[D]);
@@ -140,14 +140,14 @@ void	init_info(t_info *info)
 	info->pos_onscrn = vec3(0.0, 0.0, 0.0);
 	info->pos_camera = vec3(0.0, 0.0, -5.0);
 	info->pos_light = vec3(-5.0, 5.0, -5.0);
-	info->dir_ray = vec3(0.0, 0.0, 0.0);
-	info->vec_ctr = vec3(0.0, 0.0, 5.0);
-	info->vec_ctr_to_view = sub(&(info->pos_camera), &(info->vec_ctr));
-	info->vec_int = vec3(0.0, 0.0, 0.0);
-	info->vec_inc = vec3(0.0, 0.0, 0.0);
-	info->vec_norm = vec3(0.0, 0.0, 0.0);
+	info->camera_to_onscrn = vec3(0.0, 0.0, 0.0);
+	info->pos_centr = vec3(0.0, 0.0, 5.0);
+	info->centr_to_camera = sub(&(info->pos_camera), &(info->pos_centr));
+	info->pos_inter = vec3(0.0, 0.0, 0.0);
+	info->pos_incident = vec3(0.0, 0.0, 0.0);
+	info->pos_vertical = vec3(0.0, 0.0, 0.0);
 	info->radius = 1.0;
-	info->buf = squared_norm(&(info->vec_ctr_to_view)) - SQR(info->radius);
+	info->buf = squared_norm(&(info->centr_to_camera)) - SQR(info->radius);
 }
 
 int	main(void)

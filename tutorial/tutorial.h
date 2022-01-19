@@ -47,12 +47,12 @@ typedef struct	s_info {
 	t_vec3	pos_onscrn;
 	t_vec3	pos_camera;
 	t_vec3	pos_light;
-	t_vec3	dir_ray;
-	t_vec3	vec_ctr;
-	t_vec3	vec_ctr_to_view;
-	t_vec3	vec_int;
-	t_vec3	vec_inc;
-	t_vec3	vec_norm;
+	t_vec3	camera_to_onscrn;
+	t_vec3	pos_centr;
+	t_vec3	centr_to_camera;
+	t_vec3	pos_inter;
+	t_vec3	pos_incident;
+	t_vec3	pos_vertical;
 	double  radius;
 	double	buf;
 }	t_info;
