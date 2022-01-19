@@ -49,7 +49,7 @@ double	get_brilliance(t_info *info, double vertical_dot_incident)
 		vec_reflection = sub(times(2*vertical_dot_incident, info->pos_vertical), info->pos_incident);
 		normalize(&vec_reflection);
 		inverse_camera_to_onscrn = times(-1, info->camera_to_onscrn);
-		//normalize(&inverse_camera_to_onscrn);
+		normalize(&inverse_camera_to_onscrn);
 		br_mirror = REF_FACTOR_MIRROR * ILLUMI_RATE_DIR * pow(dot(&vec_reflection, &inverse_camera_to_onscrn), GLOSSINESS);
 	}
 	else
@@ -99,8 +99,8 @@ double	get_t(double a, double b, double d)
 	if (d >= 0)
 	{
 		d_sqrt = sqrt(d);
-		t1 = (-b + d_sqrt) / 2 * a;
-		t2 = (-b - d_sqrt) / 2 * a;
+		t1 = (-b + d_sqrt) / (2 * a);
+		t2 = (-b - d_sqrt) / (2 * a);
 		if (0 < t1 && (t1 < t2 || t2 <= 0))
 			return (t1);
 		else if (0 < t2)
@@ -125,7 +125,6 @@ color_int	raytrace(double x_img, double y_img, t_info *info)
 
 	info->pos_onscrn = conv2to3(x_img, y_img);
 	info->camera_to_onscrn = sub(info->pos_onscrn, info->pos_camera);
-	normalize(&(info->camera_to_onscrn));
 	form[A] = squared_norm(&(info->camera_to_onscrn));
 	form[B] = 2 * dot(&(info->centr_to_camera), &(info->camera_to_onscrn));
 	form[C] = info->buf;
