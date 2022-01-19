@@ -16,6 +16,7 @@ static bool	intersection_test_plane(const t_plane *plane, const t_ray *ray, t_in
 	t_vec3 normal;
 
 	normal = plane->norm_ori_vec;
+	normalize(&normal);
 	dn_dot = dot(&ray->direction, &normal);
 	if (dn_dot != 0)
 	{
