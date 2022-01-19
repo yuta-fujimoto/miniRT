@@ -17,7 +17,7 @@ static bool	intersection_test_plane(const t_plane *plane, const t_ray *ray, t_in
 	dn_dot = dot(&ray->direction, &plane->norm_ori_vec);
 	if (dn_dot != 0)
 	{
-		t = (dot(&plane->pos, &plane->norm_ori_vec) - dot(&ray->start, &plane->norm_ori_vec)) / dn_dot;
+		t = (dot(&plane->position, &plane->norm_ori_vec) - dot(&ray->start, &plane->norm_ori_vec)) / dn_dot;
 		if (t > 0)
 		{
 			out_intp->distance = t * norm(&ray->direction);

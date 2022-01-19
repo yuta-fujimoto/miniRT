@@ -17,21 +17,21 @@ void print_obj(t_list *l)
 		if (l->cont_type == Sphere)
 		{
 			printf("[SPHERE]\n");
-			print_color(((t_sphere *)l->content)->c, "COLOR");
-			printf("DIAM: %le\n", ((t_sphere *)l->content)->diameter);
 			print_vec3(((t_sphere *)l->content)->center, "CENTER");
+			printf("DIAM: %le\n", ((t_sphere *)l->content)->diameter);
+			print_color(((t_sphere *)l->content)->c, "COLOR");
 		}
 		else if (l->cont_type == Plane)
 		{
 			printf("[PLANE]\n");
-			print_vec3(((t_plane *)l->content)->pos, "POSITION");
+			print_vec3(((t_plane *)l->content)->position, "POSITION");
 			print_vec3(((t_plane *)l->content)->norm_ori_vec, "NORM VEC");
 			print_color(((t_plane *)l->content)->c, "COLOR");
 		}
 		else if (l->cont_type == Cylinder)
 		{
 			printf("[CYLINDER]\n");
-			print_vec3(((t_cylinder *)l->content)->pos, "POSITION");
+			print_vec3(((t_cylinder *)l->content)->position, "POSITION");
 			print_vec3(((t_cylinder *)l->content)->norm_ori_vec, "NORM VEC");
 			printf("DIAM, HEIGHT: %le %le\n", ((t_cylinder *)l->content)->diameter, ((t_cylinder *)l->content)->height);
 			print_color(((t_cylinder *)l->content)->c, "COLOR");
@@ -50,11 +50,12 @@ void print_world(t_world *w)
 	printf("RATIO: %le\n", w->amb_light.ratio);
 	print_color(w->amb_light.c, "COLOR");
 	printf("[CAMERA]\n");
-	print_vec3(w->camera.pos, "POSITION");
+	print_vec3(w->camera.position, "POSITION");
 	print_vec3(w->camera.norm_ori_vec, "NORM VEC");
 	printf("FOV: %d\n", w->camera.fov);
-	print_vec3(w->light.pos, "LIGHT POSITION");
-	printf("LIGHT RATIO: %le\n", w->light.ratio);
+	printf("[LIGHT]\n");
+	print_vec3(w->light.position, "POSITION");
+	printf("RATIO: %le\n", w->light.ratio);
 	print_obj(w->obj_list);
 }
 

@@ -32,7 +32,7 @@ bool	atocol(char const *nptr, t_color *c)
 	if (icolor[0] < 0 || icolor[0] > 255 ||
 		icolor[1] < 0 || icolor[1] > 255 || icolor[2] < 0 || icolor[2] > 255)
 		return (end_conversion(rgb, false));
-	*c = color(icolor[0] / 255, icolor[1] / 255, icolor[2] / 255);
+	*c = color(icolor[0] / 255.0, icolor[1] / 255.0, icolor[2] / 255.0);
 	return (end_conversion(rgb, true));
 }
 

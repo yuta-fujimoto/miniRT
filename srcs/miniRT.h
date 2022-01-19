@@ -70,7 +70,7 @@ typedef struct s_amb_light {
 } t_amb_light;
 
 typedef struct s_camera {
-	t_vec3 pos;
+	t_vec3 position;
 	t_vec3 norm_ori_vec;
 	int fov;
 } t_camera;
@@ -78,7 +78,7 @@ typedef struct s_camera {
 typedef struct s_light
 {
 	double ratio;
-	t_vec3 pos;
+	t_vec3 position;
 }	t_light;
 
 typedef struct s_sphere {
@@ -88,13 +88,13 @@ typedef struct s_sphere {
 }	t_sphere;
 
 typedef struct s_plane {
-	t_vec3 pos;
+	t_vec3 position;
 	t_vec3 norm_ori_vec;
 	t_color c;
 }	t_plane;
 
 typedef struct s_cylinder {
-	t_vec3 pos;
+	t_vec3 position;
 	t_vec3 norm_ori_vec;
 	double diameter;
 	double height;

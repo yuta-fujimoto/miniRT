@@ -35,7 +35,7 @@ bool parser_plane(t_world *world, char **info)
 	p = malloc(sizeof(t_plane));
 	if (!p)
 		return (p);
-	if (!atovec3(info[1], &p->pos))
+	if (!atovec3(info[1], &p->position))
 		return (parser_obj_failure(p));
 	if (!atovec3(info[2], &p->norm_ori_vec) || !is_normalized_vector(p->norm_ori_vec))
 		return (parser_obj_failure(p));
@@ -55,7 +55,7 @@ bool parser_cylinder(t_world *world, char **info)
 	c = malloc(sizeof(t_cylinder));
 	if (!c)
 		return (c);
-	if (!atovec3(info[1], &c->pos))
+	if (!atovec3(info[1], &c->position))
 		return (parser_obj_failure(c));
 	if (!atovec3(info[2], &c->norm_ori_vec) || !is_normalized_vector(c->norm_ori_vec))
 		return (parser_obj_failure(c));
