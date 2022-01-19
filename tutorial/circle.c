@@ -1,8 +1,17 @@
 #include "tutorial.h"
 
+const char* vector_str(const t_vec3*v)
+{
+	//will be deleted
+	static char buf[1024];
+	memset(buf, 0, sizeof(buf));
+	sprintf((void*)buf, "(%f, %f, %f)", v->x, v->y, v->z);
+	return buf;
+}
+
 void put_info(t_info *info)
 {
-	//norminette
+	//will be deleted
 	printf("------------------------>info\n");
 	printf("vec->onscrn->%s\n", vector_str(&(info->pos_onscrn)));
 	printf("pos_camera->%s\n", vector_str(&(info->pos_camera)));
@@ -10,7 +19,6 @@ void put_info(t_info *info)
 	printf("camera_to_onscrn->%s\n", vector_str(&(info->camera_to_onscrn)));
 	printf("pos_centr->%s\n", vector_str(&(info->pos_centr)));
 	printf("centr_to_camera->%s\n", vector_str(&(info->centr_to_camera)));
-	printf("pos_inter->%s\n", vector_str(&(info->pos_inter)));
 }
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -26,23 +34,23 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-double	get_brilliance(t_info *info, double dot_norm_inc)
+double	get_brilliance(t_info *info, double vertical_dot_incident)
 {
 	double	br_env;
 	double	br_diffuse;
 	double	br_mirror;
-	t_vec3	vec_ref;
-	t_vec3	pos_camera_reverse;
+	t_vec3	vec_reflection;
+	t_vec3	inverse_camera_to_onscrn;
 
 	br_env = REF_FACTOR_ENV * ILLUMI_RATE_ENV;
-	if (dot_norm_inc > 0)
+	if (vertical_dot_incident > 0)
 	{
-		br_diffuse = REF_FACTOR_DIFFUSE * ILLUMI_RATE_DIR * dot_norm_inc;
-		vec_ref = sub_deep(times(2*dot_norm_inc, &(info->pos_vertical)), info->pos_incident);
-		normalize(&vec_ref);
-		pos_camera_reverse = times(-1, &(info->camera_to_onscrn));
-		//normalize(&pos_camera_reverse);
-		br_mirror = REF_FACTOR_MIRROR * ILLUMI_RATE_DIR * pow(dot(&vec_ref, &pos_camera_reverse), GLOSSINESS);
+		br_diffuse = REF_FACTOR_DIFFUSE * ILLUMI_RATE_DIR * vertical_dot_incident;
+		vec_reflection = sub(times(2*vertical_dot_incident, info->pos_vertical), info->pos_incident);
+		normalize(&vec_reflection);
+		inverse_camera_to_onscrn = times(-1, info->camera_to_onscrn);
+		//normalize(&inverse_camera_to_onscrn);
+		br_mirror = REF_FACTOR_MIRROR * ILLUMI_RATE_DIR * pow(dot(&vec_reflection, &inverse_camera_to_onscrn), GLOSSINESS);
 	}
 	else
 	{
@@ -52,15 +60,16 @@ double	get_brilliance(t_info *info, double dot_norm_inc)
 	return(br_env + br_diffuse + br_mirror);
 }
 
-color_int	reflection(t_info *info, double t)
+color_int	get_color(t_info *info, double t)
 {
+	t_vec3	pos_intersection;
 	int		rgb;
 	double	brilliance;
 
-	info->pos_inter = add_deep(info->pos_camera, times(t, &(info->camera_to_onscrn)));
-	info->pos_incident = sub(&(info->pos_light), &(info->pos_inter));
+	pos_intersection = add(info->pos_camera, times(t, info->camera_to_onscrn));
+	info->pos_incident = sub(info->pos_light, pos_intersection);
 	normalize(&(info->pos_incident));
-	info->pos_vertical = sub(&(info->pos_inter), &(info->pos_centr));
+	info->pos_vertical = sub(pos_intersection, info->pos_centr);
 	normalize(&(info->pos_vertical));
 	brilliance = get_brilliance(info, dot(&(info->pos_vertical), &(info->pos_incident)));
 	if (brilliance > 1)
@@ -115,7 +124,7 @@ color_int	raytrace(double x_img, double y_img, t_info *info)
 	double	t;
 
 	info->pos_onscrn = conv2to3(x_img, y_img);
-	info->camera_to_onscrn = (sub(&(info->pos_onscrn), &(info->pos_camera)));
+	info->camera_to_onscrn = sub(info->pos_onscrn, info->pos_camera);
 	normalize(&(info->camera_to_onscrn));
 	form[A] = squared_norm(&(info->camera_to_onscrn));
 	form[B] = 2 * dot(&(info->centr_to_camera), &(info->camera_to_onscrn));
@@ -123,7 +132,7 @@ color_int	raytrace(double x_img, double y_img, t_info *info)
 	form[D] = SQR(form[B]) - 4 * form[A] * form[C];
 	t = get_t(form[A], form[B], form[D]);
 	if (t > 0)
-		return (reflection(info, t));
+		return (get_color(info, t));
 	return (PURPLE);
 }
 
@@ -142,8 +151,7 @@ void	init_info(t_info *info)
 	info->pos_light = vec3(-5.0, 5.0, -5.0);
 	info->camera_to_onscrn = vec3(0, 0, 0);
 	info->pos_centr = vec3(0, 0, 5.0);
-	info->centr_to_camera = sub(&(info->pos_camera), &(info->pos_centr));
-	info->pos_inter = vec3(0, 0, 0);
+	info->centr_to_camera = sub(info->pos_camera, info->pos_centr);
 	info->pos_incident = vec3(0, 0, 0);
 	info->pos_vertical = vec3(0, 0, 0);
 	info->radius = 1.0;

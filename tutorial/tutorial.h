@@ -50,7 +50,6 @@ typedef struct	s_info {
 	t_vec3	camera_to_onscrn;
 	t_vec3	pos_centr;
 	t_vec3	centr_to_camera;
-	t_vec3	pos_inter;
 	t_vec3	pos_incident;
 	t_vec3	pos_vertical;
 	double  radius;
@@ -62,17 +61,14 @@ int         ft_exit(t_data *data);
 int         key_hook(int keycode, t_data *data);
 
 //vector_utils.c
-t_vec3      vec3(double x, double y, double z);
-t_vec3		add(const t_vec3*a, const t_vec3*b);
-t_vec3		add_deep(const t_vec3 a, const t_vec3 b);
-t_vec3      sub(const t_vec3*a, const t_vec3*b);
-t_vec3		sub_deep(const t_vec3 a, const t_vec3 b);
-t_vec3		times(double nb, const t_vec3*a);
+t_vec3		vec3(const double x, const double y, const double z);
+t_vec3		add(const t_vec3 a, const t_vec3 b);
+t_vec3		sub(const t_vec3 a, const t_vec3 b);
+t_vec3		times(const double nb, const t_vec3 a);
 double      dot(const t_vec3* a, const t_vec3* b);
 double      squared_norm(const t_vec3*v);
 double      norm(const t_vec3 *v);
 double      normalize(t_vec3* v);
-t_vec3      cross(const t_vec3*a, const t_vec3*b);
-const char* vector_str(const t_vec3*v);
+t_vec3		cross(const t_vec3 a, const t_vec3 b);
 
 #endif /* VECTOR_UTILS_H */
