@@ -14,6 +14,10 @@
 
 #define W_IMG 500
 #define H_IMG 500
+#define REF_FACTOR_MIRROR 0.3
+#define ILLUMI_RATE_ENV 0.1
+#define ILLUMI_RATE_DIR 1.0
+#define GLOSSINESS 8
 
 #define SQR(x) ((x)*(x))
 #define MIN(a,b) (a < b ? a : b)
@@ -50,13 +54,6 @@ typedef struct s_ray
 	t_vec3 direction;
 } t_ray;
 
-typedef struct s_intersection_point
-{
-	double distance;
-	t_vec3 position;
-	t_vec3 normal;
-} t_intersection_point;
-
 typedef struct s_color
 {
 	double r;
@@ -64,13 +61,28 @@ typedef struct s_color
 	double b;
 } t_color;
 
+typedef struct s_intersection_point
+{
+	double distance;
+	t_vec3 pos;
+	t_vec3 normal;
+} t_intersection_point;
+
+typedef struct s_material
+{
+	t_color	ambient_ref;
+	t_color	diffuse_ref;
+	t_color	specular_ref;
+	double	shininess;
+}	t_material;
+
 typedef struct s_amb_light {
 	double ratio;
 	t_color c;
 } t_amb_light;
 
 typedef struct s_camera {
-	t_vec3 position;
+	t_vec3 pos;
 	t_vec3 norm_ori_vec;
 	int fov;
 } t_camera;
@@ -78,7 +90,7 @@ typedef struct s_camera {
 typedef struct s_light
 {
 	double ratio;
-	t_vec3 position;
+	t_vec3 pos;
 }	t_light;
 
 typedef struct s_sphere {
@@ -88,13 +100,13 @@ typedef struct s_sphere {
 }	t_sphere;
 
 typedef struct s_plane {
-	t_vec3 position;
+	t_vec3 pos;
 	t_vec3 norm_ori_vec;
 	t_color c;
 }	t_plane;
 
 typedef struct s_cylinder {
-	t_vec3 position;
+	t_vec3 pos;
 	t_vec3 norm_ori_vec;
 	double diameter;
 	double height;

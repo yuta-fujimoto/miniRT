@@ -17,7 +17,7 @@ bool parser_camera(t_world *w, char **info)
 {
 	if (ft_str_arr_len(info) != 4)
 		return (false);
-	if (!atovec3(info[1], &w->camera.position))
+	if (!atovec3(info[1], &w->camera.pos))
 		return (false);
 	if (!atovec3(info[2], &w->camera.norm_ori_vec) || !is_normalized_vector(w->camera.norm_ori_vec))
 		return (false);
@@ -31,7 +31,7 @@ bool parser_light(t_world *w, char **info)
 {
 	if (ft_str_arr_len(info) != 3)
 		return (false);
-	if (!atovec3(info[1], &w->light.position))
+	if (!atovec3(info[1], &w->light.pos))
 		return (false);
 	if (!ft_atof(info[2], &w->light.ratio) || w->light.ratio < 0 || w->light.ratio > 1.0)
 		return (false);

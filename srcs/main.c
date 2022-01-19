@@ -46,7 +46,7 @@ int main(int ac, char **av)
 		return (0);
 	}
 	print_world(&w);
-	camray.start = w.camera.position;
+	camray.start = w.camera.pos;
 	y_img = 0;
 	while (y_img < H_IMG)
 	{

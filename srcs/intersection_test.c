@@ -13,16 +13,18 @@ static bool	intersection_test_plane(const t_plane *plane, const t_ray *ray, t_in
 {
 	double dn_dot;
 	double t;
+	t_vec3 normal;
 
-	dn_dot = dot(&ray->direction, &plane->norm_ori_vec);
+	normal = plane->norm_ori_vec;
+	dn_dot = dot(&ray->direction, &normal);
 	if (dn_dot != 0)
 	{
-		t = (dot(&plane->position, &plane->norm_ori_vec) - dot(&ray->start, &plane->norm_ori_vec)) / dn_dot;
+		t = (dot(&plane->pos, &normal) - dot(&ray->start, &normal)) / dn_dot;
 		if (t > 0)
 		{
 			out_intp->distance = t * norm(&ray->direction);
-			out_intp->position = add(times(t, ray->direction), times(1, ray->start));
-			out_intp->normal = plane->norm_ori_vec;
+			out_intp->pos = add(times(t, ray->direction), times(1, ray->start));
+			out_intp->normal = normal;
 			return (true);
 		}
 	}
