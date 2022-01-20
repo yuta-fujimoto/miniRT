@@ -1,8 +1,17 @@
 #include "miniRT.h"
 
+const char *vector_str(const t_vec3 *v)
+{
+	static char buf[1024];
+
+	memset(buf, 0, sizeof(buf));
+	sprintf((void*)buf, "(%f, %f, %f)", v->x, v->y, v->z);
+	return (buf);
+}
+
 void print_color(t_color c, char *prefix)
 {
-	printf("%s: %d %d %d\n", prefix, c.r, c.g, c.b);
+	printf("%s: %f %f %f\n", prefix, c.r, c.g, c.b);
 }
 
 void print_vec3(t_vec3 v, char *prefix)
@@ -17,9 +26,9 @@ void print_obj(t_list *l)
 		if (l->cont_type == Sphere)
 		{
 			printf("[SPHERE]\n");
-			print_color(((t_sphere *)l->content)->c, "COLOR");
-			printf("DIAM: %le\n", ((t_sphere *)l->content)->diameter);
 			print_vec3(((t_sphere *)l->content)->center, "CENTER");
+			printf("DIAM: %le\n", ((t_sphere *)l->content)->diameter);
+			print_color(((t_sphere *)l->content)->c, "COLOR");
 		}
 		else if (l->cont_type == Plane)
 		{
@@ -53,8 +62,8 @@ void print_world(t_world *w)
 	print_vec3(w->camera.pos, "POSITION");
 	print_vec3(w->camera.norm_ori_vec, "NORM VEC");
 	printf("FOV: %d\n", w->camera.fov);
-	print_vec3(w->light.pos, "LIGHT POSITION");
-	printf("LIGHT RATIO: %le\n", w->light.ratio);
+	printf("[LIGHT]\n");
+	print_vec3(w->light.pos, "POSITION");
+	printf("RATIO: %le\n", w->light.ratio);
 	print_obj(w->obj_list);
 }
-

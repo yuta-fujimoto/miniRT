@@ -7,7 +7,6 @@ bool parse_line(char *line, t_world *w)
 
 	if (!*line)
 		return (true);
-	printf("%s\n", line);
 	info = ft_split(line, ' ');
 	if (!info)
 		return (false);
@@ -30,43 +29,36 @@ bool parse_line(char *line, t_world *w)
 	return (rlt);
 }
 
-bool parser_init(int *fd, char *fn, t_world **w)
+bool parser_init(int *fd, char *fn, t_world *w)
 {
 	*fd = open(fn,  O_RDONLY);
 	if (*fd == -1)		
 		return (false);
-	*w = malloc(sizeof(t_world));
-	if (!*w)
-	{
-		close(*fd);
-		return (false);
-	}
-	(*w)->obj_list = NULL;
-	(*w)->env_elems_exists[0] = false;
-	(*w)->env_elems_exists[1] = false;
-	(*w)->env_elems_exists[2] = false;
+	w->obj_list = NULL;
+	w->env_elems_exists[0] = false;
+	w->env_elems_exists[1] = false;
+	w->env_elems_exists[2] = false;
 	return (true);
 }
 
-t_world *parser(char *fn)
+bool parser(char *fn, t_world *w)
 {
 	int		fd;
 	char	*line;
-	t_world	*w;
 
-	if (!parser_init(&fd, fn, &w))
+	if (!parser_init(&fd, fn, w))
 		return (NULL);
 	while (get_next_line(fd, &line) != 0)
 	{
 		if (!line || !parse_line(line, w))
 		{
 			safe_free(line);
-			return (end_world(w));
+			return (end_world(w, false));
 		}
 		safe_free(line);
 	}
 	safe_free(line);
 	if (!w->env_elems_exists[0] || !w->env_elems_exists[1] || !w->env_elems_exists[2])
-		return (end_world(w));
-	return (w);
+		return (end_world(w, false));
+	return (true);
 }

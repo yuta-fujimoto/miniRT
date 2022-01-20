@@ -1,11 +1,12 @@
 #ifndef VECTOR_UTILS_H
 #define VECTOR_UTILS_H
 
-#include "miniRT.h"
 #include "mlx.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "keysymdef.h"
 #include <stdbool.h>
 
 #define BLACK 0x00000000
@@ -32,6 +33,13 @@
 #define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
 
 typedef int color_int;
+
+typedef struct s_vec3
+{
+	double x;
+	double y;
+	double z;
+} t_vec3;
 
 typedef struct	s_data {
 	void	*mlx;
