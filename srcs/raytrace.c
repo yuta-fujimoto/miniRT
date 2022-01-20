@@ -35,6 +35,7 @@ void get_material(t_list *obj, t_material *mat)
 	mat->ambient_ref = c;
 	mat->diffuse_ref = c;
 	mat->specular_ref = color(REF_FACTOR_MIRROR, REF_FACTOR_MIRROR, REF_FACTOR_MIRROR);
+	mat->shininess = SHININESS;
 }
 
 bool raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
@@ -49,5 +50,6 @@ bool raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
 	out_col->g = 0.0;
 	out_col->b = 0.0;
 	get_material(nearest_obj, &mat);
+	// need to complete
 	return (true);
 }

@@ -1,6 +1,7 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
+#include <string.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -18,6 +19,7 @@
 #define ILLUMI_RATE_ENV 0.1
 #define ILLUMI_RATE_DIR 1.0
 #define GLOSSINESS 8
+#define SHININESS 8
 
 #define SQR(x) ((x)*(x))
 #define MIN(a,b) (a < b ? a : b)
