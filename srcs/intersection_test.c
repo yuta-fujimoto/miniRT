@@ -1,34 +1,5 @@
 #include "miniRT.h"
 
-typedef enum e_formula
-{
-	A,
-	B,
-	C,
-	D,
-	FORMULA_NUM
-}	t_formula;
-
-double	get_t(double form[FORMULA_NUM])
-{
-	double	d_sqrt;
-	double	t1;
-	double	t2;
-
-	form[D] = SQR(form[B]) - (4 * form[A] * form[C]);
-	if (form[D] >= 0)
-	{
-		d_sqrt = sqrt(form[D]);
-		t1 = (-form[B] + d_sqrt) / (2 * form[A]);
-		t2 = (-form[B] - d_sqrt) / (2 * form[A]);
-		if (0 < t1 && (t1 < t2 || t2 <= 0))
-			return (t1);
-		else if (0 < t2)
-			return (t2);
-	}
-	return (0);
-}
-
 static bool	intersection_test_sphere(const t_sphere *shpere, const t_ray *ray, t_intersection_point *out_intp)
 {
 	double	form[FORMULA_NUM];
@@ -43,7 +14,7 @@ static bool	intersection_test_sphere(const t_sphere *shpere, const t_ray *ray, t
 	if (t > 0)
 	{
 		out_intp->distance = t * norm(&ray->direction);
-		out_intp->pos = add(times(t, ray->direction), ray->start);
+		out_intp->pos = get_position(t, ray);
 		out_intp->normal = sub(out_intp->pos, shpere->center);
 		normalize(&out_intp->normal);
 		return (true);
@@ -67,7 +38,7 @@ static bool	intersection_test_plane(const t_plane *plane, const t_ray *ray, t_in
 		if (t > 0)
 		{
 			out_intp->distance = t * norm(&ray->direction);
-			out_intp->pos = add(times(t, ray->direction), ray->start);
+			out_intp->pos = get_position(t, ray);
 			out_intp->normal = normal;
 			return (true);
 		}
@@ -78,11 +49,25 @@ static bool	intersection_test_plane(const t_plane *plane, const t_ray *ray, t_in
 
 static bool	intersection_test_cylinder(const t_cylinder *cylinder, const t_ray *ray, t_intersection_point *out_intp)
 {
-	(void)cylinder;
-	(void)ray;
-	(void)out_intp;
-	// need to complete
-	return (false);
+	t_ray	cyl_ray;
+	double	form[FORMULA_NUM];
+	int		t;
+	double	height;
+
+	cyl_ray.start = cross(cylinder->norm_ori_vec, sub(ray->start, cylinder->pos));
+	cyl_ray.direction = cross(cylinder->norm_ori_vec, ray->direction);
+	form[A] = squared_norm(&cyl_ray.direction);
+	form[B] = 2 * dot(&cyl_ray.start, &cyl_ray.direction);
+	form[C] = squared_norm(&cyl_ray.start) - SQR(cylinder->diameter / 2);
+	if (get_t(form) <= 0)
+		return (false);
+	t = cylinder_height_test(cylinder, ray, form, &height);
+	if (!t)
+		return (false);
+	out_intp->distance = form[t] * norm(&ray->direction);
+	out_intp->pos = get_position(form[t], ray);
+	out_intp->normal = sub(out_intp->pos, add(cylinder->pos, times(height, cylinder->norm_ori_vec)));
+	return (true);
 }
 
 bool intersection_test(const t_list *obj, const t_ray *ray, t_intersection_point *out_intp)

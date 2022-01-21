@@ -26,6 +26,17 @@
 #define MAX(a,b) (a > b ? a : b)
 #define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
 
+typedef enum e_formula
+{
+	A,
+	B,
+	C,
+	D,
+	T1,
+	T2,
+	FORMULA_NUM
+}	t_formula;
+
 typedef struct	s_data {
 	void	*mlx;
 	void	*mlx_win;
@@ -161,6 +172,11 @@ int		ft_str_arr_len(char **str_arr);
 bool	end_world(t_world *w, bool rlt);
 void	safe_free(void *p);
 // utils
+
+t_vec3	get_position(const double t, const t_ray *ray);
+double	get_t(double form[FORMULA_NUM]);
+int	cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, const double form[FORMULA_NUM], double *out_height);
+// intersection_test
 
 bool	raytrace(const t_world *w, const t_ray *eye_ray, t_color *out_col);
 bool	intersection_test(const t_list *obj, const t_ray *ray, t_intersection_point *out_intp);
