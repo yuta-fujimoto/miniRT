@@ -67,6 +67,7 @@ static bool	intersection_test_cylinder(const t_cylinder *cylinder, const t_ray *
 	out_intp->distance = form[t] * norm(&ray->direction);
 	out_intp->pos = get_position(form[t], ray);
 	out_intp->normal = sub(out_intp->pos, add(cylinder->pos, times(height, cylinder->norm_ori_vec)));
+	normalize(&out_intp->normal);
 	return (true);
 }
 
