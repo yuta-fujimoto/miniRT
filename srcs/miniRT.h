@@ -13,14 +13,21 @@
 #include "../libft/libft.h"
 #include "../minilibx-linux/mlx.h"
 
-#define W_IMG 500
-#define H_IMG 500
+
+#define W_IMG 512
+#define H_IMG 512
+#define W_SCRN 500
+#define H_SCRN (1.0 * H_IMG * W_SCRN / W_IMG)//thinking about over flow?
 #define REF_FACTOR_MIRROR 0.3
 #define ILLUMI_RATE_ENV 0.1
 #define ILLUMI_RATE_DIR 1.0
 #define GLOSSINESS 8
 #define SHININESS 8
 
+#ifndef M_PI
+#define M_PI 3.141592653589793
+#endif
+#define RADIANS(degrees) (1.0 * (degrees) * M_PI / 180)
 #define SQR(x) ((x)*(x))
 #define MIN(a,b) (a < b ? a : b)
 #define MAX(a,b) (a > b ? a : b)
@@ -151,6 +158,7 @@ bool parser_plane(t_world *world, char **info);
 bool parser_cylinder(t_world *world, char **info);
 // parser
 
+const char *vector_str(const t_vec3 v);
 void print_world(t_world *w);
 void print_color(t_color c, char *prefix);
 void print_vec3(t_vec3 v, char *prefix);

@@ -1,11 +1,11 @@
 #include "miniRT.h"
 
-const char *vector_str(const t_vec3 *v)
+const char *vector_str(const t_vec3 v)
 {
 	static char buf[1024];
 
 	memset(buf, 0, sizeof(buf));
-	sprintf((void*)buf, "(%f, %f, %f)", v->x, v->y, v->z);
+	sprintf((void*)buf, "(%f, %f, %f)", v.x, v.y, v.z);
 	return (buf);
 }
 
