@@ -41,6 +41,7 @@ bool parser_plane(t_world *world, char **info)
 		return (parser_obj_failure(p));
 	if (!atocol(info[3], &p->c))
 		return (parser_obj_failure(p));
+	normalize(&p->norm_ori_vec);
 	if (!ft_lstadd_back(&world->obj_list, ft_lstnew(p, Plane)))
 		return (parser_obj_failure(p));
 	return (true);
@@ -65,6 +66,7 @@ bool parser_cylinder(t_world *world, char **info)
 		return (parser_obj_failure(c));
 	if (!atocol(info[5], &c->c))
 		return (parser_obj_failure(c));
+	normalize(&c->norm_ori_vec);
 	if (!ft_lstadd_back(&world->obj_list, ft_lstnew(c, Cylinder)))
 		return (parser_obj_failure(c));
 	return (true);

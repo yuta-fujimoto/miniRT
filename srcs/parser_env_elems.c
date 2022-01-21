@@ -23,6 +23,7 @@ bool parser_camera(t_world *w, char **info)
 		return (false);
 	if  (!ft_atoi(info[3], &w->camera.fov) || w->camera.fov < 0 || w->camera.fov > 180)
 		return (false);
+	normalize(&w->camera.norm_ori_vec);
 	w->env_elems_exists[1] = true;
 	return (true);
 }
