@@ -57,6 +57,11 @@ bool parser(char *fn, t_world *w)
 		}
 		safe_free(line);
 	}
+	if (!line || !parse_line(line, w))
+	{
+		safe_free(line);
+		return (end_world(w, false));
+	}
 	safe_free(line);
 	if (!w->env_elems_exists[0] || !w->env_elems_exists[1] || !w->env_elems_exists[2])
 		return (end_world(w, false));
