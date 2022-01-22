@@ -14,10 +14,10 @@
 #include "../minilibx-linux/mlx.h"
 
 
-#define W_IMG 512
+#define W_IMG 612
 #define H_IMG 512
 #define W_SCRN 500
-#define H_SCRN (1.0 * H_IMG * W_SCRN / W_IMG)//thinking about over flow?
+#define H_SCRN (1.0 * H_IMG * W_SCRN / W_IMG)
 #define REF_FACTOR_MIRROR 0.3
 #define ILLUMI_RATE_ENV 0.1
 #define ILLUMI_RATE_DIR 1.0
@@ -121,6 +121,20 @@ typedef struct s_cylinder {
 	double height;
 	t_color c;
 }	t_cylinder;
+
+// default values used in the to_3axis()
+typedef struct s_default
+{
+	t_camera	cam;
+	t_vec3		vec_ey;
+	t_vec3		vec_dx;
+	t_vec3		vec_dy;
+	double		coef_n;
+	double		max_xi;
+	double		max_yi;
+	double		half_ws;
+	double		half_hs;
+} t_default;
 
 typedef struct s_world {
 	t_list		*obj_list;

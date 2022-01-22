@@ -7,7 +7,7 @@ bool	process_integer(double *rlt, const char *nptr, int *i)
 		if (*rlt > LONG_MAX / 10 || (*rlt == LONG_MAX / 10
 				&& (nptr[*i] - '0') > LONG_MAX % 10)
 			|| *rlt < LONG_MIN / 10 || (*rlt == LONG_MIN / 10
-				&& (nptr[*i] - '0') > (INT_MIN % 10) * (-1)))
+				&& (nptr[*i] - '0') > (LONG_MIN % 10) * (-1)))
 			return (false);
 		*rlt = *rlt * 10 + (nptr[*i] - '0');
 		(*i)++;

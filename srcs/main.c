@@ -10,28 +10,28 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor)
 	*(unsigned int*)dst = icolor;
 }
 
-t_vec3 conv2to3(double x_img, double y_img, const t_camera *cam)
+t_vec3 to_3axis(const double x_img, const double y_img, const t_default *d)
 {
-	const t_vec3	vec_ey = vec3(0, 1, 0);
-	const double	coef_n = W_SCRN / (2 * tan(RADIANS((double)cam->fov / 2)));
-	const t_vec3	vec_dx = cross(vec_ey, cam->norm_ori_vec);;
-	const t_vec3	vec_dy = cross(cam->norm_ori_vec, vec_dx);
 	double			coef_dx;
 	double			coef_dy;
 
-	coef_dx = (W_SCRN * (x_img / (W_IMG - 1))) - (W_SCRN / 2);
-	coef_dy = (-H_SCRN * (y_img / (H_IMG - 1))) + (H_SCRN / 2);
-	return (add(cam->pos, add(times(coef_n, cam->norm_ori_vec), add(times(coef_dx, vec_dx), times(coef_dy, vec_dy)))));
+	coef_dx = (W_SCRN * (x_img / d->max_xi)) - d->half_ws;
+	coef_dy = (-H_SCRN * (y_img / d->max_yi)) + d->half_hs;
+	return (add(d->cam.pos, \
+			add(times(d->coef_n, d->cam.norm_ori_vec), \
+			add(times(coef_dx, d->vec_dx), \
+				times(coef_dy, d->vec_dy)))));
 }
 
 int main(int ac, char **av)
 {
-	t_world	w;
-	t_ray	camray;
-	t_data	data;
-	double x_img;
-	double y_img;
-	t_color col;
+	t_world		w;
+	t_default	d;
+	t_ray		camray;
+	t_data		data;
+	double		x_img;
+	double		y_img;
+	t_color		col;
 
 	data.mlx = mlx_init();
 	data.mlx_win = mlx_new_window(data.mlx, W_IMG, H_IMG, "Defence Line");
@@ -48,6 +48,17 @@ int main(int ac, char **av)
 		return (0);
 	}
 	print_world(&w);
+
+	d.cam = w.camera;
+	d.vec_ey = vec3(0, 1, 0);
+	d.vec_dx = cross(d.vec_ey, d.cam.norm_ori_vec);
+	d.vec_dy = cross(d.cam.norm_ori_vec, d.vec_dx);
+	d.coef_n = W_SCRN / (2 * tan(RADIANS((double)d.cam.fov / 2)));
+	d.max_xi = W_IMG - 1;
+	d.max_yi = H_IMG - 1;
+	d.half_ws = (double)W_SCRN / 2;
+	d.half_hs = (double)H_SCRN / 2;
+
 	camray.start = w.camera.pos;
 	y_img = 0;
 	while (y_img < H_IMG)
@@ -55,7 +66,7 @@ int main(int ac, char **av)
 		x_img = 0;
 		while (x_img < W_IMG)
 		{
-			camray.direction = sub(conv2to3(x_img, y_img, &(w.camera)), camray.start);
+			camray.direction = sub(to_3axis(x_img, y_img, &d), camray.start);
 			if (!raytrace(&w, &camray, &col))
 				col = color(1.0, 1.0, 1.0);
 			my_mlx_pixel_put(&data, (int)x_img, (int)y_img, col);
