@@ -13,6 +13,7 @@ SRCS :=	srcs/main.c \
 		srcs/print_debug.c \
 		srcs/hook_funcs.c \
 		srcs/intersection_test.c \
+		srcs/intersection_test_utils.c \
 		srcs/raytrace.c
 OBJS := $(SRCS:.c=.o)
 
@@ -28,7 +29,7 @@ GNLFILE :=  $(GNL)/get_next_line_utils_bonus.o \
 			$(GNL)/get_next_line_bonus.o
 
 %.o: %.c
-	$(CC) $(CFLAG)  -I$(MLXDIR)  -c $< -o $@
+	$(CC) $(CFLAG)  -I$(MLXDIR) -lm -c $< -o $@
 
 all :$(NAME)
 
