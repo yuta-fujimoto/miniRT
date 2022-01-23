@@ -133,10 +133,10 @@ typedef struct s_cylinder {
 	t_color c;
 }	t_cylinder;
 
-// default values used in the to_3axis()
+// default values used in the vec_cam_to_scrn()
 typedef struct s_default
 {
-	t_camera	cam;
+	t_vec3		vec_ori;
 	t_vec3		vec_ey;
 	t_vec3		vec_dx;
 	t_vec3		vec_dy;
