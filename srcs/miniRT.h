@@ -13,11 +13,11 @@
 #include "../libft/libft.h"
 #include "../minilibx-linux/mlx.h"
 
-
-#define W_IMG 612
-#define H_IMG 512
-#define W_SCRN 500
-#define H_SCRN (1.0 * H_IMG * W_SCRN / W_IMG)
+// Assumptions
+#define W_IMG 612.0
+#define H_IMG 512.0
+#define W_SCRN 500.0
+#define H_SCRN (H_IMG * W_SCRN / W_IMG)
 #define REF_FACTOR_MIRROR 0.3
 #define ILLUMI_RATE_ENV 0.1
 #define ILLUMI_RATE_DIR 1.0
@@ -28,7 +28,7 @@
 #ifndef M_PI
 #define M_PI 3.141592653589793
 #endif
-#define RADIANS(degrees) (1.0 * (degrees) * M_PI / 180)
+#define RADIANS(degrees) ((degrees) * M_PI / 180)
 #define SQR(x) ((x)*(x))
 #define MIN(a,b) (a < b ? a : b)
 #define MAX(a,b) (a > b ? a : b)
@@ -134,7 +134,7 @@ typedef struct s_cylinder {
 	t_color c;
 }	t_cylinder;
 
-// default values used in the to_3axis()
+// default values used in the vec_cam_to_scrn()
 typedef struct s_default
 {
 	t_camera	cam;

@@ -10,17 +10,16 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor)
 	*(unsigned int*)dst = icolor;
 }
 
-t_vec3 to_3axis(const double x_img, const double y_img, const t_default *d)
+t_vec3 vec_cam_to_scrn(const double x_img, const double y_img, const t_default *d)
 {
 	double			coef_dx;
 	double			coef_dy;
 
 	coef_dx = (W_SCRN * (x_img / d->max_xi)) - d->half_ws;
 	coef_dy = (-H_SCRN * (y_img / d->max_yi)) + d->half_hs;
-	return (add(d->cam.pos, \
-			add(times(d->coef_n, d->cam.norm_ori_vec), \
+	return (add(times(d->coef_n, d->cam.norm_ori_vec), \
 			add(times(coef_dx, d->vec_dx), \
-				times(coef_dy, d->vec_dy)))));
+				times(coef_dy, d->vec_dy))));
 }
 
 int main(int ac, char **av)
@@ -56,8 +55,8 @@ int main(int ac, char **av)
 	d.coef_n = W_SCRN / (2 * tan(RADIANS((double)d.cam.fov / 2)));
 	d.max_xi = W_IMG - 1;
 	d.max_yi = H_IMG - 1;
-	d.half_ws = (double)W_SCRN / 2;
-	d.half_hs = (double)H_SCRN / 2;
+	d.half_ws = W_SCRN / 2;
+	d.half_hs = H_SCRN / 2;
 
 	camray.start = w.camera.pos;
 	y_img = 0;
@@ -66,7 +65,7 @@ int main(int ac, char **av)
 		x_img = 0;
 		while (x_img < W_IMG)
 		{
-			camray.direction = sub(to_3axis(x_img, y_img, &d), camray.start);
+			camray.direction = vec_cam_to_scrn(x_img, y_img, &d);
 			if (!raytrace(&w, &camray, &col))
 				col = color(1.0, 1.0, 1.0);
 			my_mlx_pixel_put(&data, (int)x_img, (int)y_img, col);
