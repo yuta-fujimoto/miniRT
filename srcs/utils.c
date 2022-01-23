@@ -38,3 +38,12 @@ int	ft_str_arr_len(char **str_arr)
 		i++;
 	return (i);
 }
+
+t_ray ray(t_vec3 start, t_vec3 direction)
+{
+	t_ray	res;
+
+	res.start = start;
+	res.direction = direction;
+	return (res);
+}
