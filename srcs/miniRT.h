@@ -147,6 +147,16 @@ typedef struct s_default
 	double		half_hs;
 } t_default;
 
+// data used in the get_color()
+typedef struct s_refdata {
+	t_vec3	camray_vec;
+	t_vec3	normal_vec;
+	t_vec3	incidence_vec;
+	t_vec3	reverseray_vec;
+	t_vec3	reflection_vec;
+	double	norm_dot_inc;
+}	t_refdata;
+
 typedef struct s_world {
 	t_list		*obj_list;
 	t_amb_light	amb_light;
