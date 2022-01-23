@@ -51,7 +51,9 @@ int main(int ac, char **av)
 	d.cam = w.camera;
 	d.vec_ey = vec3(0, 1, 0);
 	d.vec_dx = cross(d.vec_ey, d.cam.norm_ori_vec);
+	normalize(&d.vec_dx);
 	d.vec_dy = cross(d.cam.norm_ori_vec, d.vec_dx);
+	normalize(&d.vec_dy);
 	d.coef_n = W_SCRN / (2 * tan(RADIANS((double)d.cam.fov / 2)));
 	d.max_xi = W_IMG - 1;
 	d.max_yi = H_IMG - 1;

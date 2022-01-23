@@ -23,7 +23,7 @@
 #define ILLUMI_RATE_DIR 1.0
 #define GLOSSINESS 8
 #define SHININESS 8
-#define EPSILON 0.001
+#define EPSILON 0.01
 
 #ifndef M_PI
 #define M_PI 3.141592653589793
