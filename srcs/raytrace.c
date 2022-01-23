@@ -38,15 +38,16 @@ void get_material(t_list *obj, t_material *mat)
 	mat->shininess = SHININESS;
 }
 
-typedef enum e_ctype
+void get_refdata(const t_world *w, const t_ray *cam_ray, const t_intersection_point *intp, t_refdata *refdata)
 {
-	RED,
-	GREEN,
-	BLUE,
-	CTYPE_NUM
-}	t_ctype;
+	refdata->camray_vec = cam_ray->direction;
+	refdata->normal_vec = intp->normal;
+	refdata->incidence_vec = sub(w->light.pos, intp->pos);
+	normalize(&refdata->incidence_vec);
+	refdata->norm_dot_inc = dot(&refdata->normal_vec, &refdata->incidence_vec);
+}
 
-double range(const t_color *c, t_ctype ctype)
+double pickc(const t_color *c, t_ctype ctype)
 {
 	if (ctype == RED)
 		return (c->r);
@@ -57,41 +58,37 @@ double range(const t_color *c, t_ctype ctype)
 	return (0);
 }
 
+// Lr = La + Ld + ls
+// La = Ka(mat->ambient_ref) * Ea(w->amb_light.ratio)
+// Ld = Kd(mat->diffuese_ref) * Ei(w->light.ratio) * dot(normal,incidence)
+// Ls = Ks(mat->specular_ref) * Ei(w->light.ratio) * pow(dot(reflection,-ray), mat->shininess)
 double	get_light(const t_world *w, t_refdata *refdata, const t_material *mat, const t_ctype ctype)
 {
 	double	ambient_ref_light;
 	double	diffuse_ref_light;
 	double	specular_ref_light;
 
-	ambient_ref_light = range(&mat->ambient_ref, ctype) * w->amb_light.ratio;//const
+	ambient_ref_light = pickc(&mat->ambient_ref, ctype) * w->amb_light.ratio;//const
 	diffuse_ref_light = 0;
 	specular_ref_light = 0;
 	if (refdata->norm_dot_inc > 0)
 	{
-		diffuse_ref_light = range(&mat->diffuse_ref, ctype) * w->light.ratio * refdata->norm_dot_inc;
+		diffuse_ref_light = pickc(&mat->diffuse_ref, ctype) * w->light.ratio * refdata->norm_dot_inc;
 		refdata->reflection_vec = sub(times(2 * refdata->norm_dot_inc, refdata->normal_vec), refdata->incidence_vec);
 		normalize(&refdata->reflection_vec);
 		refdata->reverseray_vec = times(-1, refdata->camray_vec);
 		normalize(&refdata->reverseray_vec);
-		specular_ref_light = range(&mat->specular_ref, ctype) * w->light.ratio * \
+		specular_ref_light = pickc(&mat->specular_ref, ctype) * w->light.ratio * \
 								pow(dot(&refdata->reflection_vec, &refdata->reverseray_vec), mat->shininess);
 	}
 	return (ambient_ref_light + diffuse_ref_light + specular_ref_light);
 }
 
-void get_refdata(const t_world *w, const t_ray *cam_ray, const t_intersection_point *intp, t_refdata *refdata)
+double	filter(double light)//ここは迷走しています
 {
-	refdata->camray_vec = cam_ray->direction;
-	refdata->normal_vec = intp->normal;
-	refdata->incidence_vec = sub(w->light.pos, intp->pos);
-	normalize(&refdata->incidence_vec);
-	refdata->norm_dot_inc = dot(&refdata->normal_vec, &refdata->incidence_vec);
-}
-
-double	filter(double light)
-{
-	if (light > 255)
-		light = 255;
+	//if (light > 255)
+	//	light = 255;
+	//return (light / 255);
 	return (light);
 }
 
@@ -100,7 +97,7 @@ bool raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
 	t_list					*nearest_obj;
 	t_intersection_point	nearest_intp;
 	t_material				mat;
-	t_refdata				refdata;
+	t_refdata				refdata;//get_light()という関数で計算材料が多いので追加しました
 
 	if (!get_nearest_obj(w, cam_ray, &nearest_obj, &nearest_intp))
 		return (false);

@@ -44,6 +44,14 @@ typedef enum e_formula
 	FORMULA_NUM
 }	t_formula;
 
+typedef enum e_ctype
+{
+	RED,
+	GREEN,
+	BLUE,
+	CTYPE_NUM
+}	t_ctype;
+
 typedef struct	s_data {
 	void	*mlx;
 	void	*mlx_win;
