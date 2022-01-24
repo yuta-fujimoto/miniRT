@@ -18,10 +18,7 @@
 #define H_IMG 512.0
 #define W_SCRN 500.0
 #define H_SCRN (H_IMG * W_SCRN / W_IMG)
-#define REF_FACTOR_MIRROR 0.3
-#define ILLUMI_RATE_ENV 0.1
-#define ILLUMI_RATE_DIR 1.0
-#define GLOSSINESS 8
+#define COEF_SPECULAR_REF 0.3
 #define SHININESS 8
 #define EPSILON 0.01
 
@@ -44,6 +41,14 @@ typedef enum e_formula
 	T2,
 	FORMULA_NUM
 }	t_formula;
+
+typedef enum e_ctype
+{
+	RED,
+	GREEN,
+	BLUE,
+	CTYPE_NUM
+}	t_ctype;
 
 typedef struct	s_data {
 	void	*mlx;
@@ -148,6 +153,17 @@ typedef struct s_default
 	double		half_hs;
 } t_default;
 
+// data used in the get_color()
+typedef struct s_refdata {
+	t_vec3	ray;
+	t_vec3	normal;
+	t_vec3	incidence;
+	t_vec3	reverseray;
+	t_vec3	reflection;
+	t_color	norm_dot_inc;
+	t_color	light_ratio;
+}	t_refdata;
+
 typedef struct s_world {
 	t_list		*obj_list;
 	t_amb_light	amb_light;
@@ -159,20 +175,22 @@ typedef struct s_world {
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
 t_color	cmult(const t_color a, const t_color b);
+t_color	cadd(const t_color a, const t_color b);
+void	cfilter(t_color *a, const double min, const double max);
 // color
 
-bool		atovec3(char const *nptr, t_vec3 *rlt);
-bool		is_normalized_vector(t_vec3 v);
-t_vec3      vec3(double x, double y, double z);
-t_vec3 add(const t_vec3 a, const t_vec3 b);
-t_vec3      sub(const t_vec3 a, const t_vec3 b);
-t_vec3 		mult(const t_vec3 a, const t_vec3 b);
-t_vec3		times(const double nb, const t_vec3 a);
-double      dot(const t_vec3 *a, const t_vec3 *b);
-double      squared_norm(const t_vec3 *v);
-double      norm(const t_vec3 *v);
-double      normalize(t_vec3* v);
-t_vec3      cross(const t_vec3 a, const t_vec3 b);
+bool	atovec3(char const *nptr, t_vec3 *rlt);
+bool	is_normalized_vector(t_vec3 v);
+t_vec3	vec3(double x, double y, double z);
+t_vec3	add(const t_vec3 a, const t_vec3 b);
+t_vec3	sub(const t_vec3 a, const t_vec3 b);
+t_vec3	mult(const t_vec3 a, const t_vec3 b);
+t_vec3	times(const double nb, const t_vec3 a);
+double	dot(const t_vec3 *a, const t_vec3 *b);
+double	squared_norm(const t_vec3 *v);
+double	norm(const t_vec3 *v);
+double	normalize(t_vec3* v);
+t_vec3	cross(const t_vec3 a, const t_vec3 b);
 // vector
 
 bool parser(char *fn, t_world *w);

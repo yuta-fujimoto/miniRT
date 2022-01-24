@@ -4,12 +4,12 @@ static bool	intersection_test_sphere(const t_sphere *shpere, const t_ray *ray, t
 {
 	double	form[FORMULA_NUM];
 	double	t;
-	t_vec3	start_center;
+	t_vec3	start_sub_center;
 
-	start_center = sub(ray->start, shpere->center);
+	start_sub_center = sub(ray->start, shpere->center);
 	form[A] = squared_norm(&ray->direction);
-	form[B] = 2 * dot(&start_center, &ray->direction);
-	form[C] = squared_norm(&start_center) - SQR(shpere->diameter / 2);
+	form[B] = 2 * dot(&start_sub_center, &ray->direction);
+	form[C] = squared_norm(&start_sub_center) - SQR(shpere->diameter / 2);
 	t = get_t(form);
 	if (t > 0)
 	{
