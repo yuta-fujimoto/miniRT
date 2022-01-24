@@ -1,12 +1,12 @@
 #include "miniRT.h"
 
-bool end_world(t_world *w, bool rlt)
+bool	end_world(t_world *w, bool rlt)
 {
 	ft_lstclear(&w->obj_list, free);
 	return (rlt);
 }
 
-void safe_free(void *p)
+void	safe_free(void *p)
 {
 	if (p)
 		free(p);
@@ -39,7 +39,7 @@ int	ft_str_arr_len(char **str_arr)
 	return (i);
 }
 
-t_ray ray(t_vec3 start, t_vec3 direction)
+t_ray	ray(t_vec3 start, t_vec3 direction)
 {
 	t_ray	res;
 

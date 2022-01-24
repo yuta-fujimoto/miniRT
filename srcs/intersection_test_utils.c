@@ -4,7 +4,7 @@ double	get_t(double form[FORMULA_NUM])
 {
 	double	d_sqrt;
 
-	form[D] = SQR(form[B]) - (4 * form[A] * form[C]);
+	form[D] = sqr(form[B]) - (4 * form[A] * form[C]);
 	if (form[D] >= 0)
 	{
 		d_sqrt = sqrt(form[D]);
@@ -33,8 +33,8 @@ int	cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray,
 	height[0] = dot(&v, &cylinder->norm_ori_vec);
 	v = sub(get_position(form[T2], ray), cylinder->pos);
 	height[1] = dot(&v, &cylinder->norm_ori_vec);
-	if (fabs(height[0]) <= cylinder->height / 2.0 && form[T1] > 0 
-		&& (form[T1] <= form[T2] || form[T2] <= 0
+	if (fabs(height[0]) <= cylinder->height / 2.0 && form[T1] > 0 \
+		&& (form[T1] <= form[T2] || form[T2] <= 0 \
 		|| fabs(height[1]) > (cylinder->height / 2.0)))
 	{
 		*out_height = height[0];
