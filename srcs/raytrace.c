@@ -82,11 +82,9 @@ double pickc(const t_color *c, t_ctype ctype)
 // Ls = Ks(mat->specular_ref) * Ei(w->light.ratio) * pow(dot(reflection,-ray), mat->shininess)
 double	get_light(const t_world *w, t_refdata *refdata, const t_material *mat, const t_ctype ctype)
 {
-	double	ambient_ref_light;
 	double	diffuse_ref_light;
 	double	specular_ref_light;
 
-	ambient_ref_light = pickc(&mat->ambient_ref, ctype) * w->amb_light.ratio;//const
 	diffuse_ref_light = 0;
 	specular_ref_light = 0;
 	if (refdata->norm_dot_inc > 0)
@@ -99,7 +97,7 @@ double	get_light(const t_world *w, t_refdata *refdata, const t_material *mat, co
 		specular_ref_light = pickc(&mat->specular_ref, ctype) * w->light.ratio * \
 								pow(dot(&refdata->reflection_vec, &refdata->reverseray_vec), mat->shininess);
 	}
-	return (ambient_ref_light + diffuse_ref_light + specular_ref_light);
+	return (diffuse_ref_light + specular_ref_light);
 }
 
 double	filter(double light)
@@ -119,17 +117,15 @@ bool raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
 	if (!get_nearest_obj(w, cam_ray, &nearest_obj, &nearest_intp))
 		return (false);
 	get_material(nearest_obj, &mat);
+	*out_col = cmult(mat.ambient_ref, \
+				color(w->amb_light.ratio, w->amb_light.ratio, w->amb_light.ratio));
 	if (intersection_test_light(w, ray(nearest_intp.pos,
 		sub(w->light.pos, nearest_intp.pos))))
-	{
-		*out_col = cmult(mat.ambient_ref, \
-					color(w->amb_light.ratio, w->amb_light.ratio, w->amb_light.ratio));
 		return (true);
-	}
 	get_refdata(w, cam_ray, &nearest_intp, &refdata);
-	out_col->r = filter(get_light(w, &refdata, &mat, RED));
-	out_col->g = filter(get_light(w, &refdata, &mat, GREEN));
-	out_col->b = filter(get_light(w, &refdata, &mat, BLUE));
+	out_col->r = filter(out_col->r + get_light(w, &refdata, &mat, RED));
+	out_col->g = filter(out_col->g + get_light(w, &refdata, &mat, GREEN));
+	out_col->b = filter(out_col->b + get_light(w, &refdata, &mat, BLUE));
 	// need to complete
 	return (true);
 }
