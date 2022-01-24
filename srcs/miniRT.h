@@ -167,7 +167,7 @@ void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col);
 // color
 
 bool	atovec3(char const *nptr, t_vec3 *rlt);
-bool	is_normalized_vector(t_vec3 v);
+bool	is_normed_vec(t_vec3 v);
 t_vec3	vec3(double x, double y, double z);
 t_vec3	add(const t_vec3 a, const t_vec3 b);
 t_vec3	sub(const t_vec3 a, const t_vec3 b);
@@ -189,7 +189,7 @@ bool	parser_plane(t_world *world, char **info);
 bool	parser_cylinder(t_world *world, char **info);
 // parser
 
-const char	*vector_str(const t_vec3 v);
+char	*vector_str(const t_vec3 v);
 void	print_world(t_world *w);
 void	print_color(t_color c, char *prefix);
 void	print_vec3(t_vec3 v, char *prefix);

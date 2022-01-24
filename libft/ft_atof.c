@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atof.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fyuta <fyuta@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/24 22:46:04 by fyuta             #+#    #+#             */
+/*   Updated: 2022/01/24 22:46:06 by fyuta            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 bool	process_integer(double *rlt, const char *nptr, int *i)
@@ -17,7 +29,7 @@ bool	process_integer(double *rlt, const char *nptr, int *i)
 
 bool	process_decimal(double *rlt, const char *nptr, int *i)
 {
-	double d;
+	double	d;
 
 	d = 0.1;
 	if (nptr[*i] == '.')

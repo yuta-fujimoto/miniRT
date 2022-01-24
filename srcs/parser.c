@@ -1,9 +1,9 @@
 #include "miniRT.h"
 
-bool parse_line(char *line, t_world *w)
+bool	parse_line(char *line, t_world *w)
 {
-	char **info;
-	bool rlt;
+	char	**info;
+	bool	rlt;
 
 	if (!*line)
 		return (true);
@@ -29,10 +29,10 @@ bool parse_line(char *line, t_world *w)
 	return (rlt);
 }
 
-bool parser_init(int *fd, char *fn, t_world *w)
+bool	parser_init(int *fd, char *fn, t_world *w)
 {
-	*fd = open(fn,  O_RDONLY);
-	if (*fd == -1)		
+	*fd = open(fn, O_RDONLY);
+	if (*fd == -1)
 		return (false);
 	w->obj_list = NULL;
 	w->env_elems_exists[0] = false;
@@ -41,7 +41,7 @@ bool parser_init(int *fd, char *fn, t_world *w)
 	return (true);
 }
 
-bool parser(char *fn, t_world *w)
+bool	parser(char *fn, t_world *w)
 {
 	int		fd;
 	char	*line;
@@ -63,7 +63,8 @@ bool parser(char *fn, t_world *w)
 		return (end_world(w, false));
 	}
 	safe_free(line);
-	if (!w->env_elems_exists[0] || !w->env_elems_exists[1] || !w->env_elems_exists[2])
+	if (!w->env_elems_exists[0] || !w->env_elems_exists[1]
+		|| !w->env_elems_exists[2])
 		return (end_world(w, false));
 	return (true);
 }
