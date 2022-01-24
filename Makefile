@@ -58,6 +58,6 @@ fclean: clean
 	rm -f $(MLXDIR)/$(MLXNAME)
 	rm -f $(LIBDIR)/$(LIBNAME)
 	rm -f $(NAME)
-	rm -f $(GNL)/$(GNLNAME)
+	rm -f $(GNLFILE)
 
 re: fclean all
