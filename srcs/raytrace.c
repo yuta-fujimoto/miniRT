@@ -76,7 +76,6 @@ double pickc(const t_color *c, t_ctype ctype)
 	return (0);
 }
 
-// 計算の考え方は以下です
 // Lr = La + Ld + Ls
 // La = Ka(mat->ambient_ref) * Ea(w->amb_light.ratio)
 // Ld = Kd(mat->diffuese_ref) * Ei(w->light.ratio) * dot(normal,incidence)
@@ -103,13 +102,10 @@ double	get_light(const t_world *w, t_refdata *refdata, const t_material *mat, co
 	return (ambient_ref_light + diffuse_ref_light + specular_ref_light);
 }
 
-// ここで光のrangeの件, 調整しようとしたんですが
-// 出力する球が真っ黒になったり思い通りいかなかったので迷走しています
 double	filter(double light)
 {
-	//if (light > 255)
-	//	light = 255;
-	//return (light / 255);
+	if (light > 1)
+		light = 1;
 	return (light);
 }
 
@@ -118,17 +114,18 @@ bool raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
 	t_list					*nearest_obj;
 	t_intersection_point	nearest_intp;
 	t_material				mat;
-	t_refdata				refdata;//get_light()で必要な情報をまとめるため追加
+	t_refdata				refdata;
 
 	if (!get_nearest_obj(w, cam_ray, &nearest_obj, &nearest_intp))
 		return (false);
+	get_material(nearest_obj, &mat);
 	if (intersection_test_light(w, ray(nearest_intp.pos,
 		sub(w->light.pos, nearest_intp.pos))))
 	{
-		*out_col = color(0, 0, 0);
+		*out_col = cmult(mat.ambient_ref, \
+					color(w->amb_light.ratio, w->amb_light.ratio, w->amb_light.ratio));
 		return (true);
 	}
-	get_material(nearest_obj, &mat);
 	get_refdata(w, cam_ray, &nearest_intp, &refdata);
 	out_col->r = filter(get_light(w, &refdata, &mat, RED));
 	out_col->g = filter(get_light(w, &refdata, &mat, GREEN));
