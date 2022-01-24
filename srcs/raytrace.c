@@ -58,7 +58,8 @@ double pickc(const t_color *c, t_ctype ctype)
 	return (0);
 }
 
-// Lr = La + Ld + ls
+// 計算の考え方は以下です
+// Lr = La + Ld + Ls
 // La = Ka(mat->ambient_ref) * Ea(w->amb_light.ratio)
 // Ld = Kd(mat->diffuese_ref) * Ei(w->light.ratio) * dot(normal,incidence)
 // Ls = Ks(mat->specular_ref) * Ei(w->light.ratio) * pow(dot(reflection,-ray), mat->shininess)
@@ -84,7 +85,9 @@ double	get_light(const t_world *w, t_refdata *refdata, const t_material *mat, co
 	return (ambient_ref_light + diffuse_ref_light + specular_ref_light);
 }
 
-double	filter(double light)//ここは迷走しています
+// ここで光のrangeの件, 調整しようとしたんですが
+// 出力する球が真っ黒になったり思い通りいかなかったので迷走しています
+double	filter(double light)
 {
 	//if (light > 255)
 	//	light = 255;
@@ -97,7 +100,7 @@ bool raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
 	t_list					*nearest_obj;
 	t_intersection_point	nearest_intp;
 	t_material				mat;
-	t_refdata				refdata;//get_light()という関数で計算材料が多いので追加しました
+	t_refdata				refdata;//get_light()で必要な情報をまとめるため追加
 
 	if (!get_nearest_obj(w, cam_ray, &nearest_obj, &nearest_intp))
 		return (false);

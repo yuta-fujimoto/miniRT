@@ -156,6 +156,7 @@ typedef struct s_default
 } t_default;
 
 // data used in the get_color()
+// get_light()の光の計算で使う情報が多く, まとめたかったので構造体追加しました
 typedef struct s_refdata {
 	t_vec3	camray_vec;
 	t_vec3	normal_vec;
