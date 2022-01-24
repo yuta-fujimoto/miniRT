@@ -26,10 +26,6 @@
 #  define M_PI 3.141592653589793
 # endif
 # define RADIANS(degrees) ((degrees) * M_PI / 180)
-# define SQR(x) ((x)*(x))
-# define MIN(a,b) (a < b ? a : b)
-# define MAX(a,b) (a > b ? a : b)
-# define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
 
 typedef enum e_formula
 {
@@ -206,7 +202,13 @@ int		ft_str_arr_len(char **str_arr);
 bool	end_world(t_world *w, bool rlt);
 void	safe_free(void *p);
 t_ray	ray(t_vec3 start, t_vec3 direction);
-// utils
+// utils1
+
+double	sqr(double x);
+double	min(double a, double b);
+double	max(double a, double b);
+double	clamp(double x, double min, double max);
+// utils2
 
 t_vec3	get_position(const double t, const t_ray *ray);
 double	get_t(double form[FORMULA_NUM]);

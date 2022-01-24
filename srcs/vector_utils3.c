@@ -7,7 +7,7 @@ double	dot(const t_vec3 *a, const t_vec3 *b)
 
 double	squared_norm(const t_vec3 *v)
 {
-	return (SQR(v->x) + SQR(v->y) + SQR(v->z));
+	return (sqr(v->x) + sqr(v->y) + sqr(v->z));
 }
 
 double	norm(const t_vec3 *v)

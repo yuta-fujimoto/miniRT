@@ -2,9 +2,9 @@
 
 void	cfilter(t_color *a, const double min, const double max)
 {
-	a->r = CLAMP(a->r, min, max);
-	a->g = CLAMP(a->g, min, max);
-	a->b = CLAMP(a->b, min, max);
+	a->r = clamp(a->r, min, max);
+	a->g = clamp(a->g, min, max);
+	a->b = clamp(a->b, min, max);
 }
 
 void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col)

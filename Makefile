@@ -5,7 +5,8 @@ SRCS :=	srcs/main.c \
 		srcs/parser_env_elems.c \
 		srcs/parser_obj_elems.c \
 		srcs/parser.c \
-		srcs/utils.c \
+		srcs/utils1.c \
+		srcs/utils2.c \
 		srcs/vector_utils1.c \
 		srcs/vector_utils2.c \
 		srcs/vector_utils3.c \

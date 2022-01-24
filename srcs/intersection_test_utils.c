@@ -4,7 +4,7 @@ double	get_t(double form[FORMULA_NUM])
 {
 	double	d_sqrt;
 
-	form[D] = SQR(form[B]) - (4 * form[A] * form[C]);
+	form[D] = sqr(form[B]) - (4 * form[A] * form[C]);
 	if (form[D] >= 0)
 	{
 		d_sqrt = sqrt(form[D]);

@@ -10,7 +10,7 @@ static bool	intersection_test_sphere(const t_sphere *shpere, \
 	start_sub_center = sub(ray->start, shpere->center);
 	form[A] = squared_norm(&ray->direction);
 	form[B] = 2 * dot(&start_sub_center, &ray->direction);
-	form[C] = squared_norm(&start_sub_center) - SQR(shpere->diameter / 2);
+	form[C] = squared_norm(&start_sub_center) - sqr(shpere->diameter / 2);
 	t = get_t(form);
 	if (t > 0)
 	{
@@ -61,7 +61,7 @@ static bool	intersection_test_cylinder(const t_cylinder *cylinder, \
 	cyl_ray.direction = cross(cylinder->norm_ori_vec, ray->direction);
 	form[A] = squared_norm(&cyl_ray.direction);
 	form[B] = 2 * dot(&cyl_ray.start, &cyl_ray.direction);
-	form[C] = squared_norm(&cyl_ray.start) - SQR(cylinder->diameter / 2);
+	form[C] = squared_norm(&cyl_ray.start) - sqr(cylinder->diameter / 2);
 	if (get_t(form) <= 0)
 		return (false);
 	t = cylinder_height_test(cylinder, ray, form, &height);
