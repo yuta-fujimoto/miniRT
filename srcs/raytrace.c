@@ -22,6 +22,24 @@ static bool get_nearest_obj(const t_world *w, const t_ray *ray, t_list **out_obj
 	return (true);
 }
 
+static bool intersection_test_light(const t_world *w, t_ray shadow_ray)
+{
+	t_list					*objs;
+	t_intersection_point	p;
+	double					distance;
+
+	objs = w->obj_list;
+	distance = normalize(&shadow_ray.direction) - EPSILON;
+	shadow_ray.start = add(shadow_ray.start, times(EPSILON, shadow_ray.direction));
+	while (objs)
+	{
+		if (intersection_test(objs, &shadow_ray, &p) && distance > p.distance)
+			return (true);
+		objs = objs->next;
+	}
+	return (false);
+}
+
 void get_material(t_list *obj, t_material *mat)
 {
 	t_color	c;
@@ -104,6 +122,12 @@ bool raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
 
 	if (!get_nearest_obj(w, cam_ray, &nearest_obj, &nearest_intp))
 		return (false);
+	if (intersection_test_light(w, ray(nearest_intp.pos,
+		sub(w->light.pos, nearest_intp.pos))))
+	{
+		*out_col = color(0, 0, 0);
+		return (true);
+	}
 	get_material(nearest_obj, &mat);
 	get_refdata(w, cam_ray, &nearest_intp, &refdata);
 	out_col->r = filter(get_light(w, &refdata, &mat, RED));

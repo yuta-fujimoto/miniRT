@@ -31,12 +31,11 @@ static bool	intersection_test_plane(const t_plane *plane, const t_ray *ray, t_in
 	t_vec3 start_origin;
 
 	normal = plane->norm_ori_vec;
-	normalize(&normal);
-	start_origin = sub(ray->start, plane->norm_ori_vec);
+	start_origin = sub(ray->start, plane->pos);
 	dn_dot = dot(&ray->direction, &normal);
 	if (dn_dot != 0)
 	{
-		t = (dot(&plane->pos, &normal) - dot(&start_origin, &normal)) / dn_dot;
+		t = -dot(&start_origin, &normal) / dn_dot;
 		if (t > 0)
 		{
 			out_intp->distance = t * norm(&ray->direction);

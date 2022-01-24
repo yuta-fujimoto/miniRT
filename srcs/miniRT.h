@@ -23,6 +23,7 @@
 #define ILLUMI_RATE_DIR 1.0
 #define GLOSSINESS 8
 #define SHININESS 8
+#define EPSILON 0.01
 
 #ifndef M_PI
 #define M_PI 3.141592653589793
@@ -212,6 +213,7 @@ void	ft_str_arr_free(char **str_arr);
 int		ft_str_arr_len(char **str_arr);
 bool	end_world(t_world *w, bool rlt);
 void	safe_free(void *p);
+t_ray	ray(t_vec3 start, t_vec3 direction);
 // utils
 
 t_vec3	get_position(const double t, const t_ray *ray);
