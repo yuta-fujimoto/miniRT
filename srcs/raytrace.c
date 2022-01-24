@@ -56,57 +56,22 @@ void get_material(t_list *obj, t_material *mat)
 	mat->shininess = SHININESS;
 }
 
-bool reflection_test(const t_world *w, const t_ray *cam_ray, const t_intersection_point *intp, t_refdata *refdata)
+bool reflection_test(const t_world *w, const t_ray *cam_ray, const t_intersection_point *intp, t_refdata *out_data)
 {
 	double	dot_val;
 
-	refdata->ray = cam_ray->direction;
-	refdata->normal = intp->normal;
-	refdata->incidence = sub(w->light.pos, intp->pos);
-	normalize(&refdata->incidence);
-	dot_val = dot(&refdata->normal, &refdata->incidence);
+	out_data->ray = cam_ray->direction;
+	out_data->normal = intp->normal;
+	out_data->incidence = sub(w->light.pos, intp->pos);
+	normalize(&out_data->incidence);
+	dot_val = dot(&out_data->normal, &out_data->incidence);
 	if (dot_val <= 0)
 		return (false);
-	refdata->norm_dot_inc = color(dot_val, dot_val, dot_val);
-	refdata->light_ratio = color(w->light.ratio, w->light.ratio, w->light.ratio);
+	out_data->norm_dot_inc = color(dot_val, dot_val, dot_val);
+	out_data->light_ratio = color(w->light.ratio, w->light.ratio, w->light.ratio);
 	return (true);
 }
 
-//double pickc(const t_color *c, t_ctype ctype)
-//{
-//	if (ctype == RED)
-//		return (c->r);
-//	if (ctype == GREEN)
-//		return (c->g);
-//	if (ctype == BLUE)
-//		return (c->b);
-//	return (0);
-//}
-
-//// Lr = La + Ld + Ls
-//// La = Ka(mat->ambient_ref) * Ea(w->amb_light.ratio)
-//// Ld = Kd(mat->diffuese_ref) * Ei(w->light.ratio) * dot(normal,incidence)
-//// Ls = Ks(mat->specular_ref) * Ei(w->light.ratio) * pow(dot(reflection,-ray), mat->shininess)
-//double	get_light(const t_world *w, t_refdata *refdata, const t_material *mat, const t_ctype ctype)
-//{
-//	double	diffuse_ref_light;
-//	double	specular_ref_light;
-/*
-	diffuse_ref_light = 0;
-	specular_ref_light = 0;
-	if (refdata->norm_dot_inc > 0)
-	{
-		diffuse_ref_light = pickc(&mat->diffuse_ref, ctype) * w->light.ratio * refdata->norm_dot_inc;
-		refdata->reflection = sub(times(2 * refdata->norm_dot_inc, refdata->normal), refdata->incidence);
-		normalize(&refdata->reflection);
-		refdata->reverseray = times(-1, refdata->ray);
-		normalize(&refdata->reverseray);
-		specular_ref_light = pickc(&mat->specular_ref, ctype) * w->light.ratio * \
-								pow(dot(&refdata->reflection, &refdata->reverseray), mat->shininess);
-	}
-	return (diffuse_ref_light + specular_ref_light);
-}
-*/
 void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col)
 {
 	t_color	diffuse_ref_light;
@@ -120,9 +85,8 @@ void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col)
 	normalize(&refdata->reverseray);
 	pow_val = pow(dot(&refdata->reflection, &refdata->reverseray), mat->shininess);
 	specular_ref_light = cmult(mat->specular_ref, cmult(refdata->light_ratio, color(pow_val, pow_val, pow_val)));
-	out_col->r = CLAMP(out_col->r + diffuse_ref_light.r + specular_ref_light.r, 0, 1);
-	out_col->g = CLAMP(out_col->g + diffuse_ref_light.g + specular_ref_light.g, 0, 1);
-	out_col->b = CLAMP(out_col->b + diffuse_ref_light.b + specular_ref_light.b, 0, 1);
+	*out_col = cadd(*out_col, cadd(diffuse_ref_light, specular_ref_light));
+	cfilter(out_col, 0, 1);
 }
 
 bool raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)

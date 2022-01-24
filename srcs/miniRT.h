@@ -178,20 +178,22 @@ typedef struct s_world {
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
 t_color	cmult(const t_color a, const t_color b);
+t_color	cadd(const t_color a, const t_color b);
+void	cfilter(t_color *a, const double min, const double max);
 // color
 
-bool		atovec3(char const *nptr, t_vec3 *rlt);
-bool		is_normalized_vector(t_vec3 v);
-t_vec3      vec3(double x, double y, double z);
-t_vec3 add(const t_vec3 a, const t_vec3 b);
-t_vec3      sub(const t_vec3 a, const t_vec3 b);
-t_vec3 		mult(const t_vec3 a, const t_vec3 b);
-t_vec3		times(const double nb, const t_vec3 a);
-double      dot(const t_vec3 *a, const t_vec3 *b);
-double      squared_norm(const t_vec3 *v);
-double      norm(const t_vec3 *v);
-double      normalize(t_vec3* v);
-t_vec3      cross(const t_vec3 a, const t_vec3 b);
+bool	atovec3(char const *nptr, t_vec3 *rlt);
+bool	is_normalized_vector(t_vec3 v);
+t_vec3	vec3(double x, double y, double z);
+t_vec3	add(const t_vec3 a, const t_vec3 b);
+t_vec3	sub(const t_vec3 a, const t_vec3 b);
+t_vec3	mult(const t_vec3 a, const t_vec3 b);
+t_vec3	times(const double nb, const t_vec3 a);
+double	dot(const t_vec3 *a, const t_vec3 *b);
+double	squared_norm(const t_vec3 *v);
+double	norm(const t_vec3 *v);
+double	normalize(t_vec3* v);
+t_vec3	cross(const t_vec3 a, const t_vec3 b);
 // vector
 
 bool parser(char *fn, t_world *w);

@@ -45,3 +45,20 @@ t_color	cmult(const t_color a, const t_color b)
 	ret.b = a.b * b.b;
 	return (ret);
 }
+
+t_color	cadd(const t_color a, const t_color b)
+{
+	t_color	ret;
+
+	ret.r = a.r + b.r;
+	ret.g = a.g + b.g;
+	ret.b = a.b + b.b;
+	return (ret);
+}
+
+void	cfilter(t_color *a, const double min, const double max)
+{
+	a->r = CLAMP(a->r, min, max);
+	a->g = CLAMP(a->g, min, max);
+	a->b = CLAMP(a->b, min, max);
+}
