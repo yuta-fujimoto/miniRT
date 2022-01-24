@@ -158,12 +158,13 @@ typedef struct s_default
 
 // data used in the get_color()
 typedef struct s_refdata {
-	t_vec3	camray_vec;
-	t_vec3	normal_vec;
-	t_vec3	incidence_vec;
-	t_vec3	reverseray_vec;
-	t_vec3	reflection_vec;
-	double	norm_dot_inc;
+	t_vec3	ray;
+	t_vec3	normal;
+	t_vec3	incidence;
+	t_vec3	reverseray;
+	t_vec3	reflection;
+	t_color	norm_dot_inc;
+	t_color	light_ratio;
 }	t_refdata;
 
 typedef struct s_world {
