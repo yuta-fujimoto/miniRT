@@ -42,14 +42,6 @@ typedef enum e_formula
 	FORMULA_NUM
 }	t_formula;
 
-typedef enum e_ctype
-{
-	RED,
-	GREEN,
-	BLUE,
-	CTYPE_NUM
-}	t_ctype;
-
 typedef struct	s_data {
 	void	*mlx;
 	void	*mlx_win;
@@ -153,7 +145,7 @@ typedef struct s_default
 	double		half_hs;
 } t_default;
 
-// data used in the get_color()
+// data used in the add_color()
 typedef struct s_refdata {
 	t_vec3	ray;
 	t_vec3	normal;
