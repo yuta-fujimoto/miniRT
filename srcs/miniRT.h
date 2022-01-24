@@ -1,35 +1,35 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-#include <string.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <math.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include "keysymdef.h"
-#include "../gnl/get_next_line_bonus.h"
-#include "../libft/libft.h"
-#include "../minilibx-linux/mlx.h"
+# include <string.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <math.h>
+# include <unistd.h>
+# include <stdbool.h>
+# include "keysymdef.h"
+# include "../gnl/get_next_line_bonus.h"
+# include "../libft/libft.h"
+# include "../minilibx-linux/mlx.h"
 
 // Assumptions
-#define W_IMG 612.0
-#define H_IMG 512.0
-#define W_SCRN 500.0
-#define H_SCRN (H_IMG * W_SCRN / W_IMG)
-#define COEF_SPECULAR_REF 0.3
-#define SHININESS 8
-#define EPSILON 0.01
+# define W_IMG 612.0
+# define H_IMG 512.0
+# define W_SCRN 500.0
+# define H_SCRN (H_IMG * W_SCRN / W_IMG)
+# define COEF_SPECULAR_REF 0.3
+# define SHININESS 8
+# define EPSILON 0.01
 
-#ifndef M_PI
-#define M_PI 3.141592653589793
-#endif
-#define RADIANS(degrees) ((degrees) * M_PI / 180)
-#define SQR(x) ((x)*(x))
-#define MIN(a,b) (a < b ? a : b)
-#define MAX(a,b) (a > b ? a : b)
-#define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
+# ifndef M_PI
+#  define M_PI 3.141592653589793
+# endif
+# define RADIANS(degrees) ((degrees) * M_PI / 180)
+# define SQR(x) ((x)*(x))
+# define MIN(a,b) (a < b ? a : b)
+# define MAX(a,b) (a > b ? a : b)
+# define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
 
 typedef enum e_formula
 {
@@ -42,7 +42,7 @@ typedef enum e_formula
 	FORMULA_NUM
 }	t_formula;
 
-typedef struct	s_data {
+typedef struct s_data {
 	void	*mlx;
 	void	*mlx_win;
 	void	*img;
@@ -52,7 +52,7 @@ typedef struct	s_data {
 	int		endian;
 }	t_data;
 
-enum Object
+enum e_Object
 {
 	Sphere,
 	Plane,
@@ -61,30 +61,30 @@ enum Object
 
 typedef struct s_vec3
 {
-	double x;
-	double y;
-	double z;
-} t_vec3;
+	double	x;
+	double	y;
+	double	z;
+}	t_vec3;
 
 typedef struct s_ray
 {
-	t_vec3 start;
-	t_vec3 direction;
-} t_ray;
+	t_vec3	start;
+	t_vec3	direction;
+}	t_ray;
 
 typedef struct s_color
 {
-	double r;
-	double g;
-	double b;
-} t_color;
+	double	r;
+	double	g;
+	double	b;
+}	t_color;
 
 typedef struct s_intersection_point
 {
-	double distance;
-	t_vec3 pos;
-	t_vec3 normal;
-} t_intersection_point;
+	double	distance;
+	t_vec3	pos;
+	t_vec3	normal;
+}	t_intersection_point;
 
 typedef struct s_material
 {
@@ -95,40 +95,40 @@ typedef struct s_material
 }	t_material;
 
 typedef struct s_amb_light {
-	double ratio;
-	t_color c;
-} t_amb_light;
+	double	ratio;
+	t_color	c;
+}	t_amb_light;
 
 typedef struct s_camera {
-	t_vec3 pos;
-	t_vec3 norm_ori_vec;
-	int fov;
-} t_camera;
+	t_vec3	pos;
+	t_vec3	norm_ori_vec;
+	int		fov;
+}	t_camera;
 
 typedef struct s_light
 {
-	double ratio;
-	t_vec3 pos;
+	double	ratio;
+	t_vec3	pos;
 }	t_light;
 
 typedef struct s_sphere {
-	t_vec3 center;
-	double diameter;
-	t_color c;
+	t_vec3	center;
+	double	diameter;
+	t_color	c;
 }	t_sphere;
 
 typedef struct s_plane {
-	t_vec3 pos;
-	t_vec3 norm_ori_vec;
-	t_color c;
+	t_vec3	pos;
+	t_vec3	norm_ori_vec;
+	t_color	c;
 }	t_plane;
 
 typedef struct s_cylinder {
-	t_vec3 pos;
-	t_vec3 norm_ori_vec;
-	double diameter;
-	double height;
-	t_color c;
+	t_vec3	pos;
+	t_vec3	norm_ori_vec;
+	double	diameter;
+	double	height;
+	t_color	c;
 }	t_cylinder;
 
 // default values used in the vec_cam_to_scrn()
@@ -143,7 +143,7 @@ typedef struct s_default
 	double		max_yi;
 	double		half_ws;
 	double		half_hs;
-} t_default;
+}	t_default;
 
 // data used in the add_color()
 typedef struct s_refdata {
@@ -162,13 +162,14 @@ typedef struct s_world {
 	t_camera	camera;
 	t_light		light;
 	bool		env_elems_exists[3];
-} t_world;
+}	t_world;
 
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
 t_color	cmult(const t_color a, const t_color b);
 t_color	cadd(const t_color a, const t_color b);
 void	cfilter(t_color *a, const double min, const double max);
+void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col);
 // color
 
 bool	atovec3(char const *nptr, t_vec3 *rlt);
@@ -181,23 +182,23 @@ t_vec3	times(const double nb, const t_vec3 a);
 double	dot(const t_vec3 *a, const t_vec3 *b);
 double	squared_norm(const t_vec3 *v);
 double	norm(const t_vec3 *v);
-double	normalize(t_vec3* v);
+double	normalize(t_vec3 *v);
 t_vec3	cross(const t_vec3 a, const t_vec3 b);
 // vector
 
-bool parser(char *fn, t_world *w);
-bool parser_amb_light(t_world *world, char **info);
-bool parser_light(t_world *world, char **info);
-bool parser_camera(t_world *world, char **info);
-bool parser_sphere(t_world *world, char **info);
-bool parser_plane(t_world *world, char **info);
-bool parser_cylinder(t_world *world, char **info);
+bool	parser(char *fn, t_world *w);
+bool	parser_amb_light(t_world *world, char **info);
+bool	parser_light(t_world *world, char **info);
+bool	parser_camera(t_world *world, char **info);
+bool	parser_sphere(t_world *world, char **info);
+bool	parser_plane(t_world *world, char **info);
+bool	parser_cylinder(t_world *world, char **info);
 // parser
 
-const char *vector_str(const t_vec3 v);
-void print_world(t_world *w);
-void print_color(t_color c, char *prefix);
-void print_vec3(t_vec3 v, char *prefix);
+const char	*vector_str(const t_vec3 v);
+void	print_world(t_world *w);
+void	print_color(t_color c, char *prefix);
+void	print_vec3(t_vec3 v, char *prefix);
 // print_debug
 
 void	ft_str_arr_free(char **str_arr);
@@ -209,15 +210,17 @@ t_ray	ray(t_vec3 start, t_vec3 direction);
 
 t_vec3	get_position(const double t, const t_ray *ray);
 double	get_t(double form[FORMULA_NUM]);
-int	cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, const double form[FORMULA_NUM], double *out_height);
+int		cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, \
+					const double form[FORMULA_NUM], double *out_height);
 // intersection_test
 
 bool	raytrace(const t_world *w, const t_ray *eye_ray, t_color *out_col);
-bool	intersection_test(const t_list *obj, const t_ray *ray, t_intersection_point *out_intp);
+bool	intersection_test(const t_list *obj, \
+					const t_ray *ray, t_intersection_point *out_intp);
 // raytrace
 
 int		key_hook(int keycode, t_data *data);
-int 	ft_exit(t_data *data);
+int		ft_exit(t_data *data);
 // hooks
 
 #endif
