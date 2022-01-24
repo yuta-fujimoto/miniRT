@@ -1,22 +1,27 @@
 #include "miniRT.h"
 
-double squared_norm(const t_vec3*v)
+double	dot(const t_vec3 *a, const t_vec3 *b)
 {
-  return SQR(v->x) + SQR(v->y) + SQR(v->z);
+	return (a->x * b->x + a->y * b->y + a->z * b->z);
 }
 
-double norm(const t_vec3 *v)
+double	squared_norm(const t_vec3 *v)
 {
-  return sqrt(squared_norm(v));
+	return (SQR(v->x) + SQR(v->y) + SQR(v->z));
 }
 
-double normalize(t_vec3* v)
+double	norm(const t_vec3 *v)
 {
-  double vnorm;
+	return (sqrt(squared_norm(v)));
+}
 
-  vnorm = norm(v);
-  v->x /= vnorm;
-  v->y /= vnorm;
-  v->z /= vnorm;
-  return vnorm;
+double	normalize(t_vec3 *v)
+{
+	double	vnorm;
+
+	vnorm = norm(v);
+	v->x /= vnorm;
+	v->y /= vnorm;
+	v->z /= vnorm;
+	return (vnorm);
 }
