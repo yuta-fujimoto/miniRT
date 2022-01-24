@@ -18,10 +18,7 @@
 #define H_IMG 512.0
 #define W_SCRN 500.0
 #define H_SCRN (H_IMG * W_SCRN / W_IMG)
-#define REF_FACTOR_MIRROR 0.3
-#define ILLUMI_RATE_ENV 0.1
-#define ILLUMI_RATE_DIR 1.0
-#define GLOSSINESS 8
+#define COEF_SPECULAR_REF 0.3
 #define SHININESS 8
 #define EPSILON 0.01
 

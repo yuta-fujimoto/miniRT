@@ -52,7 +52,7 @@ void get_material(t_list *obj, t_material *mat)
 		c = ((t_cylinder *)obj->content)->c;
 	mat->ambient_ref = c;
 	mat->diffuse_ref = c;
-	mat->specular_ref = color(REF_FACTOR_MIRROR, REF_FACTOR_MIRROR, REF_FACTOR_MIRROR);
+	mat->specular_ref = color(COEF_SPECULAR_REF, COEF_SPECULAR_REF, COEF_SPECULAR_REF);
 	mat->shininess = SHININESS;
 }
 
