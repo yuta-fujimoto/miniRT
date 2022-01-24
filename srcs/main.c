@@ -5,12 +5,15 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor)
 	char	*dst;
 	int		icolor;
 
-	icolor = ((int)(dcolor.r * 255) << 16) | ((int)(dcolor.g * 255) << 8) | (int)(dcolor.b * 255); 
+	icolor = ((int)(dcolor.r * 255) << 16) | \
+				((int)(dcolor.g * 255) << 8) | \
+				(int)(dcolor.b * 255);
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = icolor;
+	*(unsigned int *)dst = icolor;
 }
 
-t_vec3 vec_cam_to_scrn(const double x_img, const double y_img, const t_default *d)
+t_vec3	vec_cam_to_scrn(const double x_img, \
+					const double y_img, const t_default *d)
 {
 	double			coef_dx;
 	double			coef_dy;
@@ -22,7 +25,7 @@ t_vec3 vec_cam_to_scrn(const double x_img, const double y_img, const t_default *
 				times(coef_dy, d->vec_dy))));
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_world		w;
 	t_default	d;
