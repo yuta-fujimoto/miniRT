@@ -17,15 +17,12 @@
 # define W_IMG 612.0
 # define H_IMG 512.0
 # define W_SCRN 500.0
-# define H_SCRN (H_IMG * W_SCRN / W_IMG)
 # define COEF_SPECULAR_REF 0.3
 # define SHININESS 8
 # define EPSILON 0.01
-
 # ifndef M_PI
 #  define M_PI 3.141592653589793
 # endif
-# define RADIANS(degrees) ((degrees) * M_PI / 180)
 
 typedef enum e_formula
 {
@@ -137,6 +134,7 @@ typedef struct s_default
 	double		coef_n;
 	double		max_xi;
 	double		max_yi;
+	double		h_scrn;
 	double		half_ws;
 	double		half_hs;
 }	t_default;
@@ -208,6 +206,7 @@ double	sqr(double x);
 double	min(double a, double b);
 double	max(double a, double b);
 double	clamp(double x, double min, double max);
+double	radians(double	degrees);
 // utils2
 
 t_vec3	get_position(const double t, const t_ray *ray);

@@ -23,3 +23,8 @@ double	clamp(double v, double minv, double maxv)
 {
 	return (min(max(v, minv), maxv));
 }
+
+double	radians(double	degrees)
+{
+	return (degrees * M_PI / 180);
+}

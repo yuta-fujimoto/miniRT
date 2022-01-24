@@ -19,7 +19,7 @@ t_vec3	vec_cam_to_scrn(const double x_img, \
 	double			coef_dy;
 
 	coef_dx = (W_SCRN * (x_img / d->max_xi)) - d->half_ws;
-	coef_dy = (-H_SCRN * (y_img / d->max_yi)) + d->half_hs;
+	coef_dy = (-d->h_scrn * (y_img / d->max_yi)) + d->half_hs;
 	return (add(times(d->coef_n, d->cam.norm_ori_vec), \
 			add(times(coef_dx, d->vec_dx), \
 				times(coef_dy, d->vec_dy))));
@@ -57,11 +57,12 @@ int	main(int ac, char **av)
 	normalize(&d.vec_dx);
 	d.vec_dy = cross(d.cam.norm_ori_vec, d.vec_dx);
 	normalize(&d.vec_dy);
-	d.coef_n = W_SCRN / (2 * tan(RADIANS((double)d.cam.fov / 2)));
+	d.coef_n = W_SCRN / (2 * tan(radians((double)d.cam.fov / 2)));
 	d.max_xi = W_IMG - 1;
 	d.max_yi = H_IMG - 1;
+	d.h_scrn = H_IMG * W_SCRN / W_IMG;
 	d.half_ws = W_SCRN / 2;
-	d.half_hs = H_SCRN / 2;
+	d.half_hs = d.h_scrn / 2;
 
 	camray.start = w.camera.pos;
 	y_img = 0;
