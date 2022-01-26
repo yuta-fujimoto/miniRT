@@ -9,7 +9,7 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include "keysymdef.h"
-# include "../gnl/get_next_line_bonus.h"
+# include "../gnl/get_next_line.h"
 # include "../libft/libft.h"
 # include "../minilibx-linux/mlx.h"
 
