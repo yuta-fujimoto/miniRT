@@ -25,21 +25,34 @@ t_vec3	to3axis(const double x_img, \
 				times(coef_dy, d->vec_dy))));
 }
 
-void	*isnull(void *result)
+void	*isnull(t_data *data, void *result)
 {
 	if (!result)
-		exit(1);
+	{
+		ft_putendl_fd("mlx malloc error", STDERR_FILENO);
+		ft_exit(data, EXIT_FAILURE);
+	}
 	return (result);
 }
 
 void	data_init(t_data *data)
 {
-	data->mlx = isnull(mlx_init());
-	data->mlx_win = \
-		isnull(mlx_new_window(data->mlx, W_IMG, H_IMG, "Defence Line"));
-	data->img = isnull(mlx_new_image(data->mlx, W_IMG, H_IMG));
-	data->addr = isnull(mlx_get_data_addr(data->img, &data->bits_per_pixel, \
-											&data->line_length, &data->endian));
+	data->mlx = NULL;
+	data->win = NULL;
+	data->img = NULL;
+	data->w.obj_list = NULL;
+	data->mlx = isnull(data, mlx_init());
+	data->win = isnull(data, \
+						mlx_new_window(data->mlx, \
+							W_IMG, H_IMG, \
+							"Defence Line"));
+	data->img = isnull(data, \
+						mlx_new_image(data->mlx, W_IMG, H_IMG));
+	data->addr = isnull(data, \
+						mlx_get_data_addr(data->img, \
+							&data->bits_per_pixel, \
+							&data->line_length, \
+							&data->endian));
 }
 
 void	set_default(const t_world *w, t_default *def)
@@ -86,9 +99,9 @@ void	set_pixel(t_data *data)
 
 void	draw(t_data *data)
 {
-	mlx_hook(data->mlx_win, 33, 1 << 17, ft_exit, data);
-	mlx_key_hook(data->mlx_win, key_hook, data);
-	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
+	mlx_hook(data->win, 33, 1 << 17, close_window, data);
+	mlx_key_hook(data->win, key_hook, data);
+	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	mlx_loop(data->mlx);
 	end_world(&data->w, true);
 }
@@ -100,15 +113,15 @@ int	main(int ac, char **av)
 	if (ac != 2)
 	{
 		ft_putendl_fd("NO ARGUMENT", STDERR_FILENO);
-		return (1);
+		return (0);
 	}
+	data_init(&data);
 	if (!parser(av[1], &data.w))
 	{
 		ft_putendl_fd("ERROR", STDERR_FILENO);
 		return (0);
 	}
 	print_world(&data.w);
-	data_init(&data);
 	set_pixel(&data);
 	draw(&data);
 }

@@ -150,14 +150,13 @@ typedef struct s_world {
 
 typedef struct s_data {
 	void		*mlx;
-	void		*mlx_win;
+	void		*win;
 	void		*img;
 	char		*addr;
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
 	t_world		w;
-	t_default	def;
 }	t_data;
 
 bool	atocol(char const *nptr, t_color *rlt);
@@ -223,7 +222,8 @@ bool	intersection_test(const t_list *obj, \
 // raytrace
 
 int		key_hook(int keycode, t_data *data);
-int		ft_exit(t_data *data);
+int		ft_exit(t_data *data, int status);
+int		close_window(t_data *data);
 // hooks
 
 #endif
