@@ -26,9 +26,9 @@ LIBDIR := ./libft
 LIBNAME := libft.a
 
 GNL := ./gnl
-GNLNAME := get_next_line_bonus.o get_next_line_utils_bonus.o
-GNLFILE :=  $(GNL)/get_next_line_utils_bonus.o \
-			$(GNL)/get_next_line_bonus.o
+GNLNAME := get_next_line.o get_next_line_utils.o
+GNLFILE :=  $(GNL)/get_next_line_utils.o \
+			$(GNL)/get_next_line.o
 
 %.o: %.c
 	$(CC) $(CFLAG)  -I$(MLXDIR) -lm -c $< -o $@
