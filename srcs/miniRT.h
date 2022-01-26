@@ -45,16 +45,6 @@ typedef enum e_error_status
 	EPARSE,
 }	t_error_status;
 
-typedef struct s_data {
-	void	*mlx;
-	void	*mlx_win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_data;
-
 enum e_Object
 {
 	Sphere,
@@ -134,7 +124,7 @@ typedef struct s_cylinder {
 	t_color	c;
 }	t_cylinder;
 
-// default values used in the vec_cam_to_scrn()
+// default values used in the to3axis()
 typedef struct s_default
 {
 	t_camera	cam;
@@ -167,6 +157,17 @@ typedef struct s_world {
 	t_light		light;
 	bool		env_elems_exists[3];
 }	t_world;
+
+typedef struct s_data {
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+	t_world		w;
+}	t_data;
 
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
@@ -230,7 +231,8 @@ bool	intersection_test(const t_list *obj, \
 // raytrace
 
 int		key_hook(int keycode, t_data *data);
-int		ft_exit(t_data *data);
+int		ft_exit(t_data *data, int status);
+int		close_window(t_data *data);
 // hooks
 
 bool	print_error(const int line_count, const t_error_status error_status);
