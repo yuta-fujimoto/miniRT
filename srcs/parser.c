@@ -68,7 +68,7 @@ bool	parser(char *fn, t_world *w)
 	int			fd;
 	char		*line;
 	static int	line_count = 1;
-	int 		gnl_status;
+	int			gnl_status;
 
 	if (!extension_equal(fn, ".rt"))
 		return (end_parse(-1, EFORMAT, 0));

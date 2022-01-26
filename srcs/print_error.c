@@ -4,7 +4,7 @@ bool	print_error(const int line_count, const t_error_status error_status)
 {
 	ft_putendl_fd("Error", STDERR_FILENO);
 	if (error_status == NOARG)
-		ft_putendl_fd("No argument", STDERR_FILENO);
+		ft_putendl_fd("Invalid number of arguments", STDERR_FILENO);
 	else if (error_status == SYSERROR)
 		perror(NULL);
 	else if (error_status == NOENV)
