@@ -32,7 +32,7 @@ bool	atovec3(char const *nptr, t_vec3 *v)
 	return (end_conversion(vec3, true));
 }
 
-bool	is_normalized_vector(t_vec3 v)
+bool	is_normed_vec(t_vec3 v)
 {
 	return (v.x >= -1.0 && v.x <= 1.0 && v.y >= -1.0 \
 		&& v.y <= 1.0 && v.z >= -1.0 && v.z <= 1.0);

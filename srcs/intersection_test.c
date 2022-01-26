@@ -18,6 +18,8 @@ static bool	intersection_test_sphere(const t_sphere *shpere, \
 		out_intp->pos = get_position(t, ray);
 		out_intp->normal = sub(out_intp->pos, shpere->center);
 		normalize(&out_intp->normal);
+		if (dot(&out_intp->normal, &ray->direction) > 0)
+			out_intp->normal = times(-1, out_intp->normal);
 		return (true);
 	}
 	return (false);
@@ -42,6 +44,8 @@ static bool	intersection_test_plane(const t_plane *plane, \
 			out_intp->distance = t * norm(&ray->direction);
 			out_intp->pos = get_position(t, ray);
 			out_intp->normal = normal;
+			if (dot(&out_intp->normal, &ray->direction) > 0)
+				out_intp->normal = times(-1, out_intp->normal);
 			return (true);
 		}
 	}
@@ -73,6 +77,8 @@ static bool	intersection_test_cylinder(const t_cylinder *cylinder, \
 						add(cylinder->pos, \
 						times(height, cylinder->norm_ori_vec)));
 	normalize(&out_intp->normal);
+	if (dot(&out_intp->normal, &ray->direction) > 0)
+		out_intp->normal = times(-1, out_intp->normal);
 	return (true);
 }
 

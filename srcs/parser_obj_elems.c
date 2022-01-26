@@ -1,14 +1,14 @@
 #include "miniRT.h"
 
-static bool parser_obj_failure(void *p)
+static bool	parser_obj_failure(void *p)
 {
 	free(p);
 	return (false);
 }
 
-bool parser_sphere(t_world *world, char **info)
+bool	parser_sphere(t_world *world, char **info)
 {
-	t_sphere *s;
+	t_sphere	*s;
 
 	if (ft_str_arr_len(info) != 4)
 		return (false);
@@ -26,9 +26,9 @@ bool parser_sphere(t_world *world, char **info)
 	return (true);
 }
 
-bool parser_plane(t_world *world, char **info)
+bool	parser_plane(t_world *world, char **info)
 {
-	t_plane *p;
+	t_plane	*p;
 
 	if (ft_str_arr_len(info) != 4)
 		return (false);
@@ -37,7 +37,7 @@ bool parser_plane(t_world *world, char **info)
 		return (p);
 	if (!atovec3(info[1], &p->pos))
 		return (parser_obj_failure(p));
-	if (!atovec3(info[2], &p->norm_ori_vec) || !is_normalized_vector(p->norm_ori_vec))
+	if (!atovec3(info[2], &p->norm_ori_vec) || !is_normed_vec(p->norm_ori_vec))
 		return (parser_obj_failure(p));
 	if (!atocol(info[3], &p->c))
 		return (parser_obj_failure(p));
@@ -47,9 +47,9 @@ bool parser_plane(t_world *world, char **info)
 	return (true);
 }
 
-bool parser_cylinder(t_world *world, char **info)
+bool	parser_cylinder(t_world *world, char **info)
 {
-	t_cylinder *c;
+	t_cylinder	*c;
 
 	if (ft_str_arr_len(info) != 6)
 		return (false);
@@ -58,7 +58,7 @@ bool parser_cylinder(t_world *world, char **info)
 		return (c);
 	if (!atovec3(info[1], &c->pos))
 		return (parser_obj_failure(c));
-	if (!atovec3(info[2], &c->norm_ori_vec) || !is_normalized_vector(c->norm_ori_vec))
+	if (!atovec3(info[2], &c->norm_ori_vec) || !is_normed_vec(c->norm_ori_vec))
 		return (parser_obj_failure(c));
 	if (!ft_atof(info[3], &c->diameter))
 		return (parser_obj_failure(c));

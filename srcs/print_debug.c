@@ -1,25 +1,25 @@
 #include "miniRT.h"
 
-const char *vector_str(const t_vec3 v)
+char	*vector_str(const t_vec3 v)
 {
-	static char buf[1024];
+	static char	buf[1024];
 
 	memset(buf, 0, sizeof(buf));
-	sprintf((void*)buf, "(%f, %f, %f)", v.x, v.y, v.z);
+	sprintf((void *)buf, "(%f, %f, %f)", v.x, v.y, v.z);
 	return (buf);
 }
 
-void print_color(t_color c, char *prefix)
+void	print_color(t_color c, char *prefix)
 {
 	printf("%s: %f %f %f\n", prefix, c.r, c.g, c.b);
 }
 
-void print_vec3(t_vec3 v, char *prefix)
+void	print_vec3(t_vec3 v, char *prefix)
 {
 	printf("%s: %f %f %f\n", prefix, v.x, v.y, v.z);
 }
 
-void print_obj(t_list *l)
+void	print_obj(t_list *l)
 {
 	while (l)
 	{
@@ -53,7 +53,7 @@ void print_obj(t_list *l)
 	}
 }
 
-void print_world(t_world *w)
+void	print_world(t_world *w)
 {
 	printf("[AMBIENT]\n");
 	printf("RATIO: %le\n", w->amb_light.ratio);
