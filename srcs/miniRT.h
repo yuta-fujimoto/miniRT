@@ -35,16 +35,6 @@ typedef enum e_formula
 	FORMULA_NUM
 }	t_formula;
 
-typedef struct s_data {
-	void	*mlx;
-	void	*mlx_win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_data;
-
 enum e_Object
 {
 	Sphere,
@@ -124,7 +114,7 @@ typedef struct s_cylinder {
 	t_color	c;
 }	t_cylinder;
 
-// default values used in the vec_cam_to_scrn()
+// default values used in the to3axis()
 typedef struct s_default
 {
 	t_camera	cam;
@@ -157,6 +147,18 @@ typedef struct s_world {
 	t_light		light;
 	bool		env_elems_exists[3];
 }	t_world;
+
+typedef struct s_data {
+	void		*mlx;
+	void		*mlx_win;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+	t_world		w;
+	t_default	def;
+}	t_data;
 
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
