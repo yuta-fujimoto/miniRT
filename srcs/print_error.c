@@ -10,7 +10,7 @@ bool	print_error(const int line_count, const t_error_status error_status)
 	else if (error_status == NOENV)
 		ft_putendl_fd("Lack environmental info(A,C,L)", STDERR_FILENO);
 	else if (error_status == EFORMAT)
-		ft_putendl_fd("Not .rt file", STDERR_FILENO);
+		ft_putendl_fd("Not a .rt file", STDERR_FILENO);
 	else if (error_status == EPARSE)
 	{
 		ft_putstr_fd("Line ", STDERR_FILENO);
