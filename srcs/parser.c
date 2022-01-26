@@ -1,13 +1,29 @@
 #include "miniRT.h"
 
-bool	parse_line(char *line, t_world *w)
+static bool	extension_equal(char *fn, char *ext)
+{
+	return (ft_strequal(ft_strrchr(fn, '.'), ext, ft_strlen(ext) ));
+}
+
+static bool	end_parse(int fd, t_error_status status, int line_count)
+{
+	if (fd != -1)
+		close(fd);
+	if (status != SUCCESS)
+	{
+		print_error(line_count, status);
+		return (false);
+	}
+	return (true);
+}
+
+static bool	parse_line(char *line, t_world *w)
 {
 	char	**info;
 	bool	rlt;
 
-	if (!*line)
-		return (true);
 	info = ft_split(line, ' ');
+	safe_free(line);
 	if (!info)
 		return (false);
 	rlt = false;
@@ -29,7 +45,7 @@ bool	parse_line(char *line, t_world *w)
 	return (rlt);
 }
 
-bool	parser_init(int *fd, char *fn, t_world *w)
+static bool	parser_init(int *fd, char *fn, t_world *w)
 {
 	*fd = open(fn, O_RDONLY);
 	if (*fd == -1)
@@ -43,28 +59,29 @@ bool	parser_init(int *fd, char *fn, t_world *w)
 
 bool	parser(char *fn, t_world *w)
 {
-	int		fd;
-	char	*line;
+	int			fd;
+	char		*line;
+	static int	line_count = 1;
+	int 		gnl_status;
 
+	if (!extension_equal(fn, ".rt"))
+		return (end_parse(-1, EFORMAT, 0));
 	if (!parser_init(&fd, fn, w))
-		return (NULL);
-	while (get_next_line(fd, &line) != 0)
+		return (end_parse(fd, SYSERROR, 0));
+	gnl_status = get_next_line(fd, &line);
+	while (gnl_status != 0)
 	{
-		if (!line || !parse_line(line, w))
-		{
-			safe_free(line);
-			return (end_world(w, false));
-		}
-		safe_free(line);
+		if (gnl_status == -1)
+			return (end_parse(fd, SYSERROR, 0));
+		if (!parse_line(line, w))
+			return (end_parse(fd, EPARSE, line_count));
+		line_count++;
+		gnl_status = get_next_line(fd, &line);
 	}
-	if (!line || !parse_line(line, w))
-	{
-		safe_free(line);
-		return (end_world(w, false));
-	}
-	safe_free(line);
+	if (!parse_line(line, w))
+		return (end_parse(fd, EPARSE, line_count));
 	if (!w->env_elems_exists[0] || !w->env_elems_exists[1]
 		|| !w->env_elems_exists[2])
-		return (end_world(w, false));
-	return (true);
+		return (end_parse(fd, NOENV, 0));
+	return (end_parse(fd, SUCCESS, 0));
 }

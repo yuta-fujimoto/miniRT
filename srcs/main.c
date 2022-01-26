@@ -40,15 +40,9 @@ int	main(int ac, char **av)
 	data.img = mlx_new_image(data.mlx, W_IMG, H_IMG);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	if (ac != 2)
-	{
-		ft_putendl_fd("NO ARGUMENT", STDERR_FILENO);
-		return (0);
-	}
+		return (print_error(0, NOARG));
 	if (!parser(av[1], &w))
-	{
-		ft_putendl_fd("ERROR", STDERR_FILENO);
 		return (0);
-	}
 	print_world(&w);
 
 	d.cam = w.camera;
@@ -84,5 +78,4 @@ int	main(int ac, char **av)
 	mlx_key_hook(data.mlx_win, key_hook, &data);
 	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
 	mlx_loop(data.mlx);
-	end_world(&w, true);
 }

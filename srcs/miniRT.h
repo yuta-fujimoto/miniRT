@@ -35,6 +35,16 @@ typedef enum e_formula
 	FORMULA_NUM
 }	t_formula;
 
+typedef enum e_error_status
+{
+	SUCCESS,
+	NOARG,
+	EFORMAT,
+	SYSERROR,
+	NOENV,
+	EPARSE,
+}	t_error_status;
+
 typedef struct s_data {
 	void	*mlx;
 	void	*mlx_win;
@@ -197,7 +207,6 @@ void	print_vec3(t_vec3 v, char *prefix);
 
 void	ft_str_arr_free(char **str_arr);
 int		ft_str_arr_len(char **str_arr);
-bool	end_world(t_world *w, bool rlt);
 void	safe_free(void *p);
 t_ray	ray(t_vec3 start, t_vec3 direction);
 // utils1
@@ -223,5 +232,8 @@ bool	intersection_test(const t_list *obj, \
 int		key_hook(int keycode, t_data *data);
 int		ft_exit(t_data *data);
 // hooks
+
+bool	print_error(const int line_count, const t_error_status error_status);
+// error
 
 #endif

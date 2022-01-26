@@ -13,6 +13,7 @@ SRCS :=	srcs/main.c \
 		srcs/color_utils.c \
 		srcs/color.c \
 		srcs/print_debug.c \
+		srcs/print_error.c \
 		srcs/hook_funcs.c \
 		srcs/intersection_test.c \
 		srcs/intersection_test_utils.c \
