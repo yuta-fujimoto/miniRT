@@ -29,15 +29,17 @@ void	*isnull(void *result)
 {
 	if (!result)
 		exit(1);
-	return(result);
+	return (result);
 }
 
-void	minirt_init(t_data *data)
+void	data_init(t_data *data)
 {
 	data->mlx = isnull(mlx_init());
-	data->mlx_win = isnull(mlx_new_window(data->mlx, W_IMG, H_IMG, "Defence Line"));
+	data->mlx_win = \
+		isnull(mlx_new_window(data->mlx, W_IMG, H_IMG, "Defence Line"));
 	data->img = isnull(mlx_new_image(data->mlx, W_IMG, H_IMG));
-	data->addr = isnull(mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian));
+	data->addr = isnull(mlx_get_data_addr(data->img, &data->bits_per_pixel, \
+											&data->line_length, &data->endian));
 }
 
 void	set_default(const t_world *w, t_default *def)
@@ -56,6 +58,32 @@ void	set_default(const t_world *w, t_default *def)
 	def->half_hs = def->h_scrn / 2;
 }
 
+void	set_pixel(t_data *data)
+{
+	double		x_img;
+	double		y_img;
+	t_ray		camray;
+	t_color		col;
+	t_default	def;
+
+	set_default(&data->w, &def);
+	camray.start = data->w.camera.pos;
+	y_img = 0;
+	while (y_img < H_IMG)
+	{
+		x_img = 0;
+		while (x_img < W_IMG)
+		{
+			camray.direction = to3axis(x_img, y_img, &def);
+			if (!raytrace(&data->w, &camray, &col))
+				col = color(1.0, 1.0, 1.0);
+			my_mlx_pixel_put(data, (int)x_img, (int)y_img, col);
+			x_img++;
+		}
+		y_img++;
+	}
+}
+
 void	draw(t_data *data)
 {
 	mlx_hook(data->mlx_win, 33, 1 << 17, ft_exit, data);
@@ -68,16 +96,11 @@ void	draw(t_data *data)
 int	main(int ac, char **av)
 {
 	t_data		data;
-	t_ray		camray;
-	double		x_img;
-	double		y_img;
-	t_color		col;
 
-	minirt_init(&data);
 	if (ac != 2)
 	{
 		ft_putendl_fd("NO ARGUMENT", STDERR_FILENO);
-		return (0);
+		return (1);
 	}
 	if (!parser(av[1], &data.w))
 	{
@@ -85,21 +108,7 @@ int	main(int ac, char **av)
 		return (0);
 	}
 	print_world(&data.w);
-	set_default(&data.w, &data.def);
-	camray.start = data.w.camera.pos;
-	y_img = 0;
-	while (y_img < H_IMG)
-	{
-		x_img = 0;
-		while (x_img < W_IMG)
-		{
-			camray.direction = to3axis(x_img, y_img, &data.def);
-			if (!raytrace(&data.w, &camray, &col))
-				col = color(1.0, 1.0, 1.0);
-			my_mlx_pixel_put(&data, (int)x_img, (int)y_img, col);
-			x_img++;
-		}
-		y_img++;
-	}
+	data_init(&data);
+	set_pixel(&data);
 	draw(&data);
 }
