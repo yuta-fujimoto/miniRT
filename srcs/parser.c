@@ -2,11 +2,17 @@
 
 static bool	extension_equal(char *fn, char *ext)
 {
-	return (ft_strequal(ft_strrchr(fn, '.'), ext, ft_strlen(ext) ));
+	return (ft_strequal(ft_strrchr(fn, '.'), ext, ft_strlen(ext) + 1));
 }
 
 static bool	end_parse(int fd, t_error_status status, int line_count)
 {
+	char	*line;
+
+	line = NULL;
+	while (get_next_line(fd, &line) == 1)
+		safe_free(line);
+	safe_free(line);
 	if (fd != -1)
 		close(fd);
 	if (status != SUCCESS)

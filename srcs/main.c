@@ -103,7 +103,6 @@ void	draw(t_data *data)
 	mlx_key_hook(data->win, key_hook, data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	mlx_loop(data->mlx);
-	end_world(&data->w, true);
 }
 
 int	main(int ac, char **av)
@@ -111,16 +110,10 @@ int	main(int ac, char **av)
 	t_data		data;
 
 	if (ac != 2)
-	{
-		ft_putendl_fd("NO ARGUMENT", STDERR_FILENO);
-		return (0);
-	}
+		return (print_error(0, NOARG));
 	data_init(&data);
 	if (!parser(av[1], &data.w))
-	{
-		ft_putendl_fd("ERROR", STDERR_FILENO);
-		return (0);
-	}
+		ft_exit(&data, 0);
 	print_world(&data.w);
 	set_pixel(&data);
 	draw(&data);
