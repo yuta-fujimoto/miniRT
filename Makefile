@@ -1,6 +1,8 @@
 NAME := a.out
 CC 	 := gcc
 CFLAG := -Wall -Werror -Wextra
+INCLUDE :=	srcs/miniRT.h \
+			srcs/keysymdef.h
 SRCS :=	srcs/main.c \
 		srcs/parser_env_elems.c \
 		srcs/parser_obj_elems.c \
@@ -39,27 +41,27 @@ all :$(NAME)
 
 gnl: $(GNLFILE)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(INCLUDE)
 	$(MAKE) -C $(MLXDIR)
 	$(MAKE) -C $(LIBDIR)
 	$(MAKE) gnl
 	$(CC) -o $(NAME) $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm
 
-debug: $(OBJS)
+debug: $(OBJS) $(INCLUDE)
 	$(MAKE) -C $(MLXDIR)
 	$(MAKE) -C $(LIBDIR)
 	$(MAKE) gnl
 	$(CC) -o $(NAME) -g3 -fsanitize=address $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm
 
 clean:
-	rm -f $(OBJS)
+	$(RM) $(OBJS)
 	$(MAKE) clean -C $(MLXDIR)
 	$(MAKE) clean -C $(LIBDIR)
 
 fclean: clean
-	rm -f $(MLXDIR)/$(MLXNAME)
-	rm -f $(LIBDIR)/$(LIBNAME)
-	rm -f $(NAME)
-	rm -f $(GNLFILE)
+	$(RM) $(MLXDIR)/$(MLXNAME)
+	$(RM) $(LIBDIR)/$(LIBNAME)
+	$(RM) $(NAME)
+	$(RM) $(GNLFILE)
 
 re: fclean all
