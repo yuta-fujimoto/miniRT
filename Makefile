@@ -17,7 +17,8 @@ SRCS :=	srcs/main.c \
 		srcs/hook_funcs.c \
 		srcs/intersection_test.c \
 		srcs/intersection_test_utils.c \
-		srcs/raytrace.c
+		srcs/raytrace.c \
+		srcs/init.c
 OBJS := $(SRCS:.c=.o)
 
 MLXDIR := ./minilibx-linux
