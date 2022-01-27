@@ -102,6 +102,7 @@ typedef struct s_light
 {
 	double	ratio;
 	t_vec3	pos;
+	t_color	c;
 }	t_light;
 
 typedef struct s_sphere {
@@ -173,6 +174,7 @@ bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
 t_color	cmult(const t_color a, const t_color b);
 t_color	cadd(const t_color a, const t_color b);
+t_color	ctimes(const double nb, const t_color c);
 void	cfilter(t_color *a, const double min, const double max);
 void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col);
 // color

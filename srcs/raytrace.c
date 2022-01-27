@@ -72,8 +72,7 @@ bool	reflection_test(const t_world *w, const t_ray *cam_ray, \
 	if (dot_val <= 0)
 		return (false);
 	out_data->norm_dot_inc = color(dot_val, dot_val, dot_val);
-	out_data->light_ratio = color(w->light.ratio, \
-									w->light.ratio, w->light.ratio);
+	out_data->light_ratio = ctimes(w->light.ratio, w->light.c);
 	return (true);
 }
 
@@ -88,8 +87,7 @@ bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
 		return (false);
 	get_material(nearest_obj, &mat);
 	*out_col = cmult(mat.ambient_ref, \
-				color(w->amb_light.ratio, \
-						w->amb_light.ratio, w->amb_light.ratio));
+				ctimes(w->amb_light.ratio, w->amb_light.c));
 	if (intersection_test_light(w, ray(nearest_intp.pos, \
 		sub(w->light.pos, nearest_intp.pos))))
 		return (true);
