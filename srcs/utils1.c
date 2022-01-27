@@ -1,11 +1,5 @@
 #include "miniRT.h"
 
-bool	end_world(t_world *w, bool rlt)
-{
-	ft_lstclear(&w->obj_list, free);
-	return (rlt);
-}
-
 void	safe_free(void *p)
 {
 	if (p)
