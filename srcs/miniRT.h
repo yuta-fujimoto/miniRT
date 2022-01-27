@@ -238,4 +238,7 @@ int		close_window(t_data *data);
 bool	print_error(const int line_count, const t_error_status error_status);
 // error
 
+void	data_init(t_data *data);
+//init
+
 #endif
