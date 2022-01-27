@@ -65,5 +65,6 @@ void	print_world(t_world *w)
 	printf("[LIGHT]\n");
 	print_vec3(w->light.pos, "POSITION");
 	printf("RATIO: %le\n", w->light.ratio);
+	print_color(w->light.c, "COLOR");
 	print_obj(w->obj_list);
 }
