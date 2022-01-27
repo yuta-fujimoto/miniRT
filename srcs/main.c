@@ -25,37 +25,7 @@ t_vec3	to3axis(const double x_img, \
 				times(coef_dy, d->vec_dy))));
 }
 
-void	*isnull(t_data *data, void *result)
-{
-	if (!result)
-	{
-		ft_putendl_fd("mlx malloc error", STDERR_FILENO);
-		ft_exit(data, EXIT_FAILURE);
-	}
-	return (result);
-}
-
-void	data_init(t_data *data)
-{
-	data->mlx = NULL;
-	data->win = NULL;
-	data->img = NULL;
-	data->w.obj_list = NULL;
-	data->mlx = isnull(data, mlx_init());
-	data->win = isnull(data, \
-						mlx_new_window(data->mlx, \
-							W_IMG, H_IMG, \
-							"Defence Line"));
-	data->img = isnull(data, \
-						mlx_new_image(data->mlx, W_IMG, H_IMG));
-	data->addr = isnull(data, \
-						mlx_get_data_addr(data->img, \
-							&data->bits_per_pixel, \
-							&data->line_length, \
-							&data->endian));
-}
-
-void	set_default(const t_world *w, t_default *def)
+void	default_set(const t_world *w, t_default *def)
 {
 	def->cam = w->camera;
 	def->vec_ey = vec3(0, 1, 0);
@@ -71,7 +41,7 @@ void	set_default(const t_world *w, t_default *def)
 	def->half_hs = def->h_scrn / 2;
 }
 
-void	set_pixel(t_data *data)
+void	data_set(t_data *data)
 {
 	double		x_img;
 	double		y_img;
@@ -79,7 +49,7 @@ void	set_pixel(t_data *data)
 	t_color		col;
 	t_default	def;
 
-	set_default(&data->w, &def);
+	default_set(&data->w, &def);
 	camray.start = data->w.camera.pos;
 	y_img = 0;
 	while (y_img < H_IMG)
@@ -97,31 +67,19 @@ void	set_pixel(t_data *data)
 	}
 }
 
-void	draw(t_data *data)
-{
-	mlx_hook(data->win, 33, 1 << 17, close_window, data);
-	mlx_key_hook(data->win, key_hook, data);
-	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	mlx_loop(data->mlx);
-	end_world(&data->w, true);
-}
-
 int	main(int ac, char **av)
 {
 	t_data		data;
 
 	if (ac != 2)
-	{
-		ft_putendl_fd("NO ARGUMENT", STDERR_FILENO);
-		return (0);
-	}
+		return (print_error(0, NOARG));
 	data_init(&data);
 	if (!parser(av[1], &data.w))
-	{
-		ft_putendl_fd("ERROR", STDERR_FILENO);
-		return (0);
-	}
+		ft_exit(&data, 0);
 	print_world(&data.w);
-	set_pixel(&data);
-	draw(&data);
+	data_set(&data);
+	mlx_hook(data.win, 33, 1 << 17, close_window, &data);
+	mlx_key_hook(data.win, key_hook, &data);
+	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+	mlx_loop(data.mlx);
 }
