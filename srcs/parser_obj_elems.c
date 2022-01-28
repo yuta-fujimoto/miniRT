@@ -62,7 +62,7 @@ bool	parser_cylinder(t_world *world, char **info)
 		return (parser_obj_failure(c));
 	if (!ft_atof(info[3], &c->diameter) || c->diameter <= 0)
 		return (parser_obj_failure(c));
-	if (!ft_atof(info[4], &c->height) || c->diameter <= 0)
+	if (!ft_atof(info[4], &c->height) || c->height <= 0)
 		return (parser_obj_failure(c));
 	if (!atocol(info[5], &c->c))
 		return (parser_obj_failure(c));
