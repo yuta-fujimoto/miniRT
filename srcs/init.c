@@ -20,7 +20,7 @@ void	data_init(t_data *data)
 	data->win = isnull(data, \
 						mlx_new_window(data->mlx, \
 							W_IMG, H_IMG, \
-							"PRO CAMPER RAKIYAMA"));
+							"FYUTA in the house!"));
 	data->img = isnull(data, \
 						mlx_new_image(data->mlx, W_IMG, H_IMG));
 	data->addr = isnull(data, \

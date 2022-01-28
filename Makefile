@@ -1,4 +1,4 @@
-NAME := a.out
+NAME := miniRT
 CC 	 := gcc
 CFLAG := -Wall -Werror -Wextra
 INCLUDE :=	srcs/miniRT.h \
@@ -35,7 +35,7 @@ GNLNAME := get_next_line.o get_next_line_utils.o
 GNLFILE :=  $(GNL)/get_next_line_utils.o \
 			$(GNL)/get_next_line.o
 
-%.o: %.c
+%.o: %.c $(INCLUDE)
 	$(CC) $(CFLAG)  -I$(MLXDIR) -lm -c $< -o $@
 
 all :$(NAME)
