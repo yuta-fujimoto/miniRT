@@ -145,10 +145,8 @@ typedef struct s_refdata {
 	t_vec3	ray;
 	t_vec3	normal;
 	t_vec3	incidence;
-	t_vec3	reverseray;
-	t_vec3	reflection;
-	t_color	norm_dot_inc;
-	t_color	light_ratio;
+	t_color	light;
+	double	norm_dot_inc;
 }	t_refdata;
 
 typedef struct s_world {

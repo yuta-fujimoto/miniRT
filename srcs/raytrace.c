@@ -60,19 +60,16 @@ void	get_material(t_list *obj, t_material *mat)
 }
 
 bool	reflection_test(const t_world *w, const t_ray *cam_ray, \
-					const t_intersection_point *intp, t_refdata *out_data)
+					const t_intersection_point *intp, t_refdata *refdata)
 {
-	double	dot_val;
-
-	out_data->ray = cam_ray->direction;
-	out_data->normal = intp->normal;
-	out_data->incidence = sub(w->light.pos, intp->pos);
-	normalize(&out_data->incidence);
-	dot_val = dot(&out_data->normal, &out_data->incidence);
-	if (dot_val <= 0)
+	refdata->ray = cam_ray->direction;
+	refdata->normal = intp->normal;
+	refdata->incidence = sub(w->light.pos, intp->pos);
+	normalize(&refdata->incidence);
+	refdata->norm_dot_inc = dot(&refdata->normal, &refdata->incidence);
+	if (refdata->norm_dot_inc <= 0)
 		return (false);
-	out_data->norm_dot_inc = color(dot_val, dot_val, dot_val);
-	out_data->light_ratio = ctimes(w->light.ratio, w->light.c);
+	refdata->light = ctimes(w->light.ratio, w->light.c);
 	return (true);
 }
 

@@ -11,21 +11,21 @@ void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col)
 {
 	t_color	diffuse_ref_light;
 	t_color	specular_ref_light;
+	t_vec3	ref_vec;
+	t_vec3	reverseray_vec;
 	double	pow_val;
 
 	diffuse_ref_light = cmult(mat->diffuse_ref, \
-						cmult(refdata->light_ratio, refdata->norm_dot_inc));
-	refdata->reflection = \
-		sub(times(2 * refdata->norm_dot_inc.r, refdata->normal), \
+						ctimes(refdata->norm_dot_inc, refdata->light));
+	ref_vec = \
+		sub(times(2 * refdata->norm_dot_inc, refdata->normal), \
 		refdata->incidence);
-	normalize(&refdata->reflection);
-	refdata->reverseray = times(-1, refdata->ray);
-	normalize(&refdata->reverseray);
-	pow_val = pow(dot(&refdata->reflection, &refdata->reverseray), \
-					mat->shininess);
+	normalize(&ref_vec);
+	reverseray_vec = times(-1, refdata->ray);
+	normalize(&reverseray_vec);
+	pow_val = pow(dot(&ref_vec, &reverseray_vec), mat->shininess);
 	specular_ref_light = cmult(mat->specular_ref, \
-							cmult(refdata->light_ratio, \
-							color(pow_val, pow_val, pow_val)));
+							ctimes(pow_val, refdata->light));
 	*out_col = cadd(*out_col, cadd(diffuse_ref_light, specular_ref_light));
 	cfilter(out_col, 0, 1);
 }
