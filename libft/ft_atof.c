@@ -6,7 +6,7 @@
 /*   By: fyuta <fyuta@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 22:46:04 by fyuta             #+#    #+#             */
-/*   Updated: 2022/01/24 22:46:06 by fyuta            ###   ########.fr       */
+/*   Updated: 2022/01/28 09:35:29 by fyuta            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ bool	process_integer(double *rlt, const char *nptr, int *i)
 {
 	while (ft_isdigit(nptr[*i]))
 	{
-		if (*rlt > LONG_MAX / 10 || (*rlt == LONG_MAX / 10
-				&& (nptr[*i] - '0') > LONG_MAX % 10)
-			|| *rlt < LONG_MIN / 10 || (*rlt == LONG_MIN / 10
-				&& (nptr[*i] - '0') > (LONG_MIN % 10) * (-1)))
+		if (*rlt > INT_MAX / 10 || (*rlt == INT_MAX / 10
+				&& (nptr[*i] - '0') > INT_MAX % 10)
+			|| *rlt < INT_MIN / 10 || (*rlt == INT_MIN / 10
+				&& (nptr[*i] - '0') > (INT_MIN % 10) * (-1)))
 			return (false);
 		*rlt = *rlt * 10 + (nptr[*i] - '0');
 		(*i)++;
