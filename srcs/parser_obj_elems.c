@@ -17,7 +17,7 @@ bool	parser_sphere(t_world *world, char **info)
 		return (s);
 	if (!atovec3(info[1], &s->center))
 		return (parser_obj_failure(s));
-	if (!ft_atof(info[2], &s->diameter))
+	if (!ft_atof(info[2], &s->diameter) || s->diameter <= 0)
 		return (parser_obj_failure(s));
 	if (!atocol(info[3], &s->c))
 		return (parser_obj_failure(s));
@@ -60,9 +60,9 @@ bool	parser_cylinder(t_world *world, char **info)
 		return (parser_obj_failure(c));
 	if (!atovec3(info[2], &c->norm_ori_vec) || !is_normed_vec(c->norm_ori_vec))
 		return (parser_obj_failure(c));
-	if (!ft_atof(info[3], &c->diameter))
+	if (!ft_atof(info[3], &c->diameter) || c->diameter <= 0)
 		return (parser_obj_failure(c));
-	if (!ft_atof(info[4], &c->height))
+	if (!ft_atof(info[4], &c->height) || c->diameter <= 0)
 		return (parser_obj_failure(c));
 	if (!atocol(info[5], &c->c))
 		return (parser_obj_failure(c));
