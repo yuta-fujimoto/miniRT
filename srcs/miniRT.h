@@ -14,8 +14,8 @@
 # include "../minilibx-linux/mlx.h"
 
 // Assumptions
-# define W_IMG 612.0
-# define H_IMG 512.0
+# define W_IMG 200.0
+# define H_IMG 200.0
 # define W_SCRN 500.0
 # define COEF_SPECULAR_REF 0.3
 # define SHININESS 8

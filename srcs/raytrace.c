@@ -1,6 +1,5 @@
 #include "miniRT.h"
 
-// 影を付けるときにmax_distとexit_onde_foundの考慮をします。別関数にしましょう
 static bool	get_nearest_obj(const t_world *w, const t_ray *ray, \
 					t_list **out_obj, t_intersection_point *out_intp)
 {
@@ -30,12 +29,12 @@ static bool	intersection_test_light(const t_world *w, t_ray shadow_ray)
 	double					distance;
 
 	objs = w->obj_list;
-	distance = normalize(&shadow_ray.direction) - EPSILON;
+	distance = normalize(&shadow_ray.direction)  - EPSILON;
 	shadow_ray.start = add(shadow_ray.start, \
 						times(EPSILON, shadow_ray.direction));
 	while (objs)
 	{
-		if (intersection_test(objs, &shadow_ray, &p) && distance > p.distance)
+		if (intersection_test(objs, &shadow_ray, &p) && (long)distance > (long)p.distance)
 			return (true);
 		objs = objs->next;
 	}
