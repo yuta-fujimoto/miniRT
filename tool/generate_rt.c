@@ -1,11 +1,6 @@
 #include <math.h>
 #include <stdio.h>
-#include "srcs/miniRT.h"
-
-# define RADIANZERO 1
-# define YZERO 200
-# define CENTER_RADIUS 50
-# define CMAX 255
+#include "miniRT.h"
 
 typedef struct s_putsph
 {
@@ -17,35 +12,6 @@ typedef struct s_putsph
 	double	gap;
 	int		cnt;
 }	t_putsph;
-
-//enum e_rgb
-//{
-//	R,
-//	G,
-//	B,
-//	COLOR_NUM
-//};
-
-//void	put_shpere()
-//{
-//	double			x;
-//	static double	y = YZERO;
-//	double			z;
-//	double			diameter = 10;
-//	int				color[COLOR_NUM];
-//	static double	radians = RADIANZERO;
-//	static unsigned int	c = 1;
-
-//	x = CENTER_RADIUS * cos(radians);
-//	z = CENTER_RADIUS * sin(radians);
-//	color[R] = ((c % 2 == 0)? 0 : 255);
-//	color[G] = ((c % 3 == 0)? 0 : 255);
-//	color[B] = ((color[R] == 255 && color[G] == 255)? 0 : 255);
-//	printf("sp %f,%f,%f %f %d,%d,%d\n", x, y, z, diameter, color[R], color[G], color[B]);
-//	y -= 2;
-//	radians += 0.2;
-//	c ++;
-//}
 
 void	spiral_sphere(t_putsph *p)
 {
@@ -86,14 +52,6 @@ void	spiral_sphere(t_putsph *p)
 }
 int main(void)
 {
-	printf("A 0.2 255,255,255\n");
-	printf("L -100,100,30 0.7 255,255,255\n");
-	printf("C -100,50,0 1,0,0 70\n");
-	printf("\n");
-	printf("pl 0,0,0 0,1,0 0,255,225\n");
-	printf("pl 0,0,300 -0.2,0,-0.5 0,255,225\n");
-	printf("pl 0,0,-300 0.2,0,0.5 0,255,225\n");
-	printf("cy 0,0,0 0,1,0 20 220 10,0,255\n");
 	t_putsph p;
 	p.start = vec3(-30, 100, 30);
 	p.direct = vec3(1, -1, -1);
