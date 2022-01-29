@@ -23,7 +23,8 @@ void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col)
 	normalize(&ref_vec);
 	reverseray_vec = times(-1, refdata->ray);
 	normalize(&reverseray_vec);
-	pow_val = pow(dot(&ref_vec, &reverseray_vec), mat->shininess);
+	pow_val = pow(calc_toon(dot(&ref_vec, &reverseray_vec), \
+		refdata->use_toon), mat->shininess);
 	specular_ref_light = cmult(mat->specular_ref, \
 							ctimes(pow_val, refdata->light));
 	*out_col = cadd(*out_col, cadd(diffuse_ref_light, specular_ref_light));

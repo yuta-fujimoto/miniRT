@@ -66,7 +66,8 @@ bool	reflection_test(const t_world *w, const t_ray *cam_ray, \
 	refdata->normal = intp->normal;
 	refdata->incidence = sub(w->light.pos, intp->pos);
 	normalize(&refdata->incidence);
-	refdata->norm_dot_inc = dot(&refdata->normal, &refdata->incidence);
+	refdata->use_toon = w->light.use_toon;
+	refdata->norm_dot_inc = calc_toon(dot(&refdata->normal, &refdata->incidence), refdata->use_toon);
 	if (refdata->norm_dot_inc <= 0)
 		return (false);
 	refdata->light = ctimes(w->light.ratio, w->light.c);
@@ -82,6 +83,8 @@ bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
 
 	if (!get_nearest_obj(w, cam_ray, &nearest_obj, &nearest_intp))
 		return (false);
+	if (toon_edge(nearest_intp.normal, cam_ray->direction, out_col, w->light.use_toon))
+		return (true);
 	get_material(nearest_obj, &mat);
 	*out_col = cmult(mat.ambient_ref, \
 				ctimes(w->amb_light.ratio, w->amb_light.c));

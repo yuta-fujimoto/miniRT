@@ -20,6 +20,11 @@ double	normalize(t_vec3 *v)
 	double	vnorm;
 
 	vnorm = norm(v);
+	if (vnorm == 0)
+	{
+		*v = vec3(0, 0, 0);
+		return (0);
+	}
 	v->x /= vnorm;
 	v->y /= vnorm;
 	v->z /= vnorm;
