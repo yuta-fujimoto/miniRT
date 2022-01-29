@@ -30,6 +30,11 @@ void	default_set(const t_world *w, t_default *def)
 	def->cam = w->camera;
 	def->vec_ey = vec3(0, 1, 0);
 	def->vec_dx = cross(def->vec_ey, def->cam.norm_ori_vec);
+	if (def->vec_dx.x == 0.0 && def->vec_dx.y == 0.0 && def->vec_dx.z == 0.0)
+	{
+		def->vec_ey = vec3(1, 0, 0);
+		def->vec_dx = cross(def->vec_ey, def->cam.norm_ori_vec);
+	}
 	normalize(&def->vec_dx);
 	def->vec_dy = cross(def->cam.norm_ori_vec, def->vec_dx);
 	normalize(&def->vec_dy);
