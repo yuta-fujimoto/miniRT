@@ -7,7 +7,7 @@ if [ $# != 1 ]; then
 else
 	cp $1 ${OUTFILE}
 fi
-gcc generate_rt.c ${ROOT}/srcs/vector_utils*.c ${ROOT}/srcs/utils*.c -I${ROOT}/srcs ${ROOT}/libft/*.c ${ROOT}/srcs/print_debug.c -lm
+gcc spiral_sphere.c ${ROOT}/srcs/vector_utils*.c ${ROOT}/srcs/utils*.c -I${ROOT}/srcs ${ROOT}/libft/*.c ${ROOT}/srcs/print_debug.c -lm
 ./a.out >> ${OUTFILE}
 ${ROOT}/miniRT ${OUTFILE}
 rm a.out ${OUTFILE}
