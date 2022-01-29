@@ -17,12 +17,9 @@ void	spiral_sphere(t_putsph *p)
 {
 	//dx, dy
 	normalize(&p->direct);
-	t_vec3	vec_ey = vec3(1, 0, 0);
-	//t_vec3	vec_ey = vec3(0, 1, 0);
+	t_vec3	vec_ey = vec3(0, 1, 0);
 	t_vec3	vec_dx = cross(vec_ey, p->direct);
 	normalize(&vec_dx);
-	//printf("%s\n", vector_str(vec_dx));
-	//exit(1);
 	t_vec3	vec_dy = cross(p->direct, vec_dx);
 	normalize(&vec_dy);
 
