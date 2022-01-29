@@ -29,12 +29,13 @@ static bool	intersection_test_light(const t_world *w, t_ray shadow_ray)
 	double					distance;
 
 	objs = w->obj_list;
-	distance = normalize(&shadow_ray.direction)  - EPSILON;
+	distance = normalize(&shadow_ray.direction) - EPSILON;
 	shadow_ray.start = add(shadow_ray.start, \
 						times(EPSILON, shadow_ray.direction));
 	while (objs)
 	{
-		if (intersection_test(objs, &shadow_ray, &p) && (long)distance > (long)p.distance)
+		if (intersection_test(objs, &shadow_ray, &p)
+			&& (long)distance > (long)p.distance)
 			return (true);
 		objs = objs->next;
 	}
