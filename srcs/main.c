@@ -64,7 +64,7 @@ void	data_set(t_data *data)
 		{
 			camray.direction = to3axis(x_img, y_img, &def);
 			col = color(0, 0, 0);
-			if (!raytrace(&data->w, &camray, &col, 0))
+			if (!raytrace(&data->w, camray, &col, 0))
 				col = color(1.0, 1.0, 1.0);
 			my_mlx_pixel_put(data, (int)x_img, (int)y_img, col);
 			x_img++;

@@ -24,7 +24,7 @@ t_color	c_specular(const t_light *l, const t_material *mat, const t_ray *cam_ray
 	t_vec3	reverseray;
 	double	pow_val;
 
-	if (mat->mattype != SPECULAR)
+	if (mat->type != SPECULAR)
 		return (color(0, 0, 0));
 	reverseray = times(-1, cam_ray->direction);
 	normalize(&reverseray);

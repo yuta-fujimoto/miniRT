@@ -59,9 +59,9 @@ void	get_material(t_list *obj, t_material *mat)
 	mat->perfect_ref = color(COEF_PERFECT_REF, \
 								COEF_PERFECT_REF, COEF_PERFECT_REF);
 	mat->shininess = SHININESS;
-	mat->mattype = SPECULAR;
+	mat->type = SPECULAR;
 	if (obj->cont_type == Sphere)
-		mat->mattype = PERFECT;
+		mat->type = PERFECT;
 }
 
 bool	reflection_test(const t_world *w, const t_vec3 incidence, const t_intersection_point *intp, t_refdata *refdata)
@@ -79,7 +79,9 @@ bool	reflection_test(const t_world *w, const t_vec3 incidence, const t_intersect
 	return (true);
 }
 
-bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col, int recursion_level)
+//void	reflect_color(const t_world *w, const )
+
+bool	raytrace(const t_world *w, const t_ray cam_ray, t_color *out_col, int recursion_level)
 {
 	t_list					*nearest_obj;
 	t_intersection_point	nearest_intp;
@@ -88,28 +90,26 @@ bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col, int recu
 
 	if (MAX_RECURSION < recursion_level)
 		return (true);
-	if (!get_nearest_obj(w, cam_ray, &nearest_obj, &nearest_intp))
+	if (!get_nearest_obj(w, &cam_ray, &nearest_obj, &nearest_intp))
 		return (false);
-	if (toon_edge(nearest_intp.normal, cam_ray->direction, out_col, w->light.use_toon))
+	if (toon_edge(nearest_intp.normal, cam_ray.direction, out_col, w->light.use_toon))
 		return (true);
 	get_material(nearest_obj, &mat);
-	*out_col = cadd(*out_col, c_ambient(&w->amb_light, &mat));
-	if (mat.mattype != PERFECT && !intersection_test_light(w, ray(nearest_intp.pos, \
+	if (mat.type != PERFECT)
+		*out_col = cadd(*out_col, c_ambient(&w->amb_light, &mat));
+	if (mat.type != PERFECT && !intersection_test_light(w, ray(nearest_intp.pos, \
 		sub(w->light.pos, nearest_intp.pos))) && \
 		reflection_test(w, sub(nearest_intp.pos, w->light.pos), &nearest_intp, &refdata))
 	{
 		*out_col = cadd(*out_col, c_diffuse(&w->light, &mat, &refdata));
-		*out_col = cadd(*out_col, c_specular(&w->light, &mat, cam_ray, &refdata));
+		*out_col = cadd(*out_col, c_specular(&w->light, &mat, &cam_ray, &refdata));
 		cfilter(out_col, 0, 1);
 	}
-	if (mat.mattype == PERFECT && reflection_test(w, cam_ray->direction, &nearest_intp, &refdata))
+	if (mat.type == PERFECT && reflection_test(w, cam_ray.direction, &nearest_intp, &refdata))
 	{
-		t_color	recursion_col = color(0, 0, 0);
 		refdata.pos = add(refdata.pos, times(EPSILON, refdata.ref_vec));
-		t_ray recursion_ray = ray(refdata.pos, refdata.ref_vec);
-		raytrace(w, &recursion_ray, &recursion_col, recursion_level + 1);
-		*out_col = cadd(*out_col, cmult(mat.perfect_ref, recursion_col));
-		cfilter(out_col, 0, 1);
+		raytrace(w, ray(refdata.pos, refdata.ref_vec), out_col, recursion_level + 1);
+		*out_col = cmult(mat.perfect_ref, *out_col);
 	}
 	return (true);
 }

@@ -98,7 +98,7 @@ typedef struct s_material
 	t_color		specular_ref;
 	t_color		perfect_ref;
 	double		shininess;
-	t_mattype	mattype;
+	t_mattype	type;
 }	t_material;
 
 typedef struct s_amb_light {
@@ -243,7 +243,7 @@ int		cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, \
 					const double form[FORMULA_NUM], double *out_height);
 // intersection_test
 
-bool	raytrace(const t_world *w, const t_ray *eye_ray, t_color *out_col, int recursion_level);
+bool	raytrace(const t_world *w, const t_ray eye_ray, t_color *out_col, int recursion_level);
 bool	intersection_test(const t_list *obj, \
 					const t_ray *ray, t_intersection_point *out_intp);
 // raytrace

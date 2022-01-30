@@ -14,8 +14,7 @@ bool	toon_edge(t_vec3 norm, t_vec3 dir, t_color *out_col, bool use_toon)
 	normalize(&dir);
 	if (fabs(dot(&norm, &dir)) > TOON_EDGE_THICKNESS)
 		return (false);
-	(void)out_col;
-	//*out_col = color(0, 0, 0);
+	*out_col = color(0, 0, 0);
 	return (true);
 }
 
