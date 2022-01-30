@@ -56,14 +56,6 @@ enum e_Object
 	Cylinder
 };
 
-typedef enum e_material_type
-{
-	NORMAL,
-	SPECULAR,
-	PERFECT,
-	MTYPE_NUM
-}	t_mattype;
-
 typedef struct s_vec3
 {
 	double	x;
@@ -93,12 +85,13 @@ typedef struct s_intersection_point
 
 typedef struct s_material
 {
-	t_color		ambient_ref;
-	t_color		diffuse_ref;
-	t_color		specular_ref;
-	t_color		perfect_ref;
-	double		shininess;
-	t_mattype	mtype;
+	t_color	ambient_ref;
+	t_color	diffuse_ref;
+	t_color	specular_ref;
+	t_color	perfect_ref;
+	double	shininess;
+	bool	type_specular;
+	bool	type_perfect;
 }	t_material;
 
 typedef struct s_amb_light {
@@ -241,7 +234,7 @@ int		cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, \
 					const double form[FORMULA_NUM], double *out_height);
 // intersection_test
 
-bool	raytrace(const t_world *w, const t_ray *eye_ray, t_color *out_col);
+bool	raytrace(const t_world *w, const t_ray *eye_ray, t_color *out_col, int recursion_level);
 bool	intersection_test(const t_list *obj, \
 					const t_ray *ray, t_intersection_point *out_intp);
 // raytrace
