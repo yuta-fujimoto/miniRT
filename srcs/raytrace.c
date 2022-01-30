@@ -79,8 +79,6 @@ bool	reflection_test(const t_world *w, const t_vec3 incidence, const t_intersect
 	return (true);
 }
 
-//void	reflect_color(const t_world *w, const )
-
 bool	raytrace(const t_world *w, const t_ray cam_ray, t_color *out_col, int recursion_level)
 {
 	t_list					*nearest_obj;
