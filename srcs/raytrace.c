@@ -59,10 +59,9 @@ void	get_material(t_list *obj, t_material *mat)
 	mat->perfect_ref = color(COEF_PERFECT_REF, \
 								COEF_PERFECT_REF, COEF_PERFECT_REF);
 	mat->shininess = SHININESS;
-	mat->type_specular = true;
-	mat->type_perfect = false;
-	//if (obj->cont_type == Sphere)
-	//	mat->type_perfect = true;
+	mat->mattype = SPECULAR;
+	if (obj->cont_type == Sphere)
+		mat->mattype = PERFECT;
 }
 
 bool	reflection_test(const t_world *w, const t_vec3 in_vec, const t_intersection_point *intp, t_refdata *refdata)
@@ -76,7 +75,6 @@ bool	reflection_test(const t_world *w, const t_vec3 in_vec, const t_intersection
 		return (false);
 	refdata->ref_vec = sub(times(2 * refdata->dot_ni, refdata->norm_vec), refdata->in_vec);
 	normalize(&refdata->ref_vec);
-	//refdata->light_attr = ctimes(w->light.ratio, w->light.c);
 	return (true);
 }
 
@@ -95,7 +93,7 @@ bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col, int recu
 		return (true);
 	get_material(nearest_obj, &mat);
 	*out_col = cadd(*out_col, c_ambient(&w->amb_light, &mat));
-	if (!intersection_test_light(w, ray(nearest_intp.pos, \
+	if (mat.mattype != PERFECT && !intersection_test_light(w, ray(nearest_intp.pos, \
 		sub(w->light.pos, nearest_intp.pos))) && \
 		reflection_test(w, sub(w->light.pos, nearest_intp.pos), &nearest_intp, &refdata))
 	{
@@ -103,7 +101,7 @@ bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col, int recu
 		*out_col = cadd(*out_col, c_specular(&w->light, &mat, cam_ray, &refdata));
 		cfilter(out_col, 0, 1);
 	}
-	if (mat.type_perfect)
+	if (mat.mattype == PERFECT)
 	{
 		t_ray ref;
 		t_vec3	reverseray = times(-1, cam_ray->direction);

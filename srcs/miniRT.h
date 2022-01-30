@@ -56,6 +56,14 @@ enum e_Object
 	Cylinder
 };
 
+typedef enum e_material_type
+{
+	NORMAL,
+	SPECULAR,
+	PERFECT,
+	MTYPE_NUM
+}	t_mattype;
+
 typedef struct s_vec3
 {
 	double	x;
@@ -85,13 +93,12 @@ typedef struct s_intersection_point
 
 typedef struct s_material
 {
-	t_color	ambient_ref;
-	t_color	diffuse_ref;
-	t_color	specular_ref;
-	t_color	perfect_ref;
-	double	shininess;
-	bool	type_specular;
-	bool	type_perfect;
+	t_color		ambient_ref;
+	t_color		diffuse_ref;
+	t_color		specular_ref;
+	t_color		perfect_ref;
+	double		shininess;
+	t_mattype	mattype;
 }	t_material;
 
 typedef struct s_amb_light {
@@ -153,7 +160,6 @@ typedef struct s_refdata {
 	t_vec3	norm_vec;
 	t_vec3	in_vec;
 	t_vec3	ref_vec;
-	//t_color	light_attr;
 	double	dot_ni;
 	bool	use_toon;
 }	t_refdata;
