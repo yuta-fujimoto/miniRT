@@ -245,6 +245,7 @@ bool	print_error(const int line_count, const t_error_status error_status);
 void	data_init(t_data *data);
 //init
 
+bool	atotoon(char *s, bool *use_toon);
 bool	toon_edge(t_vec3 norm, t_vec3 dir, t_color *out_col, bool use_toon);
 double	calc_toon(double dot, bool use_toon);
 // toon

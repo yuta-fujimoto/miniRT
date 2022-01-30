@@ -44,11 +44,8 @@ bool	parser_light(t_world *w, char **info)
 		return (false);
 	if (!atocol(info[3], &w->light.c))
 		return (false);
-	w->env_elems_exists[2] = true;
-	w->light.use_toon = false;
-	if (ft_strequal(info[4], "TOON", 5))
-		w->light.use_toon = true;
-	else if (info[4])
+	if (!atotoon(info[4], &w->light.use_toon))
 		return (false);
+	w->env_elems_exists[2] = true;
 	return (true);
 }

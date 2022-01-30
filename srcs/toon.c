@@ -18,3 +18,16 @@ bool	toon_edge(t_vec3 norm, t_vec3 dir, t_color *out_col, bool use_toon)
 	*out_col = color(0, 0, 0);
 	return (true);
 }
+
+bool	atotoon(char *s, bool *use_toon)
+{
+	*use_toon = false;
+	if (!s)
+		return (true);
+	if (ft_strequal(s, "TOON", 5))
+	{
+		*use_toon = true;
+		return (true);
+	}
+	return (false);
+}
