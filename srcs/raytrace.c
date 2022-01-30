@@ -64,10 +64,11 @@ void	get_material(t_list *obj, t_material *mat)
 		mat->mattype = PERFECT;
 }
 
-bool	reflection_test(const t_world *w, const t_vec3 in_vec, const t_intersection_point *intp, t_refdata *refdata)
+bool	reflection_test(const t_world *w, const t_vec3 incidence, const t_intersection_point *intp, t_refdata *refdata)
 {
 	refdata->norm_vec = intp->normal;
-	refdata->in_vec = in_vec;
+	refdata->pos = intp->pos;
+	refdata->in_vec = times(-1, incidence);
 	normalize(&refdata->in_vec);
 	refdata->use_toon = w->light.use_toon;
 	refdata->dot_ni = calc_toon(dot(&refdata->norm_vec, &refdata->in_vec), refdata->use_toon);
@@ -95,27 +96,20 @@ bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col, int recu
 	*out_col = cadd(*out_col, c_ambient(&w->amb_light, &mat));
 	if (mat.mattype != PERFECT && !intersection_test_light(w, ray(nearest_intp.pos, \
 		sub(w->light.pos, nearest_intp.pos))) && \
-		reflection_test(w, sub(w->light.pos, nearest_intp.pos), &nearest_intp, &refdata))
+		reflection_test(w, sub(nearest_intp.pos, w->light.pos), &nearest_intp, &refdata))
 	{
 		*out_col = cadd(*out_col, c_diffuse(&w->light, &mat, &refdata));
 		*out_col = cadd(*out_col, c_specular(&w->light, &mat, cam_ray, &refdata));
 		cfilter(out_col, 0, 1);
 	}
-	if (mat.mattype == PERFECT)
+	if (mat.mattype == PERFECT && reflection_test(w, cam_ray->direction, &nearest_intp, &refdata))
 	{
-		t_ray ref;
-		t_vec3	reverseray = times(-1, cam_ray->direction);
-		normalize(&reverseray);
 		t_color	recursion_col = color(0, 0, 0);
-		double	norm_dot_reverse = dot(&nearest_intp.normal, &reverseray);
-		if (norm_dot_reverse > 0)
-		{
-			ref.direction = sub(times(2 * norm_dot_reverse, nearest_intp.normal), reverseray);
-			ref.start = add(nearest_intp.pos, times(EPSILON, ref.direction));
-			raytrace(w, &ref, &recursion_col, recursion_level + 1);
-			*out_col = cadd(*out_col, cmult(mat.perfect_ref, recursion_col));
-			cfilter(out_col, 0, 1);
-		}
+		refdata.pos = add(refdata.pos, times(EPSILON, refdata.ref_vec));
+		t_ray recursion_ray = ray(refdata.pos, refdata.ref_vec);
+		raytrace(w, &recursion_ray, &recursion_col, recursion_level + 1);
+		*out_col = cadd(*out_col, cmult(mat.perfect_ref, recursion_col));
+		cfilter(out_col, 0, 1);
 	}
 	return (true);
 }

@@ -160,6 +160,7 @@ typedef struct s_refdata {
 	t_vec3	norm_vec;
 	t_vec3	in_vec;
 	t_vec3	ref_vec;
+	t_vec3	pos;
 	double	dot_ni;
 	bool	use_toon;
 }	t_refdata;
