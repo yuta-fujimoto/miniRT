@@ -23,6 +23,8 @@
 # ifndef M_PI
 #  define M_PI 3.141592653589793
 # endif
+# define TOON_LEVEL 4.0
+# define TOON_EDGE_THICKNESS 0.20
 
 typedef enum e_formula
 {
@@ -101,6 +103,7 @@ typedef struct s_camera {
 typedef struct s_light
 {
 	double	ratio;
+	bool	use_toon;
 	t_vec3	pos;
 	t_color	c;
 }	t_light;
@@ -147,6 +150,7 @@ typedef struct s_refdata {
 	t_vec3	incidence;
 	t_color	light;
 	double	norm_dot_inc;
+	bool	use_toon;
 }	t_refdata;
 
 typedef struct s_world {
@@ -240,5 +244,10 @@ bool	print_error(const int line_count, const t_error_status error_status);
 
 void	data_init(t_data *data);
 //init
+
+bool	atotoon(char *s, bool *use_toon);
+bool	toon_edge(t_vec3 norm, t_vec3 dir, t_color *out_col, bool use_toon);
+double	calc_toon(double dot, bool use_toon);
+// toon
 
 #endif

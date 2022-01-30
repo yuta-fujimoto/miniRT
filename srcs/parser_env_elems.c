@@ -32,7 +32,10 @@ bool	parser_camera(t_world *w, char **info)
 
 bool	parser_light(t_world *w, char **info)
 {
-	if (ft_str_arr_len(info) != 4)
+	int	str_arr_len;
+
+	str_arr_len = ft_str_arr_len(info);
+	if (str_arr_len != 4 && str_arr_len != 5)
 		return (false);
 	if (!atovec3(info[1], &w->light.pos))
 		return (false);
@@ -40,6 +43,8 @@ bool	parser_light(t_world *w, char **info)
 		|| w->light.ratio < 0 || w->light.ratio > 1.0)
 		return (false);
 	if (!atocol(info[3], &w->light.c))
+		return (false);
+	if (!atotoon(info[4], &w->light.use_toon))
 		return (false);
 	w->env_elems_exists[2] = true;
 	return (true);

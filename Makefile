@@ -21,7 +21,8 @@ SRCS :=	srcs/main.c \
 		srcs/intersection_test.c \
 		srcs/intersection_test_utils.c \
 		srcs/raytrace.c \
-		srcs/init.c
+		srcs/init.c \
+		srcs/toon.c
 OBJS := $(SRCS:.c=.o)
 
 MLXDIR := ./minilibx-linux
