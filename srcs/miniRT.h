@@ -24,7 +24,7 @@
 #  define M_PI 3.141592653589793
 # endif
 # define TOON_LEVEL 4.0
-# define TOON_EDGE_THICKNESS 0.25
+# define TOON_EDGE_THICKNESS 0.20
 
 typedef enum e_formula
 {
