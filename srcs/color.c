@@ -7,12 +7,19 @@ void	cfilter(t_color *a, const double min, const double max)
 	a->b = clamp(a->b, min, max);
 }
 
-t_color	c_diffuse(const t_material *mat, const t_refdata *refdata)
+t_color	c_ambient(const t_amb_light *a, const t_material *mat)
 {
-	return (cmult(mat->diffuse_ref, ctimes(refdata->dot_ni, refdata->light_attr)));
+	return (cmult(mat->ambient_ref, ctimes(a->ratio, a->c)));
 }
 
-t_color	c_specular(const t_material *mat, const t_ray *cam_ray, t_refdata *refdata)
+
+t_color	c_diffuse(const t_light *l, const t_material *mat, const t_refdata *refdata)
+{
+	return (cmult(mat->diffuse_ref, \
+				ctimes(refdata->dot_ni, ctimes(l->ratio, l->c))));
+}
+
+t_color	c_specular(const t_light *l, const t_material *mat, const t_ray *cam_ray, t_refdata *refdata)
 {
 	t_vec3	reverseray;
 	double	pow_val;
@@ -23,5 +30,5 @@ t_color	c_specular(const t_material *mat, const t_ray *cam_ray, t_refdata *refda
 							&reverseray), refdata->use_toon), \
 					mat->shininess);
 	return (cmult(mat->specular_ref, \
-				ctimes(pow_val, refdata->light_attr)));
+				ctimes(pow_val, ctimes(l->ratio, l->c))));
 }

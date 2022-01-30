@@ -153,7 +153,7 @@ typedef struct s_refdata {
 	t_vec3	norm_vec;
 	t_vec3	in_vec;
 	t_vec3	ref_vec;
-	t_color	light_attr;
+	//t_color	light_attr;
 	double	dot_ni;
 	bool	use_toon;
 }	t_refdata;
@@ -183,8 +183,9 @@ t_color	cmult(const t_color a, const t_color b);
 t_color	cadd(const t_color a, const t_color b);
 t_color	ctimes(const double nb, const t_color c);
 void	cfilter(t_color *a, const double min, const double max);
-t_color	c_diffuse(const t_material *mat, const t_refdata *refdata);
-t_color	c_specular(const t_material *mat, const t_ray *cam_ray, t_refdata *refdata);
+t_color	c_ambient(const t_amb_light *a, const t_material *mat);
+t_color	c_diffuse(const t_light *l, const t_material *mat, const t_refdata *refdata);
+t_color	c_specular(const t_light *l, const t_material *mat, const t_ray *cam_ray, t_refdata *refdata);
 // color
 
 bool	atovec3(char const *nptr, t_vec3 *rlt);

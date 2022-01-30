@@ -76,7 +76,7 @@ bool	reflection_test(const t_world *w, const t_vec3 in_vec, const t_intersection
 		return (false);
 	refdata->ref_vec = sub(times(2 * refdata->dot_ni, refdata->norm_vec), refdata->in_vec);
 	normalize(&refdata->ref_vec);
-	refdata->light_attr = ctimes(w->light.ratio, w->light.c);
+	//refdata->light_attr = ctimes(w->light.ratio, w->light.c);
 	return (true);
 }
 
@@ -94,15 +94,13 @@ bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col, int recu
 	if (toon_edge(nearest_intp.normal, cam_ray->direction, out_col, w->light.use_toon))
 		return (true);
 	get_material(nearest_obj, &mat);
-	*out_col = cadd(*out_col, \
-					cmult(mat.ambient_ref, \
-					ctimes(w->amb_light.ratio, w->amb_light.c)));
+	*out_col = cadd(*out_col, c_ambient(&w->amb_light, &mat));
 	if (!intersection_test_light(w, ray(nearest_intp.pos, \
 		sub(w->light.pos, nearest_intp.pos))) && \
 		reflection_test(w, sub(w->light.pos, nearest_intp.pos), &nearest_intp, &refdata))
 	{
-		*out_col = cadd(*out_col, c_diffuse(&mat, &refdata));
-		*out_col = cadd(*out_col, c_specular(&mat, cam_ray, &refdata));
+		*out_col = cadd(*out_col, c_diffuse(&w->light, &mat, &refdata));
+		*out_col = cadd(*out_col, c_specular(&w->light, &mat, cam_ray, &refdata));
 		cfilter(out_col, 0, 1);
 	}
 	if (mat.type_perfect)
