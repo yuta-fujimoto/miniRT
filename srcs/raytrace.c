@@ -56,7 +56,10 @@ void	get_material(t_list *obj, t_material *mat)
 	mat->diffuse_ref = c;
 	mat->specular_ref = color(COEF_SPECULAR_REF, \
 								COEF_SPECULAR_REF, COEF_SPECULAR_REF);
+	mat->perfect_ref = color(COEF_PERFECT_REF, \
+								COEF_PERFECT_REF, COEF_PERFECT_REF);
 	mat->shininess = SHININESS;
+	mat->mtype = SPECULAR;
 }
 
 bool	reflection_test(const t_world *w, const t_ray *cam_ray, \
@@ -70,7 +73,7 @@ bool	reflection_test(const t_world *w, const t_ray *cam_ray, \
 	refdata->norm_dot_inc = calc_toon(dot(&refdata->normal, &refdata->incidence), refdata->use_toon);
 	if (refdata->norm_dot_inc <= 0)
 		return (false);
-	refdata->light = ctimes(w->light.ratio, w->light.c);
+	refdata->light_attr = ctimes(w->light.ratio, w->light.c);
 	return (true);
 }
 

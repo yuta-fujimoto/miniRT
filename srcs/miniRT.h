@@ -18,6 +18,7 @@
 # define H_IMG 612.0
 # define W_SCRN 500.0
 # define COEF_SPECULAR_REF 0.3
+# define COEF_PERFECT_REF 1.0
 # define SHININESS 8
 # define EPSILON 0.01
 # ifndef M_PI
@@ -25,6 +26,7 @@
 # endif
 # define TOON_LEVEL 4.0
 # define TOON_EDGE_THICKNESS 0.20
+# define MAX_RECURSION 5
 
 typedef enum e_formula
 {
@@ -53,6 +55,14 @@ enum e_Object
 	Plane,
 	Cylinder
 };
+
+typedef enum e_material_type
+{
+	NORMAL,
+	SPECULAR,
+	PERFECT,
+	MTYPE_NUM
+}	t_mattype;
 
 typedef struct s_vec3
 {
@@ -83,10 +93,12 @@ typedef struct s_intersection_point
 
 typedef struct s_material
 {
-	t_color	ambient_ref;
-	t_color	diffuse_ref;
-	t_color	specular_ref;
-	double	shininess;
+	t_color		ambient_ref;
+	t_color		diffuse_ref;
+	t_color		specular_ref;
+	t_color		perfect_ref;
+	double		shininess;
+	t_mattype	mtype;
 }	t_material;
 
 typedef struct s_amb_light {
@@ -148,7 +160,7 @@ typedef struct s_refdata {
 	t_vec3	ray;
 	t_vec3	normal;
 	t_vec3	incidence;
-	t_color	light;
+	t_color	light_attr;
 	double	norm_dot_inc;
 	bool	use_toon;
 }	t_refdata;
