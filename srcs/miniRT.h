@@ -150,7 +150,6 @@ typedef struct s_default
 
 // data used in the add_color()
 typedef struct s_refdata {
-	t_vec3	ray;
 	t_vec3	normal;
 	t_vec3	incidence;
 	t_color	light_attr;
@@ -183,7 +182,7 @@ t_color	cmult(const t_color a, const t_color b);
 t_color	cadd(const t_color a, const t_color b);
 t_color	ctimes(const double nb, const t_color c);
 void	cfilter(t_color *a, const double min, const double max);
-void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col);
+void	add_color(const t_material *mat, const t_ray *cam_ray, t_refdata *refdata, t_color *out_col);
 // color
 
 bool	atovec3(char const *nptr, t_vec3 *rlt);

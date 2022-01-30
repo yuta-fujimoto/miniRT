@@ -7,7 +7,7 @@ void	cfilter(t_color *a, const double min, const double max)
 	a->b = clamp(a->b, min, max);
 }
 
-void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col)
+void	add_color(const t_material *mat, const t_ray *cam_ray, t_refdata *refdata, t_color *out_col)
 {
 	t_color	diffuse_ref_light;
 	t_color	specular_ref_light;
@@ -21,7 +21,7 @@ void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col)
 		sub(times(2 * refdata->norm_dot_inc, refdata->normal), \
 		refdata->incidence);
 	normalize(&ref_vec);
-	reverseray_vec = times(-1, refdata->ray);
+	reverseray_vec = times(-1, cam_ray->direction);
 	normalize(&reverseray_vec);
 	pow_val = pow(calc_toon(dot(&ref_vec, &reverseray_vec), \
 		refdata->use_toon), mat->shininess);
