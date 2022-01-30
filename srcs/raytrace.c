@@ -65,10 +65,10 @@ void	get_material(t_list *obj, t_material *mat)
 		mat->type_perfect = true;
 }
 
-bool	reflection_test(const t_world *w, const t_intersection_point *intp, t_refdata *refdata)
+bool	reflection_test(const t_world *w, const t_vec3 incidence, const t_intersection_point *intp, t_refdata *refdata)
 {
 	refdata->normal = intp->normal;
-	refdata->incidence = sub(w->light.pos, intp->pos);
+	refdata->incidence = incidence;
 	normalize(&refdata->incidence);
 	refdata->use_toon = w->light.use_toon;
 	refdata->norm_dot_inc = calc_toon(dot(&refdata->normal, &refdata->incidence), refdata->use_toon);
@@ -98,7 +98,7 @@ bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col, int recu
 	if (!intersection_test_light(w, ray(nearest_intp.pos, \
 		sub(w->light.pos, nearest_intp.pos))))
 	{
-		if (reflection_test(w, &nearest_intp, &refdata))
+		if (reflection_test(w, sub(w->light.pos, nearest_intp.pos), &nearest_intp, &refdata))
 			add_color(&mat, cam_ray, &refdata, out_col);
 	}
 	if (mat.type_perfect)
