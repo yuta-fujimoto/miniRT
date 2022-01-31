@@ -47,13 +47,13 @@ $(NAME): $(OBJS) $(INCLUDE)
 	$(MAKE) -C $(MLXDIR)
 	$(MAKE) -C $(LIBDIR)
 	$(MAKE) gnl
-	$(CC) -o $(NAME) $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm
+	$(CC) -o $(NAME) $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm -pthread
 
 debug: $(OBJS) $(INCLUDE)
 	$(MAKE) -C $(MLXDIR)
 	$(MAKE) -C $(LIBDIR)
 	$(MAKE) gnl
-	$(CC) -o $(NAME) -g3 -fsanitize=address $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm
+	$(CC) -o $(NAME) -g3 -fsanitize=thread $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm -pthread
 
 clean:
 	$(RM) $(OBJS)

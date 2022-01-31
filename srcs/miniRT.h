@@ -14,6 +14,8 @@
 # include "../minilibx-linux/mlx.h"
 
 // Assumptions
+# define W_BLOCK 4
+# define H_BLOCK 4
 # define W_IMG 612.0
 # define H_IMG 612.0
 # define W_SCRN 500.0
@@ -169,8 +171,18 @@ typedef struct s_data {
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
+	t_default	def;
 	t_world		w;
+	double		x_stride;
+	double		y_stride;
 }	t_data;
+
+typedef struct s_block {
+	t_data *data;
+	t_ray	camray;
+	double start_x;
+	double start_y;
+}	t_block;
 
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
