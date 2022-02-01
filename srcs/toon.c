@@ -7,12 +7,16 @@ double	calc_toon(double dot, bool use_toon)
 	return (ceil(TOON_LEVEL * (1 - (2 / M_PI) * acos(dot))) / TOON_LEVEL);
 }
 
-bool	toon_edge(t_vec3 norm, t_vec3 dir, t_color *out_col, bool use_toon)
+bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj, t_color *out_col)
 {
-	if (!use_toon)
-		return (false);
+	double	thickness;
+
+	if (obj->cont_type == Plane)
+		thickness = TOON_EDGE_THICKNESS_PLANE;
+	else
+		thickness = TOON_EDGE_THICKNESS;
 	normalize(&dir);
-	if (fabs(dot(&norm, &dir)) > TOON_EDGE_THICKNESS)
+	if (fabs(dot(&norm, &dir)) > thickness)
 		return (false);
 	*out_col = color(0, 0, 0);
 	return (true);

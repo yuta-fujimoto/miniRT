@@ -24,7 +24,8 @@
 #  define M_PI 3.141592653589793
 # endif
 # define TOON_LEVEL 4.0
-# define TOON_EDGE_THICKNESS 0.20
+# define TOON_EDGE_THICKNESS 0.25
+# define TOON_EDGE_THICKNESS_PLANE 0.01
 
 typedef enum e_formula
 {
@@ -47,12 +48,12 @@ typedef enum e_error_status
 	EPARSE,
 }	t_error_status;
 
-enum e_Object
+typedef enum e_object
 {
 	Sphere,
 	Plane,
 	Cylinder
-};
+}	t_object;
 
 typedef struct s_vec3
 {
@@ -246,7 +247,7 @@ void	data_init(t_data *data);
 //init
 
 bool	atotoon(char *s, bool *use_toon);
-bool	toon_edge(t_vec3 norm, t_vec3 dir, t_color *out_col, bool use_toon);
+bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj, t_color *out_col);
 double	calc_toon(double dot, bool use_toon);
 // toon
 
