@@ -20,6 +20,7 @@
 # define H_IMG 612.0
 # define W_SCRN 500.0
 # define COEF_SPECULAR_REF 0.3
+# define COEF_PERFECT_REF 1.0
 # define SHININESS 8
 # define EPSILON 0.01
 # ifndef M_PI
@@ -28,6 +29,7 @@
 # define TOON_LEVEL 4.0
 # define TOON_EDGE_THICKNESS 0.25
 # define TOON_EDGE_THICKNESS_PLANE 0.01
+# define MAX_RECURSION 5
 
 typedef enum e_formula
 {
@@ -56,6 +58,14 @@ typedef enum e_object
 	Plane,
 	Cylinder
 }	t_object;
+
+typedef enum e_material_type
+{
+	NORMAL,
+	SPECULAR,
+	PERFECT,
+	MTYPE_NUM
+}	t_mattype;
 
 typedef struct s_vec3
 {
@@ -86,15 +96,18 @@ typedef struct s_intersection_point
 
 typedef struct s_material
 {
-	t_color	ambient_ref;
-	t_color	diffuse_ref;
-	t_color	specular_ref;
-	double	shininess;
+	t_color		ambient_ref;
+	t_color		diffuse_ref;
+	t_color		specular_ref;
+	t_color		perfect_ref;
+	double		shininess;
+	t_mattype	type;
 }	t_material;
 
 typedef struct s_amb_light {
 	double	ratio;
 	t_color	c;
+	t_color	luminance;
 }	t_amb_light;
 
 typedef struct s_camera {
@@ -109,26 +122,30 @@ typedef struct s_light
 	bool	use_toon;
 	t_vec3	pos;
 	t_color	c;
+	t_color	luminance;
 }	t_light;
 
 typedef struct s_sphere {
-	t_vec3	center;
-	double	diameter;
-	t_color	c;
+	t_vec3		center;
+	double		diameter;
+	t_color		c;
+	t_mattype	type;
 }	t_sphere;
 
 typedef struct s_plane {
-	t_vec3	pos;
-	t_vec3	norm_ori_vec;
-	t_color	c;
+	t_vec3		pos;
+	t_vec3		norm_ori_vec;
+	t_color		c;
+	t_mattype	type;
 }	t_plane;
 
 typedef struct s_cylinder {
-	t_vec3	pos;
-	t_vec3	norm_ori_vec;
-	double	diameter;
-	double	height;
-	t_color	c;
+	t_vec3		pos;
+	t_vec3		norm_ori_vec;
+	double		diameter;
+	double		height;
+	t_color		c;
+	t_mattype	type;
 }	t_cylinder;
 
 // default values used in the to3axis()
@@ -148,11 +165,11 @@ typedef struct s_default
 
 // data used in the add_color()
 typedef struct s_refdata {
-	t_vec3	ray;
-	t_vec3	normal;
-	t_vec3	incidence;
-	t_color	light;
-	double	norm_dot_inc;
+	t_vec3	norm_vec;
+	t_vec3	in_vec;
+	t_vec3	ref_vec;
+	t_vec3	pos;
+	double	dot_ni;
 	bool	use_toon;
 }	t_refdata;
 
@@ -190,9 +207,19 @@ t_color	color(double r, double g, double b);
 t_color	cmult(const t_color a, const t_color b);
 t_color	cadd(const t_color a, const t_color b);
 t_color	ctimes(const double nb, const t_color c);
+t_color	c_zero(void);
+t_color	c_background(void);
 void	cfilter(t_color *a, const double min, const double max);
-void	add_color(const t_material *mat, t_refdata *refdata, t_color *out_col);
+
+// color_utils
+
+t_color	obj_color(const t_world *w, const t_ray \
+			*cam_ray, const t_intersection_point *intp, const t_material *mat);
 // color
+
+void	get_material(t_list *obj, t_material *mat);
+bool	atomattype(char *s, t_mattype *type);
+// material
 
 bool	atovec3(char const *nptr, t_vec3 *rlt);
 bool	is_normed_vec(t_vec3 v);
@@ -242,15 +269,18 @@ void	data_set(t_data *data);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor);
 // data_set
 
+bool	intersection_test(const t_list *obj, \
+					const t_ray *ray, t_intersection_point *out_intp);
 t_vec3	get_position(const double t, const t_ray *ray);
 double	get_t(double form[FORMULA_NUM]);
 int		cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, \
 					const double form[FORMULA_NUM], double *out_height);
 // intersection_test
 
-bool	raytrace(const t_world *w, const t_ray *eye_ray, t_color *out_col);
-bool	intersection_test(const t_list *obj, \
-					const t_ray *ray, t_intersection_point *out_intp);
+t_color	raytrace(const t_world *w, const t_ray cam_ray, int recursion_level);
+bool	intersection_test_light(const t_world *w, t_ray shadow_ray);
+bool	reflection_test(const t_world *w, const t_vec3 incidence, \
+				const t_intersection_point *intp, t_refdata *refdata);
 // raytrace
 
 int		key_hook(int keycode, t_data *data);
@@ -265,7 +295,7 @@ void	data_init(t_data *data);
 //init
 
 bool	atotoon(char *s, bool *use_toon);
-bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj, t_color *out_col);
+bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj);
 double	calc_toon(double dot, bool use_toon);
 // toon
 

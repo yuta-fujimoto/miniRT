@@ -22,7 +22,7 @@ static bool	get_nearest_obj(const t_world *w, const t_ray *ray, \
 	return (true);
 }
 
-static bool	intersection_test_light(const t_world *w, t_ray shadow_ray)
+bool	intersection_test_light(const t_world *w, t_ray shadow_ray)
 {
 	t_list					*objs;
 	t_intersection_point	p;
@@ -42,57 +42,46 @@ static bool	intersection_test_light(const t_world *w, t_ray shadow_ray)
 	return (false);
 }
 
-void	get_material(t_list *obj, t_material *mat)
+bool	reflection_test(const t_world *w, const t_vec3 incidence, \
+				const t_intersection_point *intp, t_refdata *refdata)
 {
-	t_color	c;
-
-	if (obj->cont_type == Sphere)
-		c = ((t_sphere *)obj->content)->c;
-	else if (obj->cont_type == Plane)
-		c = ((t_plane *)obj->content)->c;
-	else if (obj->cont_type == Cylinder)
-		c = ((t_cylinder *)obj->content)->c;
-	mat->ambient_ref = c;
-	mat->diffuse_ref = c;
-	mat->specular_ref = color(COEF_SPECULAR_REF, \
-								COEF_SPECULAR_REF, COEF_SPECULAR_REF);
-	mat->shininess = SHININESS;
-}
-
-bool	reflection_test(const t_world *w, const t_ray *cam_ray, \
-					const t_intersection_point *intp, t_refdata *refdata)
-{
-	refdata->ray = cam_ray->direction;
-	refdata->normal = intp->normal;
-	refdata->incidence = sub(w->light.pos, intp->pos);
-	normalize(&refdata->incidence);
+	refdata->norm_vec = intp->normal;
+	refdata->pos = intp->pos;
+	refdata->in_vec = times(-1, incidence);
+	normalize(&refdata->in_vec);
 	refdata->use_toon = w->light.use_toon;
-	refdata->norm_dot_inc = calc_toon(dot(&refdata->normal, &refdata->incidence), refdata->use_toon);
-	if (refdata->norm_dot_inc <= 0)
+	refdata->dot_ni = calc_toon(dot(&refdata->norm_vec, \
+							&refdata->in_vec), refdata->use_toon);
+	if (refdata->dot_ni <= 0)
 		return (false);
-	refdata->light = ctimes(w->light.ratio, w->light.c);
+	refdata->ref_vec = sub(times(2 * refdata->dot_ni, refdata->norm_vec), \
+								refdata->in_vec);
+	normalize(&refdata->ref_vec);
 	return (true);
 }
 
-bool	raytrace(const t_world *w, const t_ray *cam_ray, t_color *out_col)
+t_color	raytrace(const t_world *w, const t_ray cam_ray, int recursion_level)
 {
 	t_list					*nearest_obj;
 	t_intersection_point	nearest_intp;
 	t_material				mat;
 	t_refdata				refdata;
 
-	if (!get_nearest_obj(w, cam_ray, &nearest_obj, &nearest_intp))
-		return (false);
+	if (MAX_RECURSION < recursion_level)
+		return (c_zero());
+	if (!get_nearest_obj(w, &cam_ray, &nearest_obj, &nearest_intp))
+		return (c_background());
 	if (w->light.use_toon
-		&& toon_edge(nearest_intp.normal, cam_ray->direction, nearest_obj, out_col))
-		return (true);
+		&& toon_edge(nearest_intp.normal, cam_ray.direction, nearest_obj))
+		return (c_zero());
 	get_material(nearest_obj, &mat);
-	*out_col = cmult(mat.ambient_ref, \
-				ctimes(w->amb_light.ratio, w->amb_light.c));
-	if (intersection_test_light(w, ray(nearest_intp.pos, \
-		sub(w->light.pos, nearest_intp.pos))))
-		return (true);
-	if (reflection_test(w, cam_ray, &nearest_intp, &refdata))
-		add_color(&mat, &refdata, out_col);
-	return (true);
+	if (mat.type == PERFECT && \
+		reflection_test(w, cam_ray.direction, &nearest_intp, &refdata))
+	{
+		refdata.pos = add(refdata.pos, times(EPSILON, refdata.ref_vec));
+		return (cmult(mat.perfect_ref, \
+						raytrace(w, ray(refdata.pos, refdata.ref_vec), \
+												recursion_level + 1)));
+	}
+	return (obj_color(w, &cam_ray, &nearest_intp, &mat));
 }

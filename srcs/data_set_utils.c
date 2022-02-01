@@ -45,4 +45,3 @@ void	default_set(const t_world *w, t_default *def)
 	def->half_ws = W_SCRN / 2;
 	def->half_hs = def->h_scrn / 2;
 }
-

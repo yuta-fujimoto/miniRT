@@ -7,7 +7,7 @@ double	calc_toon(double dot, bool use_toon)
 	return (ceil(TOON_LEVEL * (1 - (2 / M_PI) * acos(dot))) / TOON_LEVEL);
 }
 
-bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj, t_color *out_col)
+bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj)
 {
 	double	thickness;
 
@@ -18,7 +18,6 @@ bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj, t_color *out_col)
 	normalize(&dir);
 	if (fabs(dot(&norm, &dir)) > thickness)
 		return (false);
-	*out_col = color(0, 0, 0);
 	return (true);
 }
 
