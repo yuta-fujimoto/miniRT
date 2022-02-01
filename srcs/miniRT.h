@@ -14,6 +14,8 @@
 # include "../minilibx-linux/mlx.h"
 
 // Assumptions
+# define W_BLOCK 4
+# define H_BLOCK 4
 # define W_IMG 612.0
 # define H_IMG 612.0
 # define W_SCRN 500.0
@@ -171,7 +173,17 @@ typedef struct s_data {
 	int			line_length;
 	int			endian;
 	t_world		w;
+	t_default	def;
+	double		x_stride;
+	double		y_stride;
 }	t_data;
+
+typedef struct s_block {
+	t_data	*data;
+	t_ray	camray;
+	double	start_x;
+	double	start_y;
+}	t_block;
 
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
@@ -223,6 +235,12 @@ double	max(double a, double b);
 double	clamp(double x, double min, double max);
 double	radians(double	degrees);
 // utils2
+
+t_vec3	to3axis(const double x_img, const double y_img, const t_default *d);
+void	default_set(const t_world *w, t_default *def);
+void	data_set(t_data *data);
+void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor);
+// data_set
 
 t_vec3	get_position(const double t, const t_ray *ray);
 double	get_t(double form[FORMULA_NUM]);
