@@ -44,7 +44,8 @@ t_color	obj_color(const t_world *w, const t_ray \
 	{
 		out_col = cadd(out_col, c_diffuse(&w->light, mat, &refdata));
 		if (mat->type == SPECULAR)
-		out_col = cadd(out_col, c_specular(&w->light, mat, cam_ray, &refdata));
+			out_col = cadd(out_col, \
+						c_specular(&w->light, mat, cam_ray, &refdata));
 		cfilter(&out_col, 0, 1);
 	}
 	return (out_col);

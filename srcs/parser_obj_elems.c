@@ -33,8 +33,10 @@ bool	parser_sphere(t_world *world, char **info)
 bool	parser_plane(t_world *world, char **info)
 {
 	t_plane	*p;
+	int		str_arr_len;
 
-	if (ft_str_arr_len(info) != 4)
+	str_arr_len = ft_str_arr_len(info);
+	if (str_arr_len != 4 && str_arr_len != 5)
 		return (false);
 	p = malloc(sizeof(t_plane));
 	if (!p)
@@ -45,6 +47,8 @@ bool	parser_plane(t_world *world, char **info)
 		return (parser_obj_failure(p));
 	if (!atocol(info[3], &p->c))
 		return (parser_obj_failure(p));
+	if (!atomattype(info[4], &p->type))
+		return (parser_obj_failure(p));
 	normalize(&p->norm_ori_vec);
 	if (!ft_lstadd_back(&world->obj_list, ft_lstnew(p, Plane)))
 		return (parser_obj_failure(p));
@@ -54,8 +58,10 @@ bool	parser_plane(t_world *world, char **info)
 bool	parser_cylinder(t_world *world, char **info)
 {
 	t_cylinder	*c;
+	int			str_arr_len;
 
-	if (ft_str_arr_len(info) != 6)
+	str_arr_len = ft_str_arr_len(info);
+	if (str_arr_len != 6 && str_arr_len != 7)
 		return (false);
 	c = malloc(sizeof(t_cylinder));
 	if (!c)
@@ -69,6 +75,8 @@ bool	parser_cylinder(t_world *world, char **info)
 	if (!ft_atof(info[4], &c->height) || c->height <= 0)
 		return (parser_obj_failure(c));
 	if (!atocol(info[5], &c->c))
+		return (parser_obj_failure(c));
+	if (!atomattype(info[6], &c->type))
 		return (parser_obj_failure(c));
 	normalize(&c->norm_ori_vec);
 	if (!ft_lstadd_back(&world->obj_list, ft_lstnew(c, Cylinder)))
