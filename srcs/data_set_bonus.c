@@ -26,7 +26,7 @@ static void	*draw(void *p)
 	return (NULL);
 }
 
-static void	wait_draw(t_data *data, pthread_t **th)
+static void	wait_draw(t_data *data, pthread_t th[W_BLOCK][H_BLOCK])
 {
 	int	x_i;
 	int	y_i;

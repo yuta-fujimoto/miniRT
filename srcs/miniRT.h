@@ -238,6 +238,7 @@ double	radians(double	degrees);
 t_vec3	to3axis(const double x_img, const double y_img, const t_default *d);
 void	default_set(const t_world *w, t_default *def);
 void	data_set(t_data *data);
+void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor);
 // data_set
 
 t_vec3	get_position(const double t, const t_ray *ray);
