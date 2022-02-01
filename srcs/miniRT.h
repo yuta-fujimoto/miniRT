@@ -262,7 +262,7 @@ int		cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, \
 					const double form[FORMULA_NUM], double *out_height);
 // intersection_test
 
-bool	raytrace(const t_world *w, const t_ray eye_ray, t_color *out_col, int recursion_level);
+t_color	raytrace(const t_world *w, const t_ray cam_ray, int recursion_level);
 bool	intersection_test(const t_list *obj, \
 					const t_ray *ray, t_intersection_point *out_intp);
 // raytrace
@@ -279,7 +279,7 @@ void	data_init(t_data *data);
 //init
 
 bool	atotoon(char *s, bool *use_toon);
-bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj, t_color *out_col);
+bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj);
 double	calc_toon(double dot, bool use_toon);
 // toon
 
