@@ -23,7 +23,17 @@ SRCS :=	srcs/main.c \
 		srcs/raytrace.c \
 		srcs/init.c \
 		srcs/toon.c
+B_SRCS := data_set_bonus.c \
+			data_set_bonus2.c
+M_SRCS := data_set.c
 OBJS := $(SRCS:.c=.o)
+B_OBJS := $(B_SRCS:.c=.o)
+M_OBJS := $(M_SRCS:.c=.o)
+ifdef WITH_BONUS
+OBJS += $(B_OBJS)
+else
+OBJS += $(M_OBJS)
+endif
 
 MLXDIR := ./minilibx-linux
 MLXNAME := libmlx_Linux.a
@@ -48,6 +58,9 @@ $(NAME): $(OBJS) $(INCLUDE)
 	$(MAKE) -C $(LIBDIR)
 	$(MAKE) gnl
 	$(CC) -o $(NAME) $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm -pthread
+
+bonus:
+	make WITH_BONUS=1
 
 debug: $(OBJS) $(INCLUDE)
 	$(MAKE) -C $(MLXDIR)

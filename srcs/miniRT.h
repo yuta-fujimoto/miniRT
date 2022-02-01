@@ -171,17 +171,17 @@ typedef struct s_data {
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
-	t_default	def;
 	t_world		w;
+	t_default	def;
 	double		x_stride;
 	double		y_stride;
 }	t_data;
 
 typedef struct s_block {
-	t_data *data;
+	t_data	*data;
 	t_ray	camray;
-	double start_x;
-	double start_y;
+	double	start_x;
+	double	start_y;
 }	t_block;
 
 bool	atocol(char const *nptr, t_color *rlt);
@@ -234,6 +234,11 @@ double	max(double a, double b);
 double	clamp(double x, double min, double max);
 double	radians(double	degrees);
 // utils2
+
+t_vec3	to3axis(const double x_img, const double y_img, const t_default *d);
+void	default_set(const t_world *w, t_default *def);
+void	data_set(t_data *data);
+// data_set
 
 t_vec3	get_position(const double t, const t_ray *ray);
 double	get_t(double form[FORMULA_NUM]);
