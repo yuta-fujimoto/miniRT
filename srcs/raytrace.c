@@ -22,34 +22,6 @@ static bool	get_nearest_obj(const t_world *w, const t_ray *ray, \
 	return (true);
 }
 
-void	get_material(t_list *obj, t_material *mat)
-{
-	t_color		c;
-
-	if (obj->cont_type == Sphere)
-	{
-		mat->type = ((t_sphere *)obj->content)->type;
-		c = ((t_sphere *)obj->content)->c;
-	}
-	else if (obj->cont_type == Plane)
-	{
-		mat->type = ((t_plane *)obj->content)->type;
-		c = ((t_plane *)obj->content)->c;
-	}
-	else if (obj->cont_type == Cylinder)
-	{
-		mat->type = ((t_cylinder *)obj->content)->type;
-		c = ((t_cylinder *)obj->content)->c;
-	}
-	mat->ambient_ref = c;
-	mat->diffuse_ref = c;
-	mat->specular_ref = color(COEF_SPECULAR_REF, \
-								COEF_SPECULAR_REF, COEF_SPECULAR_REF);
-	mat->perfect_ref = color(COEF_PERFECT_REF, \
-								COEF_PERFECT_REF, COEF_PERFECT_REF);
-	mat->shininess = SHININESS;
-}
-
 bool	intersection_test_light(const t_world *w, t_ray shadow_ray)
 {
 	t_list					*objs;

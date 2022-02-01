@@ -210,12 +210,16 @@ t_color	ctimes(const double nb, const t_color c);
 t_color	c_zero(void);
 t_color	c_background(void);
 void	cfilter(t_color *a, const double min, const double max);
-bool	atomattype(char *s, t_mattype *type);
+
 // color_utils
 
 t_color	obj_color(const t_world *w, const t_ray \
 			*cam_ray, const t_intersection_point *intp, const t_material *mat);
 // color
+
+void	get_material(t_list *obj, t_material *mat);
+bool	atomattype(char *s, t_mattype *type);
+// material
 
 bool	atovec3(char const *nptr, t_vec3 *rlt);
 bool	is_normed_vec(t_vec3 v);

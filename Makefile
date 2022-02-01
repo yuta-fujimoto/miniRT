@@ -23,7 +23,8 @@ SRCS :=	srcs/main.c \
 		srcs/intersection_test_utils.c \
 		srcs/raytrace.c \
 		srcs/init.c \
-		srcs/toon.c
+		srcs/toon.c \
+		srcs/material.c
 B_SRCS := srcs/data_set_bonus.c
 M_SRCS := srcs/data_set.c
 OBJS := $(SRCS:.c=.o)

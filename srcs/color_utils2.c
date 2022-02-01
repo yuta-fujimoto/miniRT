@@ -21,21 +21,3 @@ void	cfilter(t_color *a, const double min, const double max)
 	a->g = clamp(a->g, min, max);
 	a->b = clamp(a->b, min, max);
 }
-
-bool	atomattype(char *s, t_mattype *type)
-{
-	*type = NORMAL;
-	if (!s)
-		return (true);
-	if (ft_strequal(s, "SPECULAR", 9))
-	{
-		*type = SPECULAR;
-		return (true);
-	}
-	else if (ft_strequal(s, "PERFECT", 8))
-	{
-		*type = PERFECT;
-		return (true);
-	}
-	return (false);
-}
