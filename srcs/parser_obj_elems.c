@@ -9,8 +9,10 @@ static bool	parser_obj_failure(void *p)
 bool	parser_sphere(t_world *world, char **info)
 {
 	t_sphere	*s;
+	int			str_arr_len;
 
-	if (ft_str_arr_len(info) != 4)
+	str_arr_len = ft_str_arr_len(info);
+	if (str_arr_len != 4 && str_arr_len != 5)
 		return (false);
 	s = malloc(sizeof(t_sphere));
 	if (!s)
@@ -20,6 +22,8 @@ bool	parser_sphere(t_world *world, char **info)
 	if (!ft_atof(info[2], &s->diameter) || s->diameter <= 0)
 		return (parser_obj_failure(s));
 	if (!atocol(info[3], &s->c))
+		return (parser_obj_failure(s));
+	if (!atomattype(info[4], &s->type))
 		return (parser_obj_failure(s));
 	if (!ft_lstadd_back(&world->obj_list, ft_lstnew(s, Sphere)))
 		return (parser_obj_failure(s));

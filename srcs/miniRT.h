@@ -126,23 +126,26 @@ typedef struct s_light
 }	t_light;
 
 typedef struct s_sphere {
-	t_vec3	center;
-	double	diameter;
-	t_color	c;
+	t_vec3		center;
+	double		diameter;
+	t_color		c;
+	t_mattype	type;
 }	t_sphere;
 
 typedef struct s_plane {
-	t_vec3	pos;
-	t_vec3	norm_ori_vec;
-	t_color	c;
+	t_vec3		pos;
+	t_vec3		norm_ori_vec;
+	t_color		c;
+	t_mattype	type;
 }	t_plane;
 
 typedef struct s_cylinder {
-	t_vec3	pos;
-	t_vec3	norm_ori_vec;
-	double	diameter;
-	double	height;
-	t_color	c;
+	t_vec3		pos;
+	t_vec3		norm_ori_vec;
+	double		diameter;
+	double		height;
+	t_color		c;
+	t_mattype	type;
 }	t_cylinder;
 
 // default values used in the to3axis()
@@ -207,6 +210,7 @@ t_color	ctimes(const double nb, const t_color c);
 t_color	c_zero(void);
 t_color	c_background(void);
 void	cfilter(t_color *a, const double min, const double max);
+bool	atomattype(char *s, t_mattype *type);
 // color_utils
 
 t_color	obj_color(const t_world *w, const t_ray \
