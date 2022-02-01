@@ -60,43 +60,26 @@ void	get_material(t_list *obj, t_material *mat)
 								COEF_PERFECT_REF, COEF_PERFECT_REF);
 	mat->shininess = SHININESS;
 	mat->type = SPECULAR;
-	//if (obj->cont_type == Sphere)
-	//	mat->type = PERFECT;
+	if (obj->cont_type == Sphere)
+		mat->type = PERFECT;
 }
 
-bool	reflection_test(const t_world *w, const t_vec3 incidence, const t_intersection_point *intp, t_refdata *refdata)
+bool	reflection_test(const t_world *w, const t_vec3 incidence, \
+				const t_intersection_point *intp, t_refdata *refdata)
 {
 	refdata->norm_vec = intp->normal;
 	refdata->pos = intp->pos;
 	refdata->in_vec = times(-1, incidence);
 	normalize(&refdata->in_vec);
 	refdata->use_toon = w->light.use_toon;
-	refdata->dot_ni = calc_toon(dot(&refdata->norm_vec, &refdata->in_vec), refdata->use_toon);
+	refdata->dot_ni = calc_toon(dot(&refdata->norm_vec, \
+							&refdata->in_vec), refdata->use_toon);
 	if (refdata->dot_ni <= 0)
 		return (false);
-	refdata->ref_vec = sub(times(2 * refdata->dot_ni, refdata->norm_vec), refdata->in_vec);
+	refdata->ref_vec = sub(times(2 * refdata->dot_ni, refdata->norm_vec), \
+								refdata->in_vec);
 	normalize(&refdata->ref_vec);
 	return (true);
-}
-
-t_color	color_object(const t_world *w, const t_ray \
-			*cam_ray, const t_intersection_point *intp, const t_material *mat)
-{
-	t_color		out_col;
-	t_refdata	refdata;
-
-	out_col = color(0, 0, 0);
-	out_col = cadd(out_col, c_ambient(&w->amb_light, mat));
-	if (intersection_test_light(w, ray(intp->pos, \
-		sub(w->light.pos, intp->pos))))
-		return (out_col);
-	if (reflection_test(w, sub(intp->pos, w->light.pos), intp, &refdata))
-	{
-		out_col = cadd(out_col, c_diffuse(&w->light, mat, &refdata));
-		out_col = cadd(out_col, c_specular(&w->light, mat, cam_ray, &refdata));
-		cfilter(&out_col, 0, 1);
-	}
-	return (out_col);
 }
 
 t_color	raytrace(const t_world *w, const t_ray cam_ray, int recursion_level)
@@ -114,13 +97,13 @@ t_color	raytrace(const t_world *w, const t_ray cam_ray, int recursion_level)
 		&& toon_edge(nearest_intp.normal, cam_ray.direction, nearest_obj))
 		return (c_zero());
 	get_material(nearest_obj, &mat);
-	if (mat.type != PERFECT)
-		return (color_object(w, &cam_ray, &nearest_intp, &mat));
-	if (mat.type == PERFECT && reflection_test(w, cam_ray.direction, &nearest_intp, &refdata))
+	if (mat.type == PERFECT && \
+		reflection_test(w, cam_ray.direction, &nearest_intp, &refdata))
 	{
 		refdata.pos = add(refdata.pos, times(EPSILON, refdata.ref_vec));
 		return (cmult(mat.perfect_ref, \
-			raytrace(w, ray(refdata.pos, refdata.ref_vec), recursion_level + 1)));
+						raytrace(w, ray(refdata.pos, refdata.ref_vec), \
+												recursion_level + 1)));
 	}
-	return (c_zero());
+	return (obj_color(w, &cam_ray, &nearest_intp, &mat));
 }

@@ -12,14 +12,15 @@ t_color	c_ambient(const t_amb_light *a, const t_material *mat)
 	return (cmult(mat->ambient_ref, ctimes(a->ratio, a->c)));
 }
 
-
-t_color	c_diffuse(const t_light *l, const t_material *mat, const t_refdata *refdata)
+t_color	c_diffuse(const t_light *l, \
+					const t_material *mat, const t_refdata *refdata)
 {
 	return (cmult(mat->diffuse_ref, \
 				ctimes(refdata->dot_ni, ctimes(l->ratio, l->c))));
 }
 
-t_color	c_specular(const t_light *l, const t_material *mat, const t_ray *cam_ray, t_refdata *refdata)
+t_color	c_specular(const t_light *l, const t_material *mat, \
+					const t_ray *cam_ray, t_refdata *refdata)
 {
 	t_vec3	reverseray;
 	double	pow_val;
@@ -35,12 +36,22 @@ t_color	c_specular(const t_light *l, const t_material *mat, const t_ray *cam_ray
 				ctimes(pow_val, ctimes(l->ratio, l->c))));
 }
 
-t_color c_zero(void)
+t_color	obj_color(const t_world *w, const t_ray \
+			*cam_ray, const t_intersection_point *intp, const t_material *mat)
 {
-	return (color(0, 0, 0));
-}
+	t_color		out_col;
+	t_refdata	refdata;
 
-t_color c_background(void)
-{
-	return (color(1, 1, 1));
+	out_col = color(0, 0, 0);
+	out_col = cadd(out_col, c_ambient(&w->amb_light, mat));
+	if (intersection_test_light(w, ray(intp->pos, \
+		sub(w->light.pos, intp->pos))))
+		return (out_col);
+	if (reflection_test(w, sub(intp->pos, w->light.pos), intp, &refdata))
+	{
+		out_col = cadd(out_col, c_diffuse(&w->light, mat, &refdata));
+		out_col = cadd(out_col, c_specular(&w->light, mat, cam_ray, &refdata));
+		cfilter(&out_col, 0, 1);
+	}
+	return (out_col);
 }
