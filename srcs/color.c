@@ -34,3 +34,13 @@ t_color	c_specular(const t_light *l, const t_material *mat, const t_ray *cam_ray
 	return (cmult(mat->specular_ref, \
 				ctimes(pow_val, ctimes(l->ratio, l->c))));
 }
+
+t_color c_zero(void)
+{
+	return (color(0, 0, 0));
+}
+
+t_color c_background(void)
+{
+	return (color(1, 1, 1));
+}

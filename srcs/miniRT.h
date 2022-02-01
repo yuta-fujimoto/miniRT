@@ -206,6 +206,8 @@ void	cfilter(t_color *a, const double min, const double max);
 t_color	c_ambient(const t_amb_light *a, const t_material *mat);
 t_color	c_diffuse(const t_light *l, const t_material *mat, const t_refdata *refdata);
 t_color	c_specular(const t_light *l, const t_material *mat, const t_ray *cam_ray, t_refdata *refdata);
+t_color c_zero(void);
+t_color c_background(void);
 // color
 
 bool	atovec3(char const *nptr, t_vec3 *rlt);
