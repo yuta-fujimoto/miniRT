@@ -107,6 +107,7 @@ typedef struct s_material
 typedef struct s_amb_light {
 	double	ratio;
 	t_color	c;
+	t_color	luminance;
 }	t_amb_light;
 
 typedef struct s_camera {
@@ -121,6 +122,7 @@ typedef struct s_light
 	bool	use_toon;
 	t_vec3	pos;
 	t_color	c;
+	t_color	luminance;
 }	t_light;
 
 typedef struct s_sphere {
@@ -204,14 +206,9 @@ t_color	cadd(const t_color a, const t_color b);
 t_color	ctimes(const double nb, const t_color c);
 t_color	c_zero(void);
 t_color	c_background(void);
+void	cfilter(t_color *a, const double min, const double max);
 // color_utils
 
-void	cfilter(t_color *a, const double min, const double max);
-t_color	c_ambient(const t_amb_light *a, const t_material *mat);
-t_color	c_diffuse(const t_light *l, const t_material *mat, \
-								const t_refdata *refdata);
-t_color	c_specular(const t_light *l, const t_material *mat, \
-					const t_ray *cam_ray, t_refdata *refdata);
 t_color	obj_color(const t_world *w, const t_ray \
 			*cam_ray, const t_intersection_point *intp, const t_material *mat);
 // color
@@ -264,6 +261,8 @@ void	data_set(t_data *data);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor);
 // data_set
 
+bool	intersection_test(const t_list *obj, \
+					const t_ray *ray, t_intersection_point *out_intp);
 t_vec3	get_position(const double t, const t_ray *ray);
 double	get_t(double form[FORMULA_NUM]);
 int		cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, \
@@ -271,8 +270,9 @@ int		cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, \
 // intersection_test
 
 t_color	raytrace(const t_world *w, const t_ray cam_ray, int recursion_level);
-bool	intersection_test(const t_list *obj, \
-					const t_ray *ray, t_intersection_point *out_intp);
+bool	intersection_test_light(const t_world *w, t_ray shadow_ray);
+bool	reflection_test(const t_world *w, const t_vec3 incidence, \
+				const t_intersection_point *intp, t_refdata *refdata);
 // raytrace
 
 int		key_hook(int keycode, t_data *data);

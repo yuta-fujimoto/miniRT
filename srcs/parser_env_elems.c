@@ -9,6 +9,7 @@ bool	parser_amb_light(t_world *w, char **info)
 		return (false);
 	if (!atocol(info[2], &w->amb_light.c))
 		return (false);
+	w->amb_light.luminance = ctimes(w->amb_light.ratio, w->amb_light.c);
 	w->env_elems_exists[0] = true;
 	return (true);
 }
@@ -46,6 +47,7 @@ bool	parser_light(t_world *w, char **info)
 		return (false);
 	if (!atotoon(info[4], &w->light.use_toon))
 		return (false);
+	w->light.luminance = ctimes(w->light.ratio, w->light.c);
 	w->env_elems_exists[2] = true;
 	return (true);
 }

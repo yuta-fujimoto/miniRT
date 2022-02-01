@@ -1,25 +1,18 @@
 #include "miniRT.h"
 
-void	cfilter(t_color *a, const double min, const double max)
+static t_color	c_ambient(const t_amb_light *a, const t_material *mat)
 {
-	a->r = clamp(a->r, min, max);
-	a->g = clamp(a->g, min, max);
-	a->b = clamp(a->b, min, max);
+	return (cmult(mat->ambient_ref, a->luminance));
 }
 
-t_color	c_ambient(const t_amb_light *a, const t_material *mat)
-{
-	return (cmult(mat->ambient_ref, ctimes(a->ratio, a->c)));
-}
-
-t_color	c_diffuse(const t_light *l, \
+static t_color	c_diffuse(const t_light *l, \
 					const t_material *mat, const t_refdata *refdata)
 {
 	return (cmult(mat->diffuse_ref, \
-				ctimes(refdata->dot_ni, ctimes(l->ratio, l->c))));
+				ctimes(refdata->dot_ni, l->luminance)));
 }
 
-t_color	c_specular(const t_light *l, const t_material *mat, \
+static t_color	c_specular(const t_light *l, const t_material *mat, \
 					const t_ray *cam_ray, t_refdata *refdata)
 {
 	t_vec3	reverseray;
@@ -33,7 +26,7 @@ t_color	c_specular(const t_light *l, const t_material *mat, \
 							&reverseray), refdata->use_toon), \
 					mat->shininess);
 	return (cmult(mat->specular_ref, \
-				ctimes(pow_val, ctimes(l->ratio, l->c))));
+				ctimes(pow_val, l->luminance)));
 }
 
 t_color	obj_color(const t_world *w, const t_ray \
@@ -50,6 +43,7 @@ t_color	obj_color(const t_world *w, const t_ray \
 	if (reflection_test(w, sub(intp->pos, w->light.pos), intp, &refdata))
 	{
 		out_col = cadd(out_col, c_diffuse(&w->light, mat, &refdata));
+		if (mat->type == SPECULAR)
 		out_col = cadd(out_col, c_specular(&w->light, mat, cam_ray, &refdata));
 		cfilter(&out_col, 0, 1);
 	}

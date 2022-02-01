@@ -22,26 +22,6 @@ static bool	get_nearest_obj(const t_world *w, const t_ray *ray, \
 	return (true);
 }
 
-static bool	intersection_test_light(const t_world *w, t_ray shadow_ray)
-{
-	t_list					*objs;
-	t_intersection_point	p;
-	double					distance;
-
-	objs = w->obj_list;
-	distance = normalize(&shadow_ray.direction) - EPSILON;
-	shadow_ray.start = add(shadow_ray.start, \
-						times(EPSILON, shadow_ray.direction));
-	while (objs)
-	{
-		if (intersection_test(objs, &shadow_ray, &p)
-			&& (long)distance > (long)p.distance)
-			return (true);
-		objs = objs->next;
-	}
-	return (false);
-}
-
 void	get_material(t_list *obj, t_material *mat)
 {
 	t_color	c;
@@ -62,6 +42,26 @@ void	get_material(t_list *obj, t_material *mat)
 	mat->type = SPECULAR;
 	if (obj->cont_type == Sphere)
 		mat->type = PERFECT;
+}
+
+bool	intersection_test_light(const t_world *w, t_ray shadow_ray)
+{
+	t_list					*objs;
+	t_intersection_point	p;
+	double					distance;
+
+	objs = w->obj_list;
+	distance = normalize(&shadow_ray.direction) - EPSILON;
+	shadow_ray.start = add(shadow_ray.start, \
+						times(EPSILON, shadow_ray.direction));
+	while (objs)
+	{
+		if (intersection_test(objs, &shadow_ray, &p)
+			&& (long)distance > (long)p.distance)
+			return (true);
+		objs = objs->next;
+	}
+	return (false);
 }
 
 bool	reflection_test(const t_world *w, const t_vec3 incidence, \
