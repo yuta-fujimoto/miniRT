@@ -18,12 +18,22 @@ SRCS :=	srcs/main.c \
 		srcs/print_debug.c \
 		srcs/print_error.c \
 		srcs/hook_funcs.c \
+		srcs/data_set_utils.c \
 		srcs/intersection_test.c \
 		srcs/intersection_test_utils.c \
 		srcs/raytrace.c \
 		srcs/init.c \
 		srcs/toon.c
+B_SRCS := srcs/data_set_bonus.c
+M_SRCS := srcs/data_set.c
 OBJS := $(SRCS:.c=.o)
+B_OBJS := $(B_SRCS:.c=.o)
+M_OBJS := $(M_SRCS:.c=.o)
+ifdef WITH_BONUS
+OBJS += $(B_OBJS)
+else
+OBJS += $(M_OBJS)
+endif
 
 MLXDIR := ./minilibx-linux
 MLXNAME := libmlx_Linux.a
@@ -47,16 +57,19 @@ $(NAME): $(OBJS) $(INCLUDE)
 	$(MAKE) -C $(MLXDIR)
 	$(MAKE) -C $(LIBDIR)
 	$(MAKE) gnl
-	$(CC) -o $(NAME) $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm
+	$(CC) -o $(NAME) $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm -pthread
+
+bonus:
+	make WITH_BONUS=1
 
 debug: $(OBJS) $(INCLUDE)
 	$(MAKE) -C $(MLXDIR)
 	$(MAKE) -C $(LIBDIR)
 	$(MAKE) gnl
-	$(CC) -o $(NAME) -g3 -fsanitize=address $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm
+	$(CC) -o $(NAME) -g3 -fsanitize=address $(CFLAG) -I$(MLXDIR) -I/usr/include $(OBJS) $(MLXDIR)/$(MLXNAME) $(GNLFILE) $(LIBDIR)/$(LIBNAME) -lXext -lX11 -lm -pthread
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(M_OBJS) $(B_OBJS)
 	$(MAKE) clean -C $(MLXDIR)
 	$(MAKE) clean -C $(LIBDIR)
 

@@ -90,7 +90,8 @@ bool	raytrace(const t_world *w, const t_ray cam_ray, t_color *out_col, int recur
 		return (true);
 	if (!get_nearest_obj(w, &cam_ray, &nearest_obj, &nearest_intp))
 		return (false);
-	if (toon_edge(nearest_intp.normal, cam_ray.direction, out_col, w->light.use_toon))
+	if (w->light.use_toon
+		&& toon_edge(nearest_intp.normal, cam_ray->direction, nearest_obj, out_col))
 		return (true);
 	get_material(nearest_obj, &mat);
 	if (mat.type != PERFECT)

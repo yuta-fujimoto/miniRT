@@ -14,6 +14,8 @@
 # include "../minilibx-linux/mlx.h"
 
 // Assumptions
+# define W_BLOCK 4
+# define H_BLOCK 4
 # define W_IMG 612.0
 # define H_IMG 612.0
 # define W_SCRN 500.0
@@ -25,7 +27,8 @@
 #  define M_PI 3.141592653589793
 # endif
 # define TOON_LEVEL 4.0
-# define TOON_EDGE_THICKNESS 0.20
+# define TOON_EDGE_THICKNESS 0.25
+# define TOON_EDGE_THICKNESS_PLANE 0.01
 # define MAX_RECURSION 5
 
 typedef enum e_formula
@@ -49,12 +52,12 @@ typedef enum e_error_status
 	EPARSE,
 }	t_error_status;
 
-enum e_Object
+typedef enum e_object
 {
 	Sphere,
 	Plane,
 	Cylinder
-};
+}	t_object;
 
 typedef enum e_material_type
 {
@@ -182,7 +185,17 @@ typedef struct s_data {
 	int			line_length;
 	int			endian;
 	t_world		w;
+	t_default	def;
+	double		x_stride;
+	double		y_stride;
 }	t_data;
+
+typedef struct s_block {
+	t_data	*data;
+	t_ray	camray;
+	double	start_x;
+	double	start_y;
+}	t_block;
 
 bool	atocol(char const *nptr, t_color *rlt);
 t_color	color(double r, double g, double b);
@@ -237,6 +250,12 @@ double	clamp(double x, double min, double max);
 double	radians(double	degrees);
 // utils2
 
+t_vec3	to3axis(const double x_img, const double y_img, const t_default *d);
+void	default_set(const t_world *w, t_default *def);
+void	data_set(t_data *data);
+void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor);
+// data_set
+
 t_vec3	get_position(const double t, const t_ray *ray);
 double	get_t(double form[FORMULA_NUM]);
 int		cylinder_height_test(const t_cylinder *cylinder, const t_ray *ray, \
@@ -260,7 +279,7 @@ void	data_init(t_data *data);
 //init
 
 bool	atotoon(char *s, bool *use_toon);
-bool	toon_edge(t_vec3 norm, t_vec3 dir, t_color *out_col, bool use_toon);
+bool	toon_edge(t_vec3 norm, t_vec3 dir, t_list *obj, t_color *out_col);
 double	calc_toon(double dot, bool use_toon);
 // toon
 
