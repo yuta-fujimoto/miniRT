@@ -60,8 +60,8 @@ void	get_material(t_list *obj, t_material *mat)
 								COEF_PERFECT_REF, COEF_PERFECT_REF);
 	mat->shininess = SHININESS;
 	mat->type = SPECULAR;
-	if (obj->cont_type == Sphere)
-		mat->type = PERFECT;
+	//if (obj->cont_type == Sphere)
+	//	mat->type = PERFECT;
 }
 
 bool	reflection_test(const t_world *w, const t_vec3 incidence, const t_intersection_point *intp, t_refdata *refdata)
@@ -91,7 +91,7 @@ bool	raytrace(const t_world *w, const t_ray cam_ray, t_color *out_col, int recur
 	if (!get_nearest_obj(w, &cam_ray, &nearest_obj, &nearest_intp))
 		return (false);
 	if (w->light.use_toon
-		&& toon_edge(nearest_intp.normal, cam_ray->direction, nearest_obj, out_col))
+		&& toon_edge(nearest_intp.normal, cam_ray.direction, nearest_obj, out_col))
 		return (true);
 	get_material(nearest_obj, &mat);
 	if (mat.type != PERFECT)

@@ -16,7 +16,8 @@ static void	*draw(void *p)
 		while (x_img - block->start_x < block->data->x_stride && x_img < W_IMG)
 		{
 			block->camray.direction = to3axis(x_img, y_img, &block->data->def);
-			if (!raytrace(&block->data->w, &block->camray, &col))
+			col = color(0,0,0);
+			if (!raytrace(&block->data->w, block->camray, &col, 0))
 				col = color(1.0, 1.0, 1.0);
 			my_mlx_pixel_put(block->data, (int)x_img, (int)y_img, col);
 			x_img++;
