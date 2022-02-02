@@ -15,14 +15,13 @@ typedef struct s_spiral
 
 void	put(t_spiral *setting)
 {
-	// dx, dy
+	// calculate settings
 	normalize(&setting->direct_centerline);
 	t_vec3	vec_ey = vec3(0, 1, 0);
 	t_vec3	vec_dx = cross(vec_ey, setting->direct_centerline);
 	normalize(&vec_dx);
 	t_vec3	vec_dy = cross(setting->direct_centerline, vec_dx);
 	normalize(&vec_dy);
-
 	t_vec3	point;
 	double	t = 1;
 	double	degree = 0;
@@ -35,6 +34,7 @@ void	put(t_spiral *setting)
 
 	while (cnt--)
 	{
+		// point of sphere
 		point = add(setting->start_centerline, \
 				add(times(t, setting->direct_centerline), \
 				add(times(setting->gap_sphere_centerline * cos(radi), vec_dx), \
@@ -43,14 +43,18 @@ void	put(t_spiral *setting)
 		r = ((cnt % 2 == 0)? 0 : 255);
 		g = ((cnt % 3 == 0)? 0 : 255);
 		b = ((r == 255 && g == 255)? 0 : 255);
+		// mode
 		mode = ((cnt % 2 == 0)? "PERFECT" : "SPECULAR");
+		// put
 		printf("sp %f,%f,%f %f %d,%d,%d %s\n", point.x, point.y, point.z, setting->diameter_sphere, r, g, b, mode);
+		// increment factors
 		t += setting->increment_centerline;
 		degree += setting->increment_degree;
 		radi = radians(degree);
 	}
 }
 
+// first settings
 int main(void)
 {
 	t_spiral setting;
