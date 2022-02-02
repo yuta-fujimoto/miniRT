@@ -209,11 +209,9 @@ t_color	cadd(const t_color a, const t_color b);
 t_color	ctimes(const double nb, const t_color c);
 t_color	c_zero(void);
 t_color	c_background(void);
-// color_utils
-
 t_color	obj_color(const t_world *w, const t_ray \
 			*cam_ray, const t_intersection_point *intp, const t_material *mat);
-// object_color
+// color
 
 void	get_material(t_list *obj, t_material *mat);
 bool	atomattype(char *s, t_mattype *type);
@@ -252,19 +250,17 @@ void	ft_str_arr_free(char **str_arr);
 int		ft_str_arr_len(char **str_arr);
 void	safe_free(void *p);
 t_ray	ray(t_vec3 start, t_vec3 direction);
-// utils1
-
 double	sqr(double x);
 double	min(double a, double b);
 double	max(double a, double b);
 double	clamp(double x, double min, double max);
 double	radians(double	degrees);
-// utils2
+// utils
 
 t_vec3	to3axis(const double x_img, const double y_img, const t_default *d);
 void	default_set(const t_world *w, t_default *def);
-void	data_set(t_data *data);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor);
+void	data_set(t_data *data);
 // data_set
 
 bool	intersection_test(const t_list *obj, \
