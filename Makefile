@@ -12,9 +12,9 @@ SRCS :=	srcs/main.c \
 		srcs/vector_utils1.c \
 		srcs/vector_utils2.c \
 		srcs/vector_utils3.c \
-		srcs/color_utils.c \
+		srcs/color_utils1.c \
 		srcs/color_utils2.c \
-		srcs/color.c \
+		srcs/object_color.c \
 		srcs/print_debug.c \
 		srcs/print_error.c \
 		srcs/hook_funcs.c \

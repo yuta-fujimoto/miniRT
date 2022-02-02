@@ -209,13 +209,11 @@ t_color	cadd(const t_color a, const t_color b);
 t_color	ctimes(const double nb, const t_color c);
 t_color	c_zero(void);
 t_color	c_background(void);
-void	cfilter(t_color *a, const double min, const double max);
-
 // color_utils
 
 t_color	obj_color(const t_world *w, const t_ray \
 			*cam_ray, const t_intersection_point *intp, const t_material *mat);
-// color
+// object_color
 
 void	get_material(t_list *obj, t_material *mat);
 bool	atomattype(char *s, t_mattype *type);

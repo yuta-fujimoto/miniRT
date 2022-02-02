@@ -1,11 +1,5 @@
 #include "miniRT.h"
 
-static bool	end_conversion(char **s, bool rlt)
-{
-	ft_str_arr_free(s);
-	return (rlt);
-}
-
 t_color	color(double r, double g, double b)
 {
 	t_color	rlt;
@@ -13,6 +7,12 @@ t_color	color(double r, double g, double b)
 	rlt.r = r;
 	rlt.g = g;
 	rlt.b = b;
+	return (rlt);
+}
+
+static bool	end_conversion(char **s, bool rlt)
+{
+	ft_str_arr_free(s);
 	return (rlt);
 }
 
@@ -35,24 +35,4 @@ bool	atocol(char const *nptr, t_color *c)
 		return (end_conversion(rgb, false));
 	*c = color(icolor[0] / 255.0, icolor[1] / 255.0, icolor[2] / 255.0);
 	return (end_conversion(rgb, true));
-}
-
-t_color	cmult(const t_color a, const t_color b)
-{
-	t_color	ret;
-
-	ret.r = a.r * b.r;
-	ret.g = a.g * b.g;
-	ret.b = a.b * b.b;
-	return (ret);
-}
-
-t_color	cadd(const t_color a, const t_color b)
-{
-	t_color	ret;
-
-	ret.r = a.r + b.r;
-	ret.g = a.g + b.g;
-	ret.b = a.b + b.b;
-	return (ret);
 }
