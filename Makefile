@@ -14,7 +14,7 @@ SRCS :=	srcs/main.c \
 		srcs/vector_utils3.c \
 		srcs/color_utils1.c \
 		srcs/color_utils2.c \
-		srcs/object_color.c \
+		srcs/color_obj.c \
 		srcs/print_debug.c \
 		srcs/print_error.c \
 		srcs/hook_funcs.c \
