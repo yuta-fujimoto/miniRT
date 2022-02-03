@@ -20,9 +20,8 @@
 # define H_IMG 612.0
 # define W_SCRN 500.0
 # define COEF_SPECULAR_REF 0.3
-# define COEF_PERFECT_REF 1.0
 # define SHININESS 8
-# define EPSILON 0.01
+# define EPSILON 0.001
 # ifndef M_PI
 #  define M_PI 3.141592653589793
 # endif

@@ -23,8 +23,7 @@ void	get_material(t_list *obj, t_material *mat)
 	mat->diffuse_ref = c;
 	mat->specular_ref = color(COEF_SPECULAR_REF, \
 								COEF_SPECULAR_REF, COEF_SPECULAR_REF);
-	mat->perfect_ref = color(COEF_PERFECT_REF, \
-								COEF_PERFECT_REF, COEF_PERFECT_REF);
+	mat->perfect_ref = c;
 	mat->shininess = SHININESS;
 }
 
