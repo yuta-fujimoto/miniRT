@@ -29,13 +29,6 @@ static t_color	c_specular(const t_light *l, const t_material *mat, \
 				ctimes(pow_val, l->luminance)));
 }
 
-static void	cfilter(t_color *a, const double min, const double max)
-{
-	a->r = clamp(a->r, min, max);
-	a->g = clamp(a->g, min, max);
-	a->b = clamp(a->b, min, max);
-}
-
 t_color	obj_color(const t_world *w, const t_ray \
 			*cam_ray, const t_intersection_point *intp, const t_material *mat)
 {
@@ -53,7 +46,6 @@ t_color	obj_color(const t_world *w, const t_ray \
 		if (mat->type == SPECULAR)
 			out_col = cadd(out_col, \
 						c_specular(&w->light, mat, cam_ray, &refdata));
-		cfilter(&out_col, 0, 1);
 	}
 	return (out_col);
 }

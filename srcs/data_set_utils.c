@@ -1,10 +1,18 @@
 #include "miniRT.h"
 
+static void	cfilter(t_color *a, const double min, const double max)
+{
+	a->r = clamp(a->r, min, max);
+	a->g = clamp(a->g, min, max);
+	a->b = clamp(a->b, min, max);
+}
+
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_color dcolor)
 {
 	char	*dst;
 	int		icolor;
 
+	cfilter(&dcolor, 0, 1);
 	icolor = ((int)(dcolor.r * 255) << 16) | \
 				((int)(dcolor.g * 255) << 8) | \
 				(int)(dcolor.b * 255);
