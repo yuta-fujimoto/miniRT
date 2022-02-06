@@ -67,12 +67,10 @@ t_color	raytrace(const t_world *w, const t_ray cam_ray, int recursion_level)
 	t_material				mat;
 	t_refdata				refdata;
 
-	if (MAX_RECURSION < recursion_level)
-		return (c_zero());
-	if (!get_nearest_obj(w, &cam_ray, &nearest_obj, &nearest_intp))
-		return (c_background());
-	if (w->light.use_toon
-		&& toon_edge(nearest_intp.normal, cam_ray.direction, nearest_obj))
+	if (MAX_RECURSION < recursion_level
+		|| !get_nearest_obj(w, &cam_ray, &nearest_obj, &nearest_intp)
+		|| (w->light.use_toon
+			&& toon_edge(nearest_intp.normal, cam_ray.direction, nearest_obj)))
 		return (c_zero());
 	get_material(nearest_obj, &mat);
 	if (mat.type == PERFECT && \
