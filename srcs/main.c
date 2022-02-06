@@ -1,8 +1,8 @@
 #include "miniRT.h"
 
-int redraw(t_data *data)
+int	redraw(t_data *data)
 {
-	static int cnt = 0;
+	static int	cnt = 0;
 
 	cnt++;
 	if (cnt % 10000 == 0)
