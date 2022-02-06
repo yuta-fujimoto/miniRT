@@ -23,6 +23,8 @@ bool	atovec3(char const *nptr, t_vec3 *v)
 	v->x = 0;
 	v->y = 0;
 	v->z = 0;
+	if (cntchar(nptr, ',') != 2)
+		return (false);
 	vec3 = ft_split(nptr, ',');
 	if (ft_str_arr_len(vec3) != 3 || !vec3)
 		return (end_conversion(vec3, false));

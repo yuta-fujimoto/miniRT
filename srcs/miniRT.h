@@ -245,6 +245,7 @@ void	print_color(t_color c, char *prefix);
 void	print_vec3(t_vec3 v, char *prefix);
 // print_debug
 
+int		cntchar(const char* str, char c);
 void	ft_str_arr_free(char **str_arr);
 int		ft_str_arr_len(char **str_arr);
 void	safe_free(void *p);
