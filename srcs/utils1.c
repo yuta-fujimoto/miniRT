@@ -1,6 +1,6 @@
 #include "miniRT.h"
 
-int	cntchar(const char* str, char c)
+int	cntchar(const char *str, char c)
 {
 	int		cnt;
 	size_t	index;
