@@ -1,5 +1,23 @@
 #include "miniRT.h"
 
+int	cntchar(const char* str, char c)
+{
+	int		cnt;
+	size_t	index;
+
+	if (!str)
+		return (0);
+	cnt = 0;
+	index = 0;
+	while (str[index])
+	{
+		if (str[index] == c)
+			cnt++;
+		index++;
+	}
+	return (cnt);
+}
+
 void	safe_free(void *p)
 {
 	if (p)

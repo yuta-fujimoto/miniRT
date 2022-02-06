@@ -24,6 +24,8 @@ bool	atocol(char const *nptr, t_color *c)
 	icolor[0] = 0;
 	icolor[1] = 0;
 	icolor[2] = 0;
+	if (cntchar(nptr, ',') != 2)
+		return (false);
 	rgb = ft_split(nptr, ',');
 	if (ft_str_arr_len(rgb) != 3 || !rgb)
 		return (end_conversion(rgb, false));
