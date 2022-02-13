@@ -1,8 +1,26 @@
 # miniRT
 
-## This is raytrace application in progress
+this was developed by me and <a href="https://github.com/ryojiroakiyama">rakiyama</a>
 
-![ex1](http://drive.google.com/uc?export=view&id=1T6qpKE93azhUu9n2ItMnG7FUUPR55K_g "ex1.png")
+## Simple Ray Tracing Application
 
-![ex2](http://drive.google.com/uc?export=view&id=1xbldicGay9NEJxhYapFzf_60LMHK3r0c "ex2.png")
+<img src="https://user-images.githubusercontent.com/64348608/153751755-40fb93af-d8f4-4263-9884-7bbfb74baa33.PNG" width=400px>   <img src="https://user-images.githubusercontent.com/64348608/153751753-252aeadc-394b-43c0-8f1e-eba1ede4b5e0.PNG" width=400px>
+
+## Features
+
+* Three geometric objects: plane, sphere, cylinder
+* Translation and rotation
+* Spot brightness, hard shadows, ambiance lighting
+
+## Usage
+
+```
+make
+./miniRT [.rt file path]
+```
+**It needs X11 environments to run this program**
+
+## For more imformation
+
+coming soon...
 
