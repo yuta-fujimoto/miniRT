@@ -22,5 +22,4 @@ make
 
 ## For more imformation
 
-coming soon...
-
+<a href ="https://rakiyama0229.hatenablog.jp/entry/2022/02/20/221743">レイトレーシングに挑戦しましたというお話。</a>  by rakiyama
